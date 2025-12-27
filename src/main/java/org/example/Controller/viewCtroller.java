@@ -13,22 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("san-pham")
 public class viewCtroller {
-    @Autowired
-    TheLoaiRepo theLoaiRepo;
-    @GetMapping("/test")
-    @ResponseBody
-    public String test() {
-        return "OK";
-    }
-    @GetMapping("/the-loai")
-    public ResponseEntity<?> getAll() {
-        List<TheLoai> theLoaiList = theLoaiRepo.findAll();
-        return ResponseEntity.ok(
-                theLoaiList.stream()
-                        .map(TheLoai::toResponse)
-                        .toList()
-        );
-    }
 
     @GetMapping("/ban-hang")
     public String layout() {

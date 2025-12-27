@@ -1,6 +1,9 @@
 spring:
   application:
   name: demo
+  devtools:
+    restart:
+      enabled: true
 
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=SD55;encrypt=true;trustServerCertificate=true

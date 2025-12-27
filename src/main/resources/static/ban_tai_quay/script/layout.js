@@ -6,12 +6,16 @@ app.config(function ($routeProvider) {
            templateUrl: '/ban_tai_quay/view/sanpham.html',
               controller: 'sanPhamCtrl'
        })
+        .when('/theloai', {
+                  templateUrl: '/ban_tai_quay/view/theloai.html',
+                  controller: 'theLoaiCtrl'
+              })
        .when('/trangchu', {
            templateUrl: '/ban_tai_quay/view/trangchu.html'
        })
 
         .otherwise({
-            redirectTo: '/sanpham',
+            redirectTo: '/theloai',
         })
 })
 
