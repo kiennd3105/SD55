@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        Chi tiết sản phẩm
+    </div>
+
+    <div class="card-body">
+        <p><b>Mã:</b> {{sanPham.ma}}</p>
+        <p><b>Tên:</b> {{sanPham.ten}}</p>
+        <p><b>Thương hiệu:</b> {{sanPham.idThuongHieu}}</p>
+        <p><b>Chất liệu:</b> {{sanPham.idChatLieu}}</p>
+        <p><b>Thể loại:</b> {{sanPham.idTheLoai}}</p>
+        <p>
+            <b>Trạng thái:</b>
+            <span ng-if="sanPham.trangThai == 1" class="badge bg-success">Hoạt động</span>
+            <span ng-if="sanPham.trangThai == 0" class="badge bg-secondary">Ngừng</span>
+        </p>
+        <p><b>Mô tả:</b> {{sanPham.moTa}}</p>
+
+        <a href="#!/sanpham" class="btn btn-secondary">
+            Quay lại
+        </a>
+    </div>
+</div>

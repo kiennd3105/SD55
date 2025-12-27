@@ -1,4 +1,4 @@
-package org.example.dto.CTSP;
+package org.example.dto.sanpham;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -10,21 +10,19 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class SanPhamChiTietRespon {
+@NoArgsConstructor
+public class SanPhamRespon {
 
     private String id;
     private String ma;
-    private String gia;
+    private String ten;
     private String soLuong;
     private int trangThai;
     private LocalDateTime ngayTao;
     private LocalDateTime ngaySua;
-    private String IMG;
     private String moTa;
-    private String idSanPham;
-    private String idSize;
-    private String idMau;
-
+    private String idTheLoai;
+    private String idChatLieu;
+    private String idThuongHieu;
 }
