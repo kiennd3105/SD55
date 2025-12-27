@@ -1,0 +1,48 @@
+<divgusienCtrl">
+
+  <h2> Danh sách nhân viên</h2>
+
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+  <tr>
+    <th>STT</th>
+    <th>Mã</th>
+    <th>Tên</th>
+    <th>Email</th>
+    <th>Giới tính</th>
+<!--    <th>Ảnh</th>-->
+    <th>Trạng thái</th>
+    <th>Hành động</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr ng-repeat="nv in dsNhanVien">
+    <td>{{$index + 1}}</td>
+    <td>{{nv.ma}}</td>
+    <td>{{nv.ten}}</td>
+    <td>{{nv.email}}</td>
+    <td>{{nv.gioiTinh}}</td>
+<!--    <td>-->
+<!--      <img ng-if="nv.img" ng-src="{{nv.img}}" width="50">-->
+<!--    </td>-->
+    <td>
+      {{nv.trangThai == 1 ? 'Hoạt động' : 'Ngưng'}}
+    </td>
+    <td>
+      <button class="btn btn-warning btn-sm"
+              ng-click="detailNhanVien(nv.id)">
+        Sửa
+      </button>
+
+      <button class="btn btn-danger btn-sm"
+              ng-click="deleteNhanVien(nv.id)">
+        Xóa
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

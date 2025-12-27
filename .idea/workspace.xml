@@ -5,27 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1944c87-ba68-49aa-a740-14571f21f667" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/viewCtroller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/theloai/TheLoaiRespon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/TheLoai.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/TheLoaiRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/sanpham.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/trangchu.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/style/layout.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/sanpham.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/trangchu.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/layout.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/KhachHangController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/NhanVienController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/khachhang/KhachHangRespon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/nhanvien/NhanVienRespon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/KhachHang.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/NhanVien.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/KhachHangRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/NhanVienRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/khachhang.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/nhanvien.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/khachhang.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/nhanvien.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +40,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "anhdd279"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/kiennd3105/SD55.git",
+    "accountId": "bcc0b800-4a2e-4845-8022-7b99c3ce6cec"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -59,16 +67,30 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/java5_1805",
+    "last_opened_file_path": "D:/AnhNhe/SD55/src/main/resources/static/ban_tai_quay/view",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\AnhNhe\SD55\src\main\resources\static\ban_tai_quay\view" />
+      <recent name="D:\AnhNhe\SD55\src\main\resources\static\ban_tai_quay\script" />
+      <recent name="D:\AnhNhe\SD55\src\main\java\org\example\dto" />
+      <recent name="D:\AnhNhe\SD55\src\main\java\org\example\dto\" />
+      <recent name="D:\AnhNhe\SD55\src\main\java\org\example\dto\theloai" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\nguyen dinh kien\IdeaProjects\SD55\src\main\resources\static\ban_tai_quay" />
       <recent name="C:\Users\nguyen dinh kien\IdeaProjects\SD55\src\main\resources\templates\ban_tai_quay" />
@@ -76,15 +98,35 @@
       <recent name="C:\Users\nguyen dinh kien\IdeaProjects\SD55\src\main\resources\static" />
       <recent name="C:\Users\nguyen dinh kien\IdeaProjects\SD55\src\main\resources\templates\ban_tai_quay\view" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.repository" />
+      <recent name="org.example.Controller" />
+      <recent name="org.example.entity" />
+    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
-      <module name="SD55" />
+      <module name="demo" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Main" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="demo" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.Main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.300" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.300" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -94,7 +136,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1766691513639</updated>
+      <workItem from="1766761549986" duration="760000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
