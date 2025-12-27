@@ -13,7 +13,14 @@ app.config(function ($routeProvider) {
        .when('/trangchu', {
            templateUrl: '/ban_tai_quay/view/trangchu.html'
        })
-
+        .when('/nhanvien', {
+            templateUrl: '/ban_tai_quay/view/nhanvien.html',
+            controller: 'nhanVienCtrl'
+        })
+        .when('/khachhang', {
+            templateUrl: '/ban_tai_quay/view/khachhang.html',
+            controller: 'khachHangCtrl'
+        })
         .otherwise({
             redirectTo: '/theloai',
         })
