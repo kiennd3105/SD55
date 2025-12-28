@@ -10,27 +10,27 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.dto.chatlieu.ChatLieuRespon;
+import org.example.dto.thuonghieu.ThuongHieuRespon;
 
 import java.time.LocalDateTime;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 
-@Table(name = "CHATLIEU")
-public class ChatLieu {
+@Table(name = "THUONGHIEU")
+public class ThuongHieu {
     @Id
     @Column(name = "ID")
     private String id;
 
     @Column(name = "MA")
-    private String maCL;
+    private String maTH;
 
-    @Column(name = "TENCL")
-    private String tenCL;
+    @Column(name = "TENTH")
+    private String tenTH;
 
     @Column(name = "TRANGTHAI")
     private Integer trangThai;
@@ -46,10 +46,10 @@ public class ChatLieu {
 
     @Override
     public String toString() {
-        return "ChatLieu{" +
+        return "ThuongHieu{" +
                 "id='" + id + '\'' +
-                ", maCL='" + maCL + '\'' +
-                ", tenCL='" + tenCL + '\'' +
+                ", maTH='" + maTH + '\'' +
+                ", tenTH='" + tenTH + '\'' +
                 ", trangThai=" + trangThai +
                 ", moTa='" + moTa + '\'' +
                 ", ngayTao=" + ngayTao +
@@ -67,11 +67,11 @@ public class ChatLieu {
         this.ngaySua = LocalDateTime.now();
     }
 
-    public ChatLieuRespon toResponse() {
-        return new ChatLieuRespon(
+    public ThuongHieuRespon toResponse() {
+        return new ThuongHieuRespon(
                 id,
-                maCL,
-                tenCL,
+                maTH,
+                tenTH,
                 trangThai,
                 moTa,
                 ngayTao,

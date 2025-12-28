@@ -10,27 +10,27 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.dto.chatlieu.ChatLieuRespon;
+import org.example.dto.mausac.MauSacRespon;
 
 import java.time.LocalDateTime;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 
-@Table(name = "CHATLIEU")
-public class ChatLieu {
+@Table(name ="MAU")
+public class MauSac {
     @Id
     @Column(name = "ID")
     private String id;
 
     @Column(name = "MA")
-    private String maCL;
+    private String maM;
 
-    @Column(name = "TENCL")
-    private String tenCL;
+    @Column(name = "TENM")
+    private String tenM;
 
     @Column(name = "TRANGTHAI")
     private Integer trangThai;
@@ -46,10 +46,10 @@ public class ChatLieu {
 
     @Override
     public String toString() {
-        return "ChatLieu{" +
+        return "MauSac{" +
                 "id='" + id + '\'' +
-                ", maCL='" + maCL + '\'' +
-                ", tenCL='" + tenCL + '\'' +
+                ", maM='" + maM + '\'' +
+                ", tenM='" + tenM + '\'' +
                 ", trangThai=" + trangThai +
                 ", moTa='" + moTa + '\'' +
                 ", ngayTao=" + ngayTao +
@@ -67,11 +67,11 @@ public class ChatLieu {
         this.ngaySua = LocalDateTime.now();
     }
 
-    public ChatLieuRespon toResponse() {
-        return new ChatLieuRespon(
+    public MauSacRespon toResponse() {
+        return new MauSacRespon(
                 id,
-                maCL,
-                tenCL,
+                maM,
+                tenM,
                 trangThai,
                 moTa,
                 ngayTao,

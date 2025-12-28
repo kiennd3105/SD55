@@ -10,27 +10,27 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.dto.chatlieu.ChatLieuRespon;
+import org.example.dto.Size.SizeRespon;
 
 import java.time.LocalDateTime;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 
-@Table(name = "CHATLIEU")
-public class ChatLieu {
+@Table(name ="SIZE")
+public class Size {
     @Id
     @Column(name = "ID")
     private String id;
 
     @Column(name = "MA")
-    private String maCL;
+    private String maSZ;
 
-    @Column(name = "TENCL")
-    private String tenCL;
+    @Column(name = "TENS")
+    private String tenSZ;
 
     @Column(name = "TRANGTHAI")
     private Integer trangThai;
@@ -46,10 +46,10 @@ public class ChatLieu {
 
     @Override
     public String toString() {
-        return "ChatLieu{" +
+        return "Size{" +
                 "id='" + id + '\'' +
-                ", maCL='" + maCL + '\'' +
-                ", tenCL='" + tenCL + '\'' +
+                ", maSZ='" + maSZ + '\'' +
+                ", tenSZ='" + tenSZ + '\'' +
                 ", trangThai=" + trangThai +
                 ", moTa='" + moTa + '\'' +
                 ", ngayTao=" + ngayTao +
@@ -67,11 +67,11 @@ public class ChatLieu {
         this.ngaySua = LocalDateTime.now();
     }
 
-    public ChatLieuRespon toResponse() {
-        return new ChatLieuRespon(
+    public SizeRespon toResponse() {
+        return new SizeRespon(
                 id,
-                maCL,
-                tenCL,
+                maSZ,
+                tenSZ,
                 trangThai,
                 moTa,
                 ngayTao,
