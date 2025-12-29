@@ -5,32 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1944c87-ba68-49aa-a740-14571f21f667" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerCL.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerMS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerSZ.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerTH.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/Size/SizeRespon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/chatlieu/ChatLieuRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/mausac/MauSacRespon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/thuonghieu/ThuongHieuRespon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/MauSac.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Size.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/ThuongHieu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/ChatLieuRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/MauSacRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/SizeRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/ThuongHieuRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/chatlieu.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/mausac.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/size.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/thuonghieu.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/chatlieu.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/mausac.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/size.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/thuonghieu.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/ChatLieu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/ChatLieu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" afterDir="false" />
@@ -47,9 +22,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -57,16 +33,22 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="37Lo3ZHwii6yRao450YX11LgvEJ" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../SD55-main/SD55-main" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../SD55-main" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -90,8 +72,21 @@
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="SD55" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -109,6 +104,8 @@
       <workItem from="1766846600899" duration="50000" />
       <workItem from="1766902731983" duration="6169000" />
       <workItem from="1766919417886" duration="3161000" />
+      <workItem from="1767014597361" duration="434000" />
+      <workItem from="1767015238790" duration="2589000" />
     </task>
     <servers />
   </component>
