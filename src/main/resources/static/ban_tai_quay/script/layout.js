@@ -6,6 +6,10 @@ app.config(function ($routeProvider) {
            templateUrl: '/ban_tai_quay/view/sanpham.html',
               controller: 'sanPhamCtrl'
        })
+        .when("/hoadon", {
+            templateUrl: "/ban_tai_quay/view/hoadon.html",
+            controller: "hoaDonCtrl"
+        })
         .when('/theloai', {
                   templateUrl: '/ban_tai_quay/view/theloai.html',
                   controller: 'theLoaiCtrl'
@@ -20,6 +24,22 @@ app.config(function ($routeProvider) {
         .when('/khachhang', {
             templateUrl: '/ban_tai_quay/view/khachhang.html',
             controller: 'khachHangCtrl'
+        })
+        .when('/thuonghieu', {
+            templateUrl: '/ban_tai_quay/view/thuonghieu.html',
+            controller: 'thuongHieuCtrl'
+        })
+        .when('/mausac', {
+            templateUrl: '/ban_tai_quay/view/mausac.html',
+            controller: 'mauSacCtrl'
+        })
+        .when('/chatlieu', {
+            templateUrl: '/ban_tai_quay/view/chatlieu.html',
+            controller: 'chatLieuCtrl'
+        })
+        .when('/size', {
+            templateUrl: '/ban_tai_quay/view/size.html',
+            controller: 'sizeCtrl'
         })
         .otherwise({
             redirectTo: '/theloai',
