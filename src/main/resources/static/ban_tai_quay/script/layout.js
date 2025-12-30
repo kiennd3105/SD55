@@ -6,6 +6,10 @@ app.config(function ($routeProvider) {
            templateUrl: '/ban_tai_quay/view/sanpham.html',
               controller: 'sanPhamCtrl'
        })
+        .when("/hoadon", {
+            templateUrl: "/ban_tai_quay/view/hoadon.html",
+            controller: "hoaDonCtrl"
+        })
         .when('/theloai', {
                   templateUrl: '/ban_tai_quay/view/theloai.html',
                   controller: 'theLoaiCtrl'
