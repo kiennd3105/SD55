@@ -7,15 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SizeRepo extends JpaRepository<Size, String> {
-    Optional<Size> findByMaSZIgnoreCase(String maSZ);
-    Optional<Size> findByTenSZIgnoreCase(String tenSZ);
+    List<Size> findByTenSZContainingIgnoreCase(String ten);
 
-    // search theo tên (contains ignore case)
-    List<Size> findByTenSZContainingIgnoreCase(String keyword);
-
-    // filter theo trạng thái
     List<Size> findByTrangThai(Integer trangThai);
 
-    // search theo tên + trạng thái
-    List<Size> findByTenSZContainingIgnoreCaseAndTrangThai(String keyword, Integer trangThai);
+    List<Size> findByTenSZContainingIgnoreCaseAndTrangThai(String ten, Integer trangThai);
+
+    Optional<Size> findByMaSZIgnoreCase(String ma);
+
+    Optional<Size> findByTenSZIgnoreCase(String ten);
 }

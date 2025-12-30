@@ -2,259 +2,277 @@
 
     <h2 class="mb-3">Quản lý chất liệu</h2>
 
-    <!-- FORM ADD/UPDATE -->
+    <!-- SEARCH BAR -->
     <div class="card mb-3">
         <div class="card-body">
-            <form name="clForm" novalidate>
 
-                <div class="row g-3 align-items-start">
-
-                    <!-- MÃ -->
-                    <div class="col-md-3">
-                        <label class="form-label">Mã</label>
-                        <input type="text"
-                               class="form-control"
-                               name="maCL"
-                               ng-model="form.maCL"
-                               ng-required="true"
-                               ng-trim="true"
-                               ng-class="{'is-invalid': (submitted && clForm.maCL.$invalid) || (submitted && err.maCL)}"
-                               placeholder="VD: CL01">
-
-                        <!-- slot cố định để không lệch hàng -->
-                        <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
-                            <span ng-show="submitted && clForm.maCL.$error.required">Vui lòng nhập mã chất liệu</span>
-                            <span ng-show="submitted && !clForm.maCL.$error.required && err.maCL">{{err.maCL}}</span>
-                        </div>
-                    </div>
-
-                    <!-- TÊN -->
-                    <div class="col-md-4">
-                        <label class="form-label">Tên chất liệu</label>
-                        <input type="text"
-                               class="form-control"
-                               name="tenCL"
-                               ng-model="form.tenCL"
-                               ng-required="true"
-                               ng-trim="true"
-                               ng-class="{'is-invalid': (submitted && clForm.tenCL.$invalid) || (submitted && err.tenCL)}"
-                               placeholder="VD: Cotton">
-
-                        <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
-                            <span ng-show="submitted && clForm.tenCL.$error.required">Vui lòng nhập tên chất liệu</span>
-                            <span ng-show="submitted && !clForm.tenCL.$error.required && err.tenCL">{{err.tenCL}}</span>
-                        </div>
-                    </div>
-
-                    <!-- TRẠNG THÁI -->
-                    <div class="col-md-3">
-                        <label class="form-label">Trạng thái</label>
-                        <select class="form-select"
-                                ng-model="form.trangThai"
-                                ng-init="form.trangThai = form.trangThai || 1">
-                            <option ng-value="1">Hoạt động</option>
-                            <option ng-value="0">Ngừng</option>
-                        </select>
-
-                        <!-- slot rỗng -->
-                        <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"></div>
-                    </div>
-
-                    <!-- MÔ TẢ -->
-                    <div class="col-md-12">
-                        <label class="form-label">Mô tả</label>
-                        <textarea class="form-control" rows="2" ng-model="form.moTa"></textarea>
-                    </div>
-
-                </div>
-
-                <div class="mt-3 d-flex gap-2">
-                    <button type="button"
-                            class="btn btn-primary"
-                            ng-if="!isEdit"
-                            ng-click="add(clForm)">
-                        Thêm
-                    </button>
-
-                    <button type="button"
-                            class="btn btn-warning"
-                            ng-if="isEdit"
-                            ng-click="update(clForm)">
-                        Cập nhật
-                    </button>
-
-                    <button type="button"
-                            class="btn btn-secondary"
-                            ng-click="reset(clForm)">
-                        Làm mới
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
-    <!-- FILTER BAR (có validate tìm kiếm) -->
-    <div class="row g-2 mb-3 align-items-end">
-        <div class="col-md-6">
-            <label class="form-label">Tìm kiếm</label>
-            <input type="text"
-                   class="form-control"
-                   placeholder="Nhập tên hoặc mã chất liệu..."
-                   ng-model="keyword"
-                   ng-class="{'is-invalid': searchSubmitted && searchErr}">
-            <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
-                <span ng-show="searchSubmitted && searchErr">{{searchErr}}</span>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="fw-bold">Tìm kiếm</div>
+                <div class="fw-bold">Tổng: {{dsChatLieu.length}}</div>
             </div>
-        </div>
 
-        <div class="col-md-3">
-            <label class="form-label">Trạng thái</label>
-            <select class="form-select" ng-model="filterTrangThai">
-                <option value="">Tất cả</option>
-                <option value="1">Hoạt động</option>
-                <option value="0">Ngừng</option>
-            </select>
-            <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"></div>
-        </div>
+            <div class="row g-3 align-items-start">
 
-        <!-- nút sát trạng thái -->
-        <div class="col-md-3 d-flex gap-2">
-            <button type="button" class="btn btn-primary w-50" ng-click="applyFilter()">
-                Tìm
-            </button>
+                <!-- keyword ngắn lại -->
+                <div class="col-md-4">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Tên hoặc mã chất liệu..."
+                           ng-model="keyword"
+                           ng-change="onKeywordChange()"
+                           ng-class="{'is-invalid': searchSubmitted && searchErr}">
+                    <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                        <span ng-show="searchSubmitted && searchErr">{{searchErr}}</span>
+                    </div>
+                </div>
 
-            <button type="button" class="btn btn-outline-secondary w-50" ng-click="clearFilter()">
-                Xóa lọc
-            </button>
-        </div>
+                <div class="col-md-3">
+                    <select class="form-select"
+                            ng-model="filterTrangThai"
+                            ng-change="onTrangThaiChange()">
+                        <option value="">Tất cả</option>
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Ngừng</option>
+                    </select>
+                    <div style="height:18px;margin-top:4px"></div>
+                </div>
 
-        <div class="col-12 text-end mt-1">
-            <span class="fw-bold">Tổng: {{dsChatLieu.length}}</span>
+                <!-- nút sát trạng thái -->
+                <div class="col-md-2">
+                    <button type="button"
+                            class="btn btn-outline-primary w-100"
+                            style="height:38px"
+                            ng-click="applyFilter()">
+                        Tìm
+                    </button>
+                    <div style="height:18px;margin-top:4px"></div>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="button"
+                            class="btn btn-outline-secondary w-100"
+                            style="height:38px"
+                            ng-click="clearFilter()">
+                        Reset
+                    </button>
+                    <div style="height:18px;margin-top:4px"></div>
+                </div>
+
+                <div class="col-md-1"></div>
+            </div>
+
         </div>
     </div>
 
     <!-- TABLE -->
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th style="width:60px">#</th>
-            <th style="width:120px">Mã</th>
-            <th>Tên chất liệu</th>
-            <th style="width:140px">Trạng thái</th>
-            <th>Mô tả</th>
-            <th style="width:220px">Hành động</th>
-        </tr>
-        </thead>
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
 
-        <tbody>
-        <tr ng-repeat="cl in dsChatLieu">
-            <td>{{getSTT($index)}}</td>
-            <td>{{cl.maCL}}</td>
-            <td>{{cl.tenCL}}</td>
-            <td>
-                <span ng-if="cl.trangThai==1" class="badge bg-success">Hoạt động</span>
-                <span ng-if="cl.trangThai==0" class="badge bg-secondary">Ngừng</span>
-            </td>
-            <td>{{cl.moTa}}</td>
+                <table class="table table-bordered table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th style="width:60px">#</th>
+                        <th style="width:120px">Mã</th>
+                        <th>Tên chất liệu</th>
+                        <th style="width:140px">Trạng thái</th>
+                        <th>Mô tả</th>
 
-            <td>
-                <button class="btn btn-sm btn-outline-primary" ng-click="edit(cl)">Sửa</button>
+                        <!-- THÊM nằm trong thanh HÀNH ĐỘNG -->
+                        <th style="width:240px" class="text-nowrap">
+                            Hành động
 
-                <button class="btn btn-sm btn-outline-secondary ms-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalDetailCL"
-                        ng-click="showDetail(cl)">
-                    Chi tiết
-                </button>
+                        </th>
+                    </tr>
+                    </thead>
 
-                <button class="btn btn-sm btn-outline-danger ms-1" ng-click="remove(cl)">
-                    Xóa
-                </button>
-            </td>
-        </tr>
+                    <tbody>
+                    <tr ng-repeat="cl in dsChatLieu">
+                        <td>{{getSTT($index)}}</td>
+                        <td>{{cl.maCL}}</td>
+                        <td>{{cl.tenCL}}</td>
+                        <td>
+                            <span ng-if="cl.trangThai==1" class="badge bg-success">Hoạt động</span>
+                            <span ng-if="cl.trangThai==0" class="badge bg-secondary">Ngừng</span>
+                        </td>
+                        <td>{{cl.moTa}}</td>
 
-        <tr ng-if="dsChatLieu.length === 0">
-            <td colspan="6" class="text-center text-muted py-3">
-                Không có dữ liệu
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                        <td class="text-nowrap">
+                            <button type="button"
+                                    class="btn btn-sm btn-success ms-2"
+                                    data-bs-toggle="modal" data-bs-target="#modalForm"
+                                    ng-click="openAdd()">
+                                Thêm
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary"
+                                    data-bs-toggle="modal" data-bs-target="#modalForm"
+                                    ng-click="openEdit(cl)">
+                                Sửa
+                            </button>
 
-    <!-- MODAL DETAIL (NEW UI) -->
-    <div class="modal fade" id="modalDetailCL" tabindex="-1" aria-hidden="true">
+                            <button class="btn btn-sm btn-outline-secondary ms-1"
+                                    data-bs-toggle="modal" data-bs-target="#modalDetail"
+                                    ng-click="showDetail(cl)">
+                                Chi tiết
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr ng-if="dsChatLieu.length === 0">
+                        <td colspan="6" class="text-center text-muted py-4">
+                            Không có dữ liệu
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORM: THÊM / SỬA -->
+    <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
+            <div class="modal-content">
 
-                <div class="modal-header bg-light">
-                    <div>
-                        <h5 class="modal-title fw-bold mb-0">Chi tiết chất liệu</h5>
-                        <small class="text-muted">Thông tin xem nhanh</small>
-                    </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        {{isEdit ? 'Cập nhật chất liệu' : 'Thêm chất liệu'}}
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
+                    <form name="clForm" novalidate>
+                        <div class="row g-3 align-items-start">
 
-                    <!-- Loading -->
-                    <div class="text-center text-muted py-5" ng-if="!detail">
-                        <div class="spinner-border" role="status"></div>
-                        <div class="mt-2">Đang tải dữ liệu...</div>
-                    </div>
+                            <!-- MÃ -->
+                            <div class="col-md-4">
+                                <label class="form-label">Mã</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="maCL"
+                                       ng-model="form.maCL"
+                                       ng-required="true"
+                                       ng-trim="true"
+                                       ng-class="{'is-invalid': (submitted && clForm.maCL.$invalid) || (submitted && err.maCL)}"
+                                       placeholder="VD: CL01">
 
-                    <!-- Content -->
-                    <div ng-if="detail">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <div class="text-muted small">Mã chất liệu</div>
-                                <div class="fs-5 fw-bold">{{detail.maCL}}</div>
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                    <span ng-show="submitted && clForm.maCL.$error.required">Vui lòng nhập mã chất liệu</span>
+                                    <span ng-show="submitted && !clForm.maCL.$error.required && err.maCL">{{err.maCL}}</span>
+                                </div>
                             </div>
 
-                            <div class="text-end">
-                                <div class="text-muted small">Trạng thái</div>
-                                <span ng-if="detail.trangThai==1" class="badge bg-success px-3 py-2">Hoạt động</span>
-                                <span ng-if="detail.trangThai==0" class="badge bg-secondary px-3 py-2">Ngừng</span>
+                            <!-- TÊN -->
+                            <div class="col-md-5">
+                                <label class="form-label">Tên chất liệu</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="tenCL"
+                                       ng-model="form.tenCL"
+                                       ng-required="true"
+                                       ng-trim="true"
+                                       ng-class="{'is-invalid': (submitted && clForm.tenCL.$invalid) || (submitted && err.tenCL)}"
+                                       placeholder="VD: Cotton">
+
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                    <span ng-show="submitted && clForm.tenCL.$error.required">Vui lòng nhập tên chất liệu</span>
+                                    <span ng-show="submitted && !clForm.tenCL.$error.required && err.tenCL">{{err.tenCL}}</span>
+                                </div>
                             </div>
+
+                            <!-- TRẠNG THÁI -->
+                            <div class="col-md-3">
+                                <label class="form-label">Trạng thái</label>
+                                <select class="form-select"
+                                        ng-model="form.trangThai"
+                                        ng-init="form.trangThai = form.trangThai || 1">
+                                    <option ng-value="1">Hoạt động</option>
+                                    <option ng-value="0">Ngừng</option>
+                                </select>
+                                <div style="height:18px;margin-top:4px"></div>
+                            </div>
+
+                            <!-- MÔ TẢ -->
+                            <div class="col-md-12">
+                                <label class="form-label">Mô tả</label>
+                                <textarea class="form-control" rows="3" ng-model="form.moTa" placeholder="VD: Cotton 100%..."></textarea>
+                            </div>
+
                         </div>
-
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="border rounded p-3 bg-light">
-                                    <div class="text-muted small mb-1">Tên chất liệu</div>
-                                    <div class="fw-semibold">{{detail.tenCL}}</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="border rounded p-3 bg-light">
-                                    <div class="text-muted small mb-1">Mô tả</div>
-                                    <div class="fw-semibold">{{detail.moTa || 'Không có mô tả'}}</div>
-                                </div>
-                            </div>
-
-                            <!-- Nếu DTO có ngày tạo/ngày sửa thì mở -->
-                            <!--
-                            <div class="col-md-6">
-                                <div class="border rounded p-3 bg-light">
-                                    <div class="text-muted small mb-1">Ngày tạo</div>
-                                    <div class="fw-semibold">{{detail.ngayTao}}</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="border rounded p-3 bg-light">
-                                    <div class="text-muted small mb-1">Ngày sửa</div>
-                                    <div class="fw-semibold">{{detail.ngaySua}}</div>
-                                </div>
-                            </div>
-                            -->
-                        </div>
-                    </div>
-
+                    </form>
                 </div>
 
-                <div class="modal-footer bg-light">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" ng-click="resetForm(clForm)">
+                        Làm mới
+                    </button>
+
+                    <button type="button" class="btn btn-primary" ng-click="save(clForm)">
+                        {{isEdit ? 'Lưu cập nhật' : 'Thêm'}}
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL -->
+    <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Chi tiết chất liệu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body" ng-if="detail">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Mã</label>
+                            <input class="form-control" ng-model="detail.maCL" disabled>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label class="form-label">Tên</label>
+                            <input class="form-control" ng-model="detail.tenCL" disabled>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Trạng thái</label>
+                            <input class="form-control"
+                                   ng-value="detail.trangThai==1 ? 'Hoạt động' : 'Ngừng'"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Mô tả</label>
+                            <textarea class="form-control" rows="3" ng-model="detail.moTa" disabled></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Ngày tạo</label>
+                            <input class="form-control"
+                                   ng-value="formatDateTime(detail.ngayTao)"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Ngày sửa</label>
+                            <input class="form-control"
+                                   ng-value="formatDateTime(detail.ngaySua)"
+                                   disabled>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-body" ng-if="!detail">
+                    <span class="text-muted">Đang tải dữ liệu...</span>
+                </div>
+
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
 

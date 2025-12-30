@@ -2,133 +2,180 @@
 
     <h2 class="mb-3">Quản lý size</h2>
 
-    <!-- FORM -->
+    <!-- FILTER CARD -->
     <div class="card mb-3">
         <div class="card-body">
-            <form name="szForm" novalidate>
 
-                <div class="row g-3 align-items-start">
-
-                    <!-- MÃ -->
-                    <div class="col-md-3">
-                        <label class="form-label">Mã</label>
-                        <input type="text"
-                               class="form-control"
-                               name="maSZ"
-                               ng-model="form.maSZ"
-                               ng-required="true"
-                               ng-trim="true"
-                               ng-class="{'is-invalid': submitted && szForm.maSZ.$invalid}"
-                               placeholder="VD: SZ01">
-
-                        <!-- SLOT cố định để không lệch -->
-                        <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"
-                             class="text-danger">
-                            <span ng-show="submitted && szForm.maSZ.$error.required">
-                                Vui lòng nhập mã size
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- TÊN -->
-                    <div class="col-md-4">
-                        <label class="form-label">Tên size</label>
-                        <input type="text"
-                               class="form-control"
-                               name="tenSZ"
-                               ng-model="form.tenSZ"
-                               ng-required="true"
-                               ng-trim="true"
-                               ng-class="{'is-invalid': submitted && szForm.tenSZ.$invalid}"
-                               placeholder="VD: M / L / XL">
-
-                        <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"
-                             class="text-danger">
-                            <span ng-show="submitted && szForm.tenSZ.$error.required">
-                                Vui lòng nhập tên size
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- TRẠNG THÁI -->
-                    <div class="col-md-3">
-                        <label class="form-label">Trạng thái</label>
-                        <select class="form-select"
-                                ng-model="form.trangThai"
-                                ng-init="form.trangThai = form.trangThai || 1">
-                            <option ng-value="1">Hoạt động</option>
-                            <option ng-value="0">Ngừng</option>
-                        </select>
-
-                        <!-- slot rỗng để thẳng hàng -->
-                        <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"></div>
-                    </div>
-
-                    <!-- MÔ TẢ -->
-                    <div class="col-md-12">
-                        <label class="form-label">Mô tả</label>
-                        <textarea class="form-control"
-                                  rows="2"
-                                  ng-model="form.moTa"
-                                  placeholder="VD: Size áo..."></textarea>
-                    </div>
-
-                </div>
-
-                <div class="mt-3 d-flex gap-2">
-                    <button type="button"
-                            class="btn btn-primary"
-                            ng-if="!isEdit"
-                            ng-click="add(szForm)">
-                        Thêm
-                    </button>
-
-                    <button type="button"
-                            class="btn btn-warning"
-                            ng-if="isEdit"
-                            ng-click="update(szForm)">
-                        Cập nhật
-                    </button>
-
-                    <button type="button"
-                            class="btn btn-secondary"
-                            ng-click="reset(szForm)">
-                        Làm mới
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
-    <!-- SEARCH / FILTER (đặt bên dưới giống yêu cầu) -->
-    <div class="card mb-3">
-        <div class="card-body">
             <div class="row g-3 align-items-end">
 
-                <div class="col-md-5">
-                    <label class="form-label">Tìm theo tên size</label>
+                <!-- keyword -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Tìm kiếm</label>
                     <input type="text"
                            class="form-control"
-                           ng-model="filter.ten"
-                           placeholder="Nhập tên size (VD: M, L, XL)">
+                           ng-model="keyword"
+                           ng-change="onKeywordChange()"
+                           placeholder="Tên size (VD: M, L, XL)"
+                           list="sizeSuggest">
+
+                    <datalist id="sizeSuggest">
+                        <option ng-repeat="x in suggest" value="{{x}}"></option>
+                    </datalist>
+
+                    <!-- SLOT cố định -->
+                    <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                        <span ng-show="filterSubmitted && filterErr">{{filterErr}}</span>
+                    </div>
                 </div>
 
+                <!-- trạng thái -->
                 <div class="col-md-3">
-                    <label class="form-label">Trạng thái</label>
-                    <select class="form-select" ng-model="filter.trangThai">
+                    <label class="form-label fw-semibold">Trạng thái</label>
+                    <select class="form-select" ng-model="filterTrangThai">
                         <option value="">Tất cả</option>
                         <option value="1">Hoạt động</option>
                         <option value="0">Ngừng</option>
                     </select>
+                    <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"></div>
                 </div>
 
-                <div class="col-md-4 d-flex gap-2">
-                    <button class="btn btn-outline-primary" type="button" ng-click="search()">
-                        Tìm kiếm
-                    </button>
-                    <button class="btn btn-outline-secondary" type="button" ng-click="resetFilter()">
-                        Reset lọc
+                <!-- buttons: sát với trạng thái -->
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="button" class="btn btn-outline-primary w-50" ng-click="search()">Tìm</button>
+                    <button type="button" class="btn btn-outline-secondary w-50" ng-click="resetFilter()">Reset</button>
+                </div>
+
+                <!-- total: cùng hàng + in đậm -->
+                <div class="col-md-2 text-end">
+                    <div class="fw-bold" style="font-size:18px">Tổng: {{dsSize.length}}</div>
+                    <div style="height:18px;margin-top:4px"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+        <div class="card-body p-0">
+
+            <table class="table table-bordered table-hover mb-0">
+                <thead class="table-dark">
+                <tr>
+                    <th style="width:70px">#</th>
+                    <th style="width:140px">Mã</th>
+                    <th>Tên size</th>
+                    <th style="width:140px">Trạng thái</th>
+                    <th>Mô tả</th>
+                    <th style="width:260px">Hành động</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="s in dsSize">
+                    <td>{{getSTT($index)}}</td>
+                    <td>{{s.maSZ}}</td>
+                    <td>{{s.tenSZ}}</td>
+                    <td>
+                        <span ng-if="s.trangThai==1" class="badge bg-success">Hoạt động</span>
+                        <span ng-if="s.trangThai==0" class="badge bg-secondary">Ngừng</span>
+                    </td>
+                    <td>{{s.moTa}}</td>
+                    <td class="d-flex gap-2">
+                        <button class="btn btn-success btn-sm" ng-click="openAddModal()">Thêm</button>
+                        <button class="btn btn-outline-primary btn-sm" ng-click="openEditModal(s)">Sửa</button>
+                        <button class="btn btn-outline-secondary btn-sm" ng-click="openDetailModal(s)">Chi tiết</button>
+
+                    </td>
+                </tr>
+
+                <tr ng-if="!dsSize || dsSize.length===0">
+                    <td colspan="6" class="text-center text-muted py-3">Không có dữ liệu</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <!-- MODAL FORM -->
+    <div class="modal fade" id="modalSizeForm" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">{{isEdit ? 'Cập nhật size' : 'Thêm size'}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form name="szForm" novalidate>
+
+                        <div class="row g-3 align-items-start">
+
+                            <!-- MÃ -->
+                            <div class="col-md-4">
+                                <label class="form-label">Mã</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="maSZ"
+                                       ng-model="form.maSZ"
+                                       ng-required="true"
+                                       ng-trim="true"
+                                       ng-class="{'is-invalid': (submitted && szForm.maSZ.$invalid) || (submitted && err.maSZ)}"
+                                       placeholder="VD: SZ01">
+
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                    <span ng-show="submitted && szForm.maSZ.$error.required">Vui lòng nhập mã size</span>
+                                    <span ng-show="submitted && !szForm.maSZ.$error.required && err.maSZ">{{err.maSZ}}</span>
+                                </div>
+                            </div>
+
+                            <!-- TÊN -->
+                            <div class="col-md-5">
+                                <label class="form-label">Tên size</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="tenSZ"
+                                       ng-model="form.tenSZ"
+                                       ng-required="true"
+                                       ng-trim="true"
+                                       ng-class="{'is-invalid': (submitted && szForm.tenSZ.$invalid) || (submitted && err.tenSZ)}"
+                                       placeholder="VD: M / L / XL">
+
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                    <span ng-show="submitted && szForm.tenSZ.$error.required">Vui lòng nhập tên size</span>
+                                    <span ng-show="submitted && !szForm.tenSZ.$error.required && err.tenSZ">{{err.tenSZ}}</span>
+                                </div>
+                            </div>
+
+                            <!-- TRẠNG THÁI -->
+                            <div class="col-md-3">
+                                <label class="form-label">Trạng thái</label>
+                                <select class="form-select" ng-model="form.trangThai"
+                                        ng-init="form.trangThai = form.trangThai || 1">
+                                    <option ng-value="1">Hoạt động</option>
+                                    <option ng-value="0">Ngừng</option>
+                                </select>
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"></div>
+                            </div>
+
+                            <!-- MÔ TẢ -->
+                            <div class="col-md-12">
+                                <label class="form-label">Mô tả</label>
+                                <textarea class="form-control" rows="3" ng-model="form.moTa" placeholder="VD: Size áo..."></textarea>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Đóng</button>
+                    <button class="btn btn-primary" type="button" ng-click="save(szForm)">
+                        {{isEdit ? 'Cập nhật' : 'Lưu'}}
                     </button>
                 </div>
 
@@ -136,38 +183,58 @@
         </div>
     </div>
 
-    <!-- TABLE -->
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th style="width:60px">#</th>
-            <th style="width:120px">Mã</th>
-            <th>Tên size</th>
-            <th style="width:140px">Trạng thái</th>
-            <th>Mô tả</th>
-            <th style="width:120px">Hành động</th>
-        </tr>
-        </thead>
+    <!-- MODAL DETAIL -->
+    <div class="modal fade" id="modalSizeDetail" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
 
-        <tbody>
-        <tr ng-repeat="s in dsSize">
-            <td>{{getSTT($index)}}</td>
-            <td>{{s.maSZ}}</td>
-            <td>{{s.tenSZ}}</td>
-            <td>
-                <span ng-if="s.trangThai==1" class="badge bg-success">Hoạt động</span>
-                <span ng-if="s.trangThai==0" class="badge bg-secondary">Ngừng</span>
-            </td>
-            <td>{{s.moTa}}</td>
-            <td>
-                <button class="btn btn-sm btn-outline-primary" ng-click="edit(s)">Sửa</button>
-            </td>
-        </tr>
+                <div class="modal-header">
+                    <h5 class="modal-title">Chi tiết size</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-        <tr ng-if="dsSize.length === 0">
-            <td colspan="6" class="text-center text-muted">Không có dữ liệu</td>
-        </tr>
-        </tbody>
-    </table>
+                <div class="modal-body" ng-if="detail">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Mã</label>
+                            <input class="form-control" ng-model="detail.maSZ" disabled>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label class="form-label">Tên</label>
+                            <input class="form-control" ng-model="detail.tenSZ" disabled>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Trạng thái</label>
+                            <input class="form-control"
+                                   ng-value="detail.trangThai==1 ? 'Hoạt động' : 'Ngừng'"
+                                   disabled>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Mô tả</label>
+                            <textarea class="form-control" rows="3" ng-model="detail.moTa" disabled></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Ngày tạo</label>
+                            <input class="form-control" ng-value="formatDateTime(detail.ngayTao)" disabled>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Ngày sửa</label>
+                            <input class="form-control" ng-value="formatDateTime(detail.ngaySua)" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 </div>
