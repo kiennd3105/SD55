@@ -1,0 +1,30 @@
+<div ng-controller="thuongHieuCtrl">
+
+    <h2>Danh sách thương hiệu</h2>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Mã</th>
+            <th>Tên thương hiệu</th>
+            <th>Trạng thái</th>
+            <th>Mô tả</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="th in dsThuongHieu">
+            <td>{{getSTT($index)}}</td>
+            <td>{{th.maTH}}</td>
+            <td>{{th.tenTH}}</td>
+            <td>
+                <span ng-if="th.trangThai==1" class="badge bg-success">Hoạt động</span>
+                <span ng-if="th.trangThai==0" class="badge bg-secondary">Ngừng</span>
+            </td>
+            <td>{{th.moTa}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

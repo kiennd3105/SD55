@@ -1,0 +1,137 @@
+<div ng-controller="sanPhamCtrl">
+
+    <h2>Quản lý sản phẩm</h2>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Mã</th>
+            <th>Tên sản phẩm</th>
+            <th>Thương hiệu</th>
+            <th>Chất liệu</th>
+            <th>Thể loại</th>
+            <th>Trạng thái</th>
+            <th>Mô tả</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr ng-repeat="sp in dsSanPham">
+            <td>{{sp.id}}</td>
+            <td>{{sp.ma}}</td>
+            <td>{{sp.ten}}</td>
+            <td>{{sp.idThuongHieu}}</td>
+            <td>{{sp.idChatLieu}}</td>
+            <td>{{sp.idTheLoai}}</td>
+            <td>
+                <span ng-if="sp.trangThai == 1" class="badge bg-success">Hoạt động</span>
+                <span ng-if="sp.trangThai == 0" class="badge bg-secondary">Ngừng</span>
+            </td>
+            <td>{{sp.moTa}}</td>
+            <td>
+
+                <button class="btn btn-info btn-sm" ng-click="openDetail(sp.id)">
+                    Chi tiết
+                </button>
+                <button class="btn btn-warning btn-sm mb-3"
+                        ng-click="openCTSP(sp.id)">
+                    Xem sản phẩm chi tiết
+                </button>
+
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Chi tiết sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <p><b>Mã:</b> {{sanPhamDetail.ma}}</p>
+                <p><b>Tên:</b> {{sanPhamDetail.ten}}</p>
+                <p><b>Thương hiệu:</b> {{sanPhamDetail.idThuongHieu}}</p>
+                <p><b>Chất liệu:</b> {{sanPhamDetail.idChatLieu}}</p>
+                <p><b>Thể loại:</b> {{sanPhamDetail.idTheLoai}}</p>
+
+                <p>
+                    <b>Trạng thái:</b>
+                    <span ng-if="sanPhamDetail.trangThai == 1" class="badge bg-success">Hoạt động</span>
+                    <span ng-if="sanPhamDetail.trangThai == 0" class="badge bg-secondary">Ngừng</span>
+                </p>
+
+                <p><b>Mô tả:</b> {{sanPhamDetail.moTa}}</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    Đóng
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <div class="modal fade" id="ctspModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Danh sách sản phẩm chi tiết</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-secondary">
+                        <tr>
+                            <th>Mã</th>
+                            <th>Ảnh</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Size</th>
+                            <th>Màu</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr ng-repeat="ct in dsSPCT">
+                            <td>{{ct.ma}}</td>
+                            <td class="text-center">
+                                <img ng-src="{{ct.IMG}}"
+                                     alt="ảnh sản phẩm"
+                                     style="width: 60px; height: 60px; object-fit: cover;">
+                            </td>
+
+                            <td>{{ct.gia}}</td>
+                            <td>{{ct.soLuong}}</td>
+                            <td>{{ct.idSize}}</td>
+                            <td>{{ct.idMau}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
