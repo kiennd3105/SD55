@@ -1,0 +1,52 @@
+
+<div ng-controller="hoaDonCtrl">
+
+    <h2 class="mb-3">Quản lý Hóa Đơn</h2>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>STT</th>
+            <th>ID</th>
+            <th>Mã</th>
+            <th>Nhân viên</th>
+            <th>Ngày đặt</th>
+            <th>Hóa Đơn</th>
+            <th>Thanh toán</th>
+            <th>Địa chỉ</th>
+            <th>Trạng thái</th>
+            <th>Hành Động</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="hd in dsHoaDon">
+            <td>{{$index + 1}}</td>
+            <td>{{hd.id}}</td>
+            <td>{{hd.ma}}</td>
+            <td>{{hd.idNhanVien}}</td>
+            <td>{{hd.ngayDatHang | date:'dd/MM/yyyy HH:mm'}}</td>
+
+            <td>
+                <span ng-if="hd.loaiHoaDon == 1" class="badge bg-success">Online</span>
+                <span ng-if="hd.loaiHoaDon == 0" class="badge bg-secondary">Tại quầy</span>
+            </td>
+
+            <td>{{hd.phuongThucThanhToan}}</td>
+            <td>{{hd.diaChi}}</td>
+
+            <td>
+                <span ng-if="hd.trangThai == 0" class="badge bg-warning">Chờ TT</span>
+                <span ng-if="hd.trangThai == 1" class="badge bg-success">Đã TT</span>
+            </td>
+            <td class="text-center">
+                <button class="btn btn-info btn-sm" ng-click="openDetail(hd.id)">
+                    Chi tiết
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
