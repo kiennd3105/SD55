@@ -6,9 +6,13 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=SD56;encrypt=true;trustServerCertificate=true
+    url: jdbc:sqlserver://localhost:1433;databaseName=SD551;encrypt=true;trustServerCertificate=true
     username: sa
+<<<<<<< HEAD
     password: 12345
+=======
+    password: 123456
+>>>>>>> 927bfbbfd1c09daf61bf63cefa9d7afac18c88fd
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:
@@ -18,7 +22,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     properties:
-      hibernate.format_sql: true
+      hibernate.format_sql: false
 
   servlet:
     multipart:
