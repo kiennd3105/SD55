@@ -36,6 +36,9 @@ public class TheLoai {
     @Column(name = "KIEU")
 
     private String kieu;
+    public TheLoai(String id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {

@@ -1,0 +1,49 @@
+<div ng-controller="khachHangCtrl">
+
+  <h2>Danh sách khách hàng</h2>
+
+
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+  <tr>
+    <th>STT</th>
+    <th>Mã</th>
+    <th>Tên</th>
+    <th>Email</th>
+    <th>Giới tính</th>
+    <th>SĐT</th>
+    <th>Địa chỉ</th>
+    <th>Trạng thái</th>
+    <th>Hành động</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr ng-repeat="kh in dsKhachHang">
+    <td>{{$index + 1}}</td>
+    <td>{{kh.ma}}</td>
+    <td>{{kh.ten}}</td>
+    <td>{{kh.email}}</td>
+    <td>{{kh.gioiTinh}}</td>
+    <td>{{kh.sdt}}</td>
+    <td>{{kh.diaChi}}</td>
+    <td>
+      {{kh.trangThai == 1 ? 'Hoạt động' : 'Ngưng'}}
+    </td>
+    <td>
+      <button class="btn btn-warning btn-sm"
+              ng-click="detailKhachHang(kh.id)">
+        Sửa
+      </button>
+
+      <button class="btn btn-danger btn-sm"
+              ng-click="deleteKhachHang(kh.id)">
+        Xóa
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

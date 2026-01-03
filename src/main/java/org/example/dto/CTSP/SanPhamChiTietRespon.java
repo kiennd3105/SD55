@@ -24,7 +24,7 @@ public class SanPhamChiTietRespon {
     private String IMG;
     private String moTa;
     private String idSanPham;
-    private String idSize;
-    private String idMau;
+    private String tenSize;
+    private String tenMau;
 
 }

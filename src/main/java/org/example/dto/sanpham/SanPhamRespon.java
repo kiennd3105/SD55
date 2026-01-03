@@ -22,7 +22,7 @@ public class SanPhamRespon {
     private LocalDateTime ngayTao;
     private LocalDateTime ngaySua;
     private String moTa;
-    private String idTheLoai;
-    private String idChatLieu;
-    private String idThuongHieu;
+    private String tenTheLoai;
+    private String tenChatLieu;
+    private String tenThuongHieu;
 }

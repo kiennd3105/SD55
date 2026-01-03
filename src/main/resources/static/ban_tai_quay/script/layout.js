@@ -13,7 +13,30 @@ app.config(function ($routeProvider) {
        .when('/trangchu', {
            templateUrl: '/ban_tai_quay/view/trangchu.html'
        })
-
+        .when('/nhanvien', {
+            templateUrl: '/ban_tai_quay/view/nhanvien.html',
+            controller: 'nhanVienCtrl'
+        })
+        .when('/khachhang', {
+            templateUrl: '/ban_tai_quay/view/khachhang.html',
+            controller: 'khachHangCtrl'
+        })
+        .when('/thuonghieu', {
+            templateUrl: '/ban_tai_quay/view/thuonghieu.html',
+            controller: 'thuongHieuCtrl'
+        })
+        .when('/mausac', {
+            templateUrl: '/ban_tai_quay/view/mausac.html',
+            controller: 'mauSacCtrl'
+        })
+        .when('/chatlieu', {
+            templateUrl: '/ban_tai_quay/view/chatlieu.html',
+            controller: 'chatLieuCtrl'
+        })
+        .when('/size', {
+            templateUrl: '/ban_tai_quay/view/size.html',
+            controller: 'sizeCtrl'
+        })
         .otherwise({
             redirectTo: '/theloai',
         })

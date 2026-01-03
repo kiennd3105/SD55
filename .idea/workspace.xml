@@ -5,7 +5,60 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1944c87-ba68-49aa-a740-14571f21f667" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerCL.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerMS.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerSZ.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerTH.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/KhachHangController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/NhanVienController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/config/WebConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/CTSP/ChiTietSanPhamRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/Size/SizeRespon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/chatlieu/ChatLieuRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/chatlieu/ChatLieuRespon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/khachhang/KhachHangRespon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/mausac/MauSacRespon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/nhanvien/NhanVienRespon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/sanpham/sanPhamRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/thuonghieu/ThuongHieuRespon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/ChatLieu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/KhachHang.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/MauSac.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/NhanVien.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Size.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/ThuongHieu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/ChatLieuRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/KhachHangRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/MauSacRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/NhanVienRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/SizeRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/ThuongHieuRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/chatlieu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/khachhang.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/mausac.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/nhanvien.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/size.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/thuonghieu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/chatlieu.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/khachhang.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/mausac.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/nhanvien.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/size.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/thuonghieu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controller/SanPhamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/SanPhamController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/dto/CTSP/SanPhamChiTietRespon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/CTSP/SanPhamChiTietRespon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/dto/sanpham/SanPhamRespon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/sanpham/SanPhamRespon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/SanPham.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/SanPham.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/SanPhamChiTiet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/SanPhamChiTiet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/TheLoai.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/TheLoai.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/SanPhamChiTietRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/SanPhamChiTietRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/SanPhamRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/SanPhamRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/sanpham.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/sanpham.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/sanpham.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/sanpham.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +73,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -43,13 +96,13 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/java5_1805",
+    "last_opened_file_path": "D:/2512thu2/DATN_2024_Master",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">

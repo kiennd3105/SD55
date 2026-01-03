@@ -1,9 +1,6 @@
 package org.example.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,15 +33,35 @@ public class SanPham {
     private LocalDateTime ngaySua;
     @Column(name = "MOTA")
     private String moTa;
-    @Column(name = "IDTHELOAI")
-    private String idTheLoai;
-    @Column(name = "IDCHATLIEU")
-    private String idChatLieu;
-    @Column(name = "IDTHUONGHIEU")
-    private String idThuongHieu;
 
-    public SanPhamRespon toResponse(){
-        return new SanPhamRespon(id,ma,ten,soLuong,trangThai,ngayTao,ngaySua,moTa,idTheLoai,idChatLieu,idThuongHieu);
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "IDTHELOAI")
+    private TheLoai theLoai;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "IDCHATLIEU")
+    private ChatLieu chatLieu;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "IDTHUONGHIEU")
+    private ThuongHieu thuongHieu;
+
+
+    public SanPhamRespon toResponse() {
+        return new SanPhamRespon(
+                id,
+                ma,
+                ten,
+                soLuong,
+                trangThai,
+                ngayTao,
+                ngaySua,
+                moTa,
+                theLoai != null ? theLoai.getTen() : null,
+                chatLieu != null ? chatLieu.getTenCL() : null,
+                thuongHieu != null ? thuongHieu.getTenTH() : null
+        );
     }
+
 }
 
