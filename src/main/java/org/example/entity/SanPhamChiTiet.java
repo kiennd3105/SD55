@@ -9,6 +9,7 @@ import org.example.dto.CTSP.SanPhamChiTietRespon;
 import org.example.dto.sanpham.SanPhamRespon;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -60,6 +61,7 @@ public class SanPhamChiTiet {
                         : "http://localhost:8084/uploads/" + IMG,
                 moTa,
                 sanPham != null ? sanPham.getId() : null,
+                sanPham != null ? sanPham.getTen() : null,
                 size != null ? size.getTenSZ() : null,
                 mauSac != null ? mauSac.getTenM() : null
         );

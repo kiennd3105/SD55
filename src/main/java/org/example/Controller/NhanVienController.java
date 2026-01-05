@@ -84,7 +84,8 @@ public class NhanVienController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        NhanVien last = nhanVienRepo.findTopByOrderByMaDesc();
+        NhanVien last = nhanVienRepo.
+                findTopByOrderByMaDesc();
 
         int next = 1;
         if (last != null && last.getMa() != null) {

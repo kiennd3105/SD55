@@ -13,26 +13,26 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserHomeController {
 
-    @Autowired
-    private HomePageService homePageService;
-
-    @GetMapping("/san-pham-ban-chay")
-    public ResponseEntity<?> getBestSellingProducts(
-            @RequestParam(defaultValue = "8") int limit) {
-        List<HomePageProductDTO> products = homePageService.getBestSellingProducts(limit);
-        return ResponseEntity.ok(products);
-    }
-
-    @GetMapping("/san-pham-moi")
-    public ResponseEntity<?> getNewProducts(
-            @RequestParam(defaultValue = "8") int limit) {
-        List<HomePageProductDTO> products = homePageService.getNewProducts(limit);
-        return ResponseEntity.ok(products);
-    }
-
-    @GetMapping("/trang-chu")
-    public String trangChu() {
-        return "redirect:/user/layout-user.html";
-    }
+//    @Autowired
+//    private HomePageService homePageService;
+//
+//    @GetMapping("/san-pham-ban-chay")
+//    public ResponseEntity<?> getBestSellingProducts(
+//            @RequestParam(defaultValue = "8") int limit) {
+//        List<HomePageProductDTO> products = homePageService.getBestSellingProducts(limit);
+//        return ResponseEntity.ok(products);
+//    }
+//
+//    @GetMapping("/san-pham-moi")
+//    public ResponseEntity<?> getNewProducts(
+//            @RequestParam(defaultValue = "8") int limit) {
+//        List<HomePageProductDTO> products = homePageService.getNewProducts(limit);
+//        return ResponseEntity.ok(products);
+//    }
+//
+//    @GetMapping("/trang-chu")
+//    public String trangChu() {
+//        return "redirect:/user/layout-user.html";
+//    }
 }
 

@@ -1,31 +1,35 @@
-package org.example.dto.CTSP;
+package org.example.dto.hoadon;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.entity.HoaDon;
+import org.example.entity.SanPhamChiTiet;
 
 import java.time.LocalDateTime;
 @Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class SanPhamChiTietRespon {
+@NoArgsConstructor
+@Setter
+public class HoaDonChiTietRespon {
 
     private String id;
     private String ma;
-    private String gia;
+    private String giaBan;
     private String soLuong;
-    private int trangThai;
     private LocalDateTime ngayTao;
     private LocalDateTime ngaySua;
-    private String IMG;
-    private String moTa;
-    private String idSanPham;
-    private String tenSP;
+    private String idHD;
+    private String tenSanPham;
     private String tenSize;
     private String tenMau;
+    private String tenTL;
+    private String tenCL;
+    private String tenTH;
+    private String img;
 
 }

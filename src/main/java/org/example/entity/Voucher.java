@@ -3,6 +3,7 @@ package org.example.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.dto.hoadon.VoucherRespon;
 import org.example.utils.IdGenerator;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.Generated;
@@ -72,4 +73,21 @@ public class Voucher {
             idVoucher = IdGenerator.generate8Hex();
         }
     }
+
+    public VoucherRespon toResponse() {
+        return new VoucherRespon(
+                this.idVoucher,
+                this.ma,
+                this.ten,
+                this.loai,
+                this.dieuKienApDung,
+                this.giamMax,
+                this.giaTriGiam,
+                this.soLuong,
+                this.ngayBatDau,
+                this.ngayKetThuc,
+                this.trangThai
+        );
+    }
+
 }
