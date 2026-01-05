@@ -5,10 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1944c87-ba68-49aa-a740-14571f21f667" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerCL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ChatLieuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/MauSacController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerSZ.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/SizeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controller/ControllerTH.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller/ThuongHieuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/MauSac.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/MauSac.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/ThuongHieu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/ThuongHieu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/MauSacRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/MauSacRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/repository/ThuongHieuRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/repository/ThuongHieuRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/layout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/mausac.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/mausac.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/thuonghieu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/script/thuonghieu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/mausac.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/mausac.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/thuonghieu.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/ban_tai_quay/view/thuonghieu.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,14 +34,17 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="37Lo3ZHwii6yRao450YX11LgvEJ" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -41,17 +55,20 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../SD55-main" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\code-ha\SD55\src\main\java\org\example" />
       <recent name="C:\Users\ADMIN\Downloads\55\SD55\src\main\resources\static\ban_tai_quay\script" />
       <recent name="C:\Users\ADMIN\Downloads\55\SD55\src\main\resources\static\ban_tai_quay\view" />
     </key>
@@ -70,7 +87,7 @@
       <recent name="org.example.dto.Size" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.Main">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -80,17 +97,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
+    <configuration name="Main" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="SD55" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.Main" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.Main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -105,7 +129,26 @@
       <workItem from="1766902731983" duration="6169000" />
       <workItem from="1766919417886" duration="3161000" />
       <workItem from="1767014597361" duration="434000" />
-      <workItem from="1767015238790" duration="2589000" />
+      <workItem from="1767015238790" duration="6936000" />
+      <workItem from="1767022513140" duration="34000" />
+      <workItem from="1767249475412" duration="1703000" />
+      <workItem from="1767251437646" duration="1016000" />
+      <workItem from="1767252573460" duration="1122000" />
+      <workItem from="1767253776344" duration="838000" />
+      <workItem from="1767254693587" duration="755000" />
+      <workItem from="1767255541765" duration="679000" />
+      <workItem from="1767256287179" duration="1787000" />
+      <workItem from="1767260675162" duration="696000" />
+      <workItem from="1767261424697" duration="1222000" />
+      <workItem from="1767262711720" duration="396000" />
+      <workItem from="1767263165617" duration="5653000" />
+      <workItem from="1767278805450" duration="2643000" />
+      <workItem from="1767281620048" duration="10368000" />
+      <workItem from="1767446302603" duration="12070000" />
+      <workItem from="1767573020309" duration="9568000" />
+      <workItem from="1767621788411" duration="298000" />
+      <workItem from="1767623561515" duration="133000" />
+      <workItem from="1767623734901" duration="1373000" />
     </task>
     <servers />
   </component>
