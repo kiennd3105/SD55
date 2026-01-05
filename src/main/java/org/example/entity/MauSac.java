@@ -43,6 +43,8 @@ public class MauSac {
     @Column(name = "NGAYSUA")
     private LocalDateTime ngaySua;
 
+
+
     @Override
     public String toString() {
         return "MauSac{" +
@@ -60,7 +62,9 @@ public class MauSac {
     public void onCreate() {
         this.ngayTao = LocalDateTime.now();
     }
-
+    public MauSac(String id) {
+        this.id = id;
+    }
     @PreUpdate
     public void onUpdate() {
         this.ngaySua = LocalDateTime.now();

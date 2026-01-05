@@ -6,9 +6,19 @@ spring:
       enabled: true
 
   datasource:
+<<<<<<< HEAD
     url: jdbc:sqlserver://localhost:1433;databaseName=SD55;encrypt=true;trustServerCertificate=true
+    username: test2
+    password: kien1234
+=======
+    url: jdbc:sqlserver://localhost:1433;databaseName=SD551;encrypt=true;trustServerCertificate=true
     username: sa
-    password: 999999999
+<<<<<<< HEAD
+    password: 12345
+=======
+    password: 123456
+>>>>>>> 927bfbbfd1c09daf61bf63cefa9d7afac18c88fd
+>>>>>>> 060b417fed95ebe3b4e6be6ef620af62cb4173a6
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:

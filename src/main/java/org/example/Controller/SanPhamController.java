@@ -1,64 +1,172 @@
-package org.example.Controller;
+    package org.example.Controller;
 
-import org.example.dto.CTSP.SanPhamChiTietRespon;
-import org.example.entity.SanPham;
-import org.example.entity.TheLoai;
-import org.example.repository.SanPhamChiTietRepo;
-import org.example.repository.SanPhamRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+    import jakarta.transaction.Transactional;
+    import jakarta.validation.Valid;
+    import org.example.dto.CTSP.ChiTietSanPhamRequest;
+    import org.example.dto.CTSP.SanPhamChiTietRespon;
+    import org.example.dto.sanpham.sanPhamRequest;
+    import org.example.entity.*;
+    import org.example.repository.*;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.http.MediaType;
+    import org.springframework.http.ResponseEntity;
+    import org.springframework.validation.BindingResult;
+    import org.springframework.web.bind.annotation.*;
+    import java.nio.file.Path;
+    import java.nio.file.Paths;
+    import java.nio.file.Files;
+    import java.io.IOException;
+    import java.nio.file.StandardCopyOption;
+    import java.time.LocalDateTime;
+    import java.util.HashMap;
+    import java.util.List;
+    import java.util.Map;
+    import java.util.UUID;
 
-import java.util.List;
+    @CrossOrigin(origins = "*")
+    @RestController
+    @RequestMapping("san-pham")
+    public class SanPhamController {
+        @Autowired
+        SanPhamRepo sanPhamRepo;
+        @Autowired
+        private SanPhamChiTietRepo sanPhamChiTietRepo;
+        @Autowired
+        private TheLoaiRepo theLoaiRepo;
 
-@CrossOrigin(origins = "*")
-@RestController
-@RequestMapping("san-pham")
-public class SanPhamController {
-    @Autowired
-    SanPhamRepo sanPhamRepo;
-    @Autowired
-    private SanPhamChiTietRepo sanPhamChiTietRepo;
+        @Autowired
+        private ChatLieuRepo chatLieuRepo;
+        @Autowired
+        private SizeRepo sizeRepo;
+        @Autowired
+        private MauSacRepo mauSacRepo;
 
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAll() {
-        List<SanPham> sanPhamList = sanPhamRepo.findAll();
-        return ResponseEntity.ok(
-                sanPhamList.stream()
-                        .map(SanPham::toResponse)
-                        .toList()
-        );
+        @Autowired
+        private ThuongHieuRepo thuongHieuRepo;
+        @GetMapping("/getAll")
+        public ResponseEntity<?> getAll() {
+            List<SanPham> sanPhamList = sanPhamRepo.findAllWithJoin();
+            return ResponseEntity.ok(
+                    sanPhamList.stream()
+                            .map(SanPham::toResponse)
+                            .toList()
+            );
+        }
+
+        private String generateMaSanPham() {
+            String maxMa = sanPhamRepo.findMaxMa(); // VD: SP00000009
+
+            if (maxMa == null) {
+                return "SP00000001";
+            }
+            maxMa = maxMa.trim();
+            int next = Integer.parseInt(maxMa.substring(2)) + 1;
+            return String.format("SP%08d", next);
+        }
+
+        @GetMapping("/detail/{id}")
+        public ResponseEntity<?> detail(@PathVariable String id) {
+            return sanPhamRepo.findDetailById(id)
+                    .map(sp -> ResponseEntity.ok(sp.toResponse()))
+                    .orElse(ResponseEntity.notFound().build());
+        }
+
+        @GetMapping("/san-pham/{idSanPham}")
+        public ResponseEntity<?> getBySanPham(@PathVariable String idSanPham) {
+
+            List<SanPhamChiTietRespon> list = sanPhamChiTietRepo
+                    .findBySanPhamId(idSanPham)
+                    .stream()
+                    .map(SanPhamChiTiet::toResponse)
+                    .toList();
+
+            return ResponseEntity.ok(list);
+        }
+
+
+
+        @PutMapping("/update/{id}")
+        public ResponseEntity<?> updateSanPham(
+                @PathVariable String id,
+                @RequestBody SanPham sanPhamReq
+        ) {
+
+            return sanPhamRepo.findById(id)
+                    .map(sp -> {
+                        sp.setTen(sanPhamReq.getTen());
+                        sp.setSoLuong(sanPhamReq.getSoLuong());
+                        sp.setTrangThai(sanPhamReq.getTrangThai());
+                        sp.setMoTa(sanPhamReq.getMoTa());
+
+                        sp.setTheLoai(sanPhamReq.getTheLoai());
+                        sp.setChatLieu(sanPhamReq.getChatLieu());
+                        sp.setThuongHieu(sanPhamReq.getThuongHieu());
+
+                        sp.setNgaySua(java.time.LocalDateTime.now());
+
+                        sanPhamRepo.save(sp);
+
+                        return ResponseEntity.ok(sp.toResponse());
+                    })
+                    .orElse(ResponseEntity.notFound().build());
+        }
+
+
+        @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        @Transactional
+        public ResponseEntity<?> addSanPham(@ModelAttribute sanPhamRequest req) throws IOException {
+            SanPham sp = new SanPham();
+            sp.setId(UUID.randomUUID().toString().substring(0, 8));
+            sp.setMa(generateMaSanPham());
+            sp.setTen(req.getTen());
+            sp.setTrangThai(req.getTrangThai());
+            sp.setMoTa(req.getMoTa());
+            sp.setTheLoai(theLoaiRepo.getReferenceById(req.getTheLoaiId()));
+            sp.setChatLieu(chatLieuRepo.getReferenceById(req.getChatLieuId()));
+            sp.setThuongHieu(thuongHieuRepo.getReferenceById(req.getThuongHieuId()));
+            sp.setNgayTao(LocalDateTime.now());
+            sp.setNgaySua(LocalDateTime.now());
+            sanPhamRepo.save(sp);
+            for (ChiTietSanPhamRequest ctReq : req.getCtspList()) {
+                SanPhamChiTiet ct = new SanPhamChiTiet();
+                ct.setId(UUID.randomUUID().toString().substring(0, 8));
+                ct.setSanPham(sp);
+                ct.setMa("CTSP_" + System.currentTimeMillis());
+                ct.setGia(ctReq.getGia());
+                ct.setSoLuong(ctReq.getSoLuong());
+                ct.setTrangThai(1);
+                ct.setNgayTao(LocalDateTime.now());
+                ct.setNgaySua(LocalDateTime.now());
+                ct.setSize(sizeRepo.getReferenceById(ctReq.getSizeId()));
+                ct.setMauSac(mauSacRepo.getReferenceById(ctReq.getMauId()));
+                if (ctReq.getImage() != null && !ctReq.getImage().isEmpty()) {
+
+                    String fileName = System.currentTimeMillis() + "_" +
+                            ctReq.getImage().getOriginalFilename();
+
+                    Path uploadDir = Paths.get("uploads");
+                    Files.createDirectories(uploadDir);
+
+                    Files.copy(
+                            ctReq.getImage().getInputStream(),
+                            uploadDir.resolve(fileName),
+                            StandardCopyOption.REPLACE_EXISTING
+                    );
+
+                    ct.setIMG(fileName);
+                }
+
+                sanPhamChiTietRepo.save(ct);
+            }
+
+            return ResponseEntity.ok(
+                    new HashMap<String, Object>() {{
+                        put("message", "Thêm sản phẩm thành công");
+                        put("status", "SUCCESS");
+                    }}
+            );
+
+
+        }
+
     }
-    @GetMapping("/detail/{id}")
-    public ResponseEntity<?> detail(@PathVariable String id) {
-        return sanPhamRepo.findById(id)
-                .map(sp -> ResponseEntity.ok(sp.toResponse()))
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/san-pham/{idSanPham}")
-    public ResponseEntity<?> getBySanPham(@PathVariable String idSanPham) {
-
-        List<SanPhamChiTietRespon> list = sanPhamChiTietRepo
-                .findBySanPham_Id(idSanPham)
-                .stream()
-                .map(ct -> new SanPhamChiTietRespon(
-                        ct.getId(),
-                        ct.getMa(),
-                        ct.getGia(),
-                        ct.getSoLuong(),
-                        ct.getTrangThai(),
-                        ct.getNgayTao(),
-                        ct.getNgaySua(),
-                        ct.getIMG(),
-                        ct.getMoTa(),
-                        ct.getSanPham() != null ? ct.getSanPham().getId() : null,
-                        ct.getIdSize(),
-                        ct.getIdMau()
-                ))
-                .toList();
-
-        return ResponseEntity.ok(list);
-    }
-
-}

@@ -41,6 +41,10 @@ app.config(function ($routeProvider) {
             templateUrl: '/ban_tai_quay/view/size.html',
             controller: 'sizeCtrl'
         })
+        .when('/voucher', {
+            templateUrl: '/ban_tai_quay/view/voucher.html',
+            controller: 'voucherCtrl'
+        })
         .otherwise({
             redirectTo: '/theloai',
         })

@@ -2,6 +2,12 @@
 
     <h2>Quản lý sản phẩm</h2>
 
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-success" ng-click="openAddModal()">
+            ➕ Thêm sản phẩm
+        </button>
+    </div>
+
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
         <tr>
@@ -22,9 +28,10 @@
             <td>{{sp.id}}</td>
             <td>{{sp.ma}}</td>
             <td>{{sp.ten}}</td>
-            <td>{{sp.idThuongHieu}}</td>
-            <td>{{sp.idChatLieu}}</td>
-            <td>{{sp.idTheLoai}}</td>
+            <td>{{sp.tenThuongHieu}}</td>
+            <td>{{sp.tenChatLieu}}</td>
+            <td>{{sp.tenTheLoai}}</td>
+
             <td>
                 <span ng-if="sp.trangThai == 1" class="badge bg-success">Hoạt động</span>
                 <span ng-if="sp.trangThai == 0" class="badge bg-secondary">Ngừng</span>
@@ -58,9 +65,10 @@
             <div class="modal-body">
                 <p><b>Mã:</b> {{sanPhamDetail.ma}}</p>
                 <p><b>Tên:</b> {{sanPhamDetail.ten}}</p>
-                <p><b>Thương hiệu:</b> {{sanPhamDetail.idThuongHieu}}</p>
-                <p><b>Chất liệu:</b> {{sanPhamDetail.idChatLieu}}</p>
-                <p><b>Thể loại:</b> {{sanPhamDetail.idTheLoai}}</p>
+                <p><b>Thương hiệu:</b> {{sanPhamDetail.tenThuongHieu}}</p>
+                <p><b>Chất liệu:</b> {{sanPhamDetail.tenChatLieu}}</p>
+                <p><b>Thể loại:</b> {{sanPhamDetail.tenTheLoai}}</p>
+
 
                 <p>
                     <b>Trạng thái:</b>
@@ -101,6 +109,8 @@
                             <th>Số lượng</th>
                             <th>Size</th>
                             <th>Màu</th>
+                            <th>trạng thái</th>
+                            <th>Hành động</th>
                         </tr>
                         </thead>
 
@@ -108,15 +118,18 @@
                         <tr ng-repeat="ct in dsSPCT">
                             <td>{{ct.ma}}</td>
                             <td class="text-center">
-                                <img ng-src="{{ct.IMG}}"
-                                     alt="ảnh sản phẩm"
-                                     style="width: 60px; height: 60px; object-fit: cover;">
+                                <img ng-src="{{ct.img}}"
+                                     style="width:60px;height:60px;object-fit:cover">
                             </td>
 
                             <td>{{ct.gia}}</td>
                             <td>{{ct.soLuong}}</td>
-                            <td>{{ct.idSize}}</td>
-                            <td>{{ct.idMau}}</td>
+                            <td>{{ct.tenSize}}</td>
+                            <td>{{ct.tenMau}}</td>
+                            <td>{{ct.trangThai}}</td>
+                            <td>
+
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -126,6 +139,192 @@
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">
                         Đóng
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Thêm sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- lỗi BE -->
+                    <div class="alert alert-danger" ng-if="errorMessage">
+                        {{errorMessage}}
+                    </div>
+
+                    <!-- ====== THÔNG TIN SẢN PHẨM CHA ====== -->
+                    <h6 class="fw-bold text-primary mb-3">Thông tin sản phẩm</h6>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tên sản phẩm</label>
+                            <input type="text" class="form-control"
+                                   ng-model="newSanPham.ten">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Trạng thái</label>
+                            <select class="form-select"
+                                    ng-model="newSanPham.trangThai">
+                                <option value="1">Hoạt động</option>
+                                <option value="0">Ngừng</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Thể loại</label>
+                            <select class="form-select"
+                                    ng-model="newSanPham.theLoai">
+                                <option value="">-- Chọn thể loại --</option>
+                                <option ng-repeat="tl in dsTheLoai"
+                                        value="{{tl.id}}">
+                                    {{tl.ten}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Chất liệu</label>
+                            <select class="form-select"
+                                    ng-model="newSanPham.chatLieu">
+                                <option value="">-- Chọn chất liệu --</option>
+                                <option ng-repeat="cl in dsChatLieu"
+                                        value="{{cl.id}}">
+                                    {{cl.tenCL}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Thương hiệu</label>
+                            <select class="form-select"
+                                    ng-model="newSanPham.thuongHieu">
+                                <option value="">-- Chọn thương hiệu --</option>
+                                <option ng-repeat="th in dsThuongHieu"
+                                        value="{{th.id}}">
+                                    {{th.tenTH}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả</label>
+                        <textarea class="form-control"
+                                  ng-model="newSanPham.moTa"></textarea>
+                    </div>
+
+                    <hr>
+
+                    <!-- ====== CHỌN SIZE ====== -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Size</label>
+                        <div class="d-flex flex-wrap gap-3">
+                            <label ng-repeat="s in dsSize">
+                                <input type="checkbox"
+                                       ng-checked="newSanPham.sizeIds.includes(s.id)"
+                                       ng-click="toggleSize(s.id)">
+                                {{s.tenSZ}}
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <!-- ====== CHỌN MÀU ====== -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Màu sắc</label>
+                        <div class="d-flex flex-wrap gap-3">
+                            <label ng-repeat="m in dsMauSac">
+                                <input type="checkbox"
+                                       ng-checked="newSanPham.mauIds.includes(m.id)"
+                                       ng-click="toggleMau(m.id)">
+                                {{m.tenM}}
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <!-- ====== DANH SÁCH CTSP ====== -->
+                    <div class="mt-4" ng-if="newSanPham.ctspList.length > 0">
+
+                        <h6 class="fw-bold text-success">
+                            Danh sách sản phẩm chi tiết
+                        </h6>
+
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Màu</th>
+                                <th>Size</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Ảnh</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr ng-repeat="ct in newSanPham.ctspList">
+                                <td>
+                                <span class="badge bg-danger">
+                                    {{ct.tenMau}}
+                                </span>
+                                </td>
+                                <td>
+                                <span class="badge bg-primary">
+                                    {{ct.tenSize}}
+                                </span>
+                                </td>
+                                <td>
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="ct.gia">
+                                </td>
+                                <td>
+                                    <input type="number"
+                                           class="form-control"
+                                           ng-model="ct.soLuong">
+                                </td>
+                                <td>
+                                    <input type="file"
+                                           class="form-control"
+                                           accept="image/*"
+                                           file-change="onSelectImage(files, ct)">
+
+                                    <img ng-if="ct.preview"
+                                         ng-src="{{ct.preview}}"
+                                         style="width:80px;height:80px;object-fit:cover;border-radius:5px;margin-top:5px">
+
+                                </td>
+
+
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+                        Hủy
+                    </button>
+                    <button class="btn btn-success" ng-click="addSanPham()">
+                        Lưu
                     </button>
                 </div>
 
