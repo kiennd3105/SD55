@@ -66,8 +66,8 @@
                 <div class="col-md-3 col-sm-6" ng-repeat="product in bestSellingProducts">
                     <div class="product-card">
                         <div class="product-image-wrapper">
-                            <img ng-src="{{product.hinhAnh || 'https://via.placeholder.com/300x300?text=No+Image'}}" 
-                                 alt="{{product.tenSanPham}}" 
+                            <img ng-src="http://localhost:8084/uploads/{{product.hinhAnh}}"
+                            alt="{{product.tenSanPham}}"
                                  class="product-image">
                             <div class="product-overlay">
                                 <button class="btn btn-light btn-sm" ng-click="viewProduct(product.id)">
@@ -114,8 +114,8 @@
                     <div class="product-card">
                         <div class="product-image-wrapper">
                             <span class="badge bg-danger position-absolute top-0 start-0 m-2">Mới</span>
-                            <img ng-src="{{product.hinhAnh || 'https://via.placeholder.com/300x300?text=No+Image'}}" 
-                                 alt="{{product.tenSanPham}}" 
+                            <img ng-src="http://localhost:8084/uploads/{{product.hinhAnh}}"
+                            alt="{{product.tenSanPham}}"
                                  class="product-image">
                             <div class="product-overlay">
                                 <button class="btn btn-light btn-sm" ng-click="viewProduct(product.id)">
