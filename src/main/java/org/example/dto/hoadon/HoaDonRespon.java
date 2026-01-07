@@ -32,4 +32,12 @@ public class HoaDonRespon {
     private int tongTien;
     private int giamGia;
     private int thanhTien;
+    private VoucherRespon voucher;
+    public HoaDonRespon(String id, Integer tongTien, Integer giamGia, Integer thanhTien) {
+        this.id = id;
+        this.tongTien = tongTien;
+        this.giamGia = giamGia;
+        this.thanhTien = thanhTien;
+    }
+
 }

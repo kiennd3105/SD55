@@ -88,7 +88,8 @@ public class HoaDon {
                 this.voucher != null ? this.voucher.getMa() : null,
                 this.tongTien != null ? this.tongTien : 0,
                 this.giamGia != null ? this.giamGia : 0,
-                this.thanhTien != null ? this.thanhTien : 0
+                this.thanhTien != null ? this.thanhTien : 0,
+                this.voucher != null ? this.voucher.toResponse() : null
 
         );    }
 }

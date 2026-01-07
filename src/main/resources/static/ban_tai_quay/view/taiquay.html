@@ -191,7 +191,10 @@
 
                         <a class="list-group-item list-group-item-action"
                            ng-repeat="vc in dsVoucher"
-                           ng-class="{'active': hoaDonDangXem.voucher?.id === vc.idVoucher,'voucher-active': hoaDonDangXem.voucher?.id === vc.idVoucher}"
+                           ng-class="{
+                              'active': hoaDonDangXem.voucher && hoaDonDangXem.voucher.id === vc.idVoucher,
+                              'voucher-active': hoaDonDangXem.voucher && hoaDonDangXem.voucher.id === vc.idVoucher
+                            }"
                            ng-click="chonVoucher(vc)">
 
                             <div class="fw-bold">{{vc.ten}}</div>
@@ -204,7 +207,9 @@
                                 Điều kiện: {{vc.dieuKienApDung}}
                             </div>
                             <i class="bi bi-check-circle-fill text-primary fs-4"
-                               ng-if="hoaDonDangXem.voucher?.id === vc.idVoucher"></i>
+                               ng-if="hoaDonDangXem.voucher && hoaDonDangXem.voucher.id === vc.idVoucher">
+                            </i>
+
                         </a>
 
                     </div>

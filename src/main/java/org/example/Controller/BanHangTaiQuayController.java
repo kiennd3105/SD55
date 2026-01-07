@@ -57,13 +57,12 @@ public class BanHangTaiQuayController {
                 .toList();
     }
     @GetMapping("/hoa-don/detail-info/{id}")
-    public HoaDon getInfo(@PathVariable String id) {
-        return hoaDonRepo.findById(id).orElse(null);
+    public HoaDonRespon getInfo(@PathVariable String id) {
+        return hoaDonRepo.findById(id)
+                .map(HoaDon::toResponse)
+                .orElse(null);
     }
-    private NhanVien getNhanVienMacDinh() {
-        return nhanVienRepo.findById("NV_MAC_DINH")
-                .orElseThrow(() -> new RuntimeException("Chưa có nhân viên mặc định"));
-    }
+
 
     @PostMapping("/hoa-don/add")
     public HoaDon addHoaDon() {
@@ -75,23 +74,22 @@ public class BanHangTaiQuayController {
         hd.setTrangThai(0);
         hd.setKhachHang(null);
         hd.setNhanVien(null);
-        hd.setTongTien(0);
-        hd.setGiamGia(0);
-        hd.setThanhTien(0);
+        hd.setTongTien(null);
+        hd.setGiamGia(null);
+        hd.setThanhTien(null);
+
         hd.setPhiVanChuyen(0);
 
         HoaDon hoaDonSaved = hoaDonRepo.save(hd);
         hoaDonSaved.setMa("HD" + hoaDonSaved.getId());
         hoaDonRepo.save(hoaDonSaved);
-
-        HDCT hdct = new HDCT();
-        hdct.setHoaDon(hoaDonSaved);
-        hdct.setSanPhamChiTiet(null);
-        hdct.setSoLuong("0");
-        hdct.setGiaBan(null);
-        hdctRepo.save(hdct);
-
         return hoaDonSaved;
+    }
+    @GetMapping("/hoa-don/{id}")
+    public HoaDonRespon getHoaDonById(@PathVariable String id) {
+        return hoaDonRepo.findById(id)
+                .map(HoaDon::toResponse)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
     }
 
     @PostMapping("/hoa-don/them-san-pham")
@@ -101,11 +99,9 @@ public class BanHangTaiQuayController {
             @RequestParam int soLuong
     ) {
 
-        // 1. Lấy hóa đơn
         HoaDon hoaDon = hoaDonRepo.findById(idHoaDon)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
 
-        // 2. Lấy SPCT
         SanPhamChiTiet spct = sanPhamChiTietRepo.findById(idSPCT)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm"));
 
@@ -116,7 +112,6 @@ public class BanHangTaiQuayController {
 
 
 
-        // 3. Kiểm tra đã có HDCT chưa
         HDCT hdct = hdctRepo
                 .findByHoaDonIdAndSanPhamChiTietId(idHoaDon, idSPCT)
                 .orElse(null);
@@ -125,7 +120,6 @@ public class BanHangTaiQuayController {
             int slCu = Integer.parseInt(hdct.getSoLuong());
             hdct.setSoLuong(String.valueOf(slCu + soLuong));
         } else {
-            // ➕ Tạo mới HDCT
             hdct = new HDCT();
             hdct.setId(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             hdct.setHoaDon(hoaDon);
@@ -134,10 +128,8 @@ public class BanHangTaiQuayController {
             hdct.setGiaBan(spct.getGia());
         }
 
-        // 4. Trừ tồn kho
         spct.setSoLuong(String.valueOf(tonKho - soLuong));
 
-        // 5. Save
         sanPhamChiTietRepo.save(spct);
         hdctRepo.save(hdct);
 
@@ -189,15 +181,10 @@ public class BanHangTaiQuayController {
     @Transactional
     public void xoaHoaDon(@PathVariable String idHoaDon) {
 
-        // 1. Lấy hóa đơn
         HoaDon hoaDon = hoaDonRepo.findById(idHoaDon)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
-
-        // 2. Lấy danh sách chi tiết hóa đơn
         List<HDCT> dsHDCT = hdctRepo.findByHoaDonId(idHoaDon);
-
         for (HDCT hdct : dsHDCT) {
-
             SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
             if (spct != null) {
 
@@ -209,11 +196,7 @@ public class BanHangTaiQuayController {
                 sanPhamChiTietRepo.save(spct);
             }
         }
-
-        // 3. Xóa chi tiết hóa đơn
         hdctRepo.deleteAll(dsHDCT);
-
-        // 4. Xóa hóa đơn
         hoaDonRepo.delete(hoaDon);
     }
     @PostMapping("/hoa-don/them-khach-hang")
@@ -261,7 +244,8 @@ public class BanHangTaiQuayController {
         HoaDon hd = hoaDonRepo.findById(idHoaDon)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
 
-        int tongTien = hdctRepo.tinhTongTien(idHoaDon);
+        Integer tongTien = hdctRepo.tinhTongTien(idHoaDon);
+        if (tongTien == null) tongTien = 0;
 
         return voucherRepository.findVoucherApDung(tongTien)
                 .stream()
@@ -276,7 +260,6 @@ public class BanHangTaiQuayController {
             @RequestParam String idVoucher
     ) {
 
-        // 1️⃣ Lấy hóa đơn
         HoaDon hoaDon = hoaDonRepo.findById(idHoaDon)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
 
@@ -284,16 +267,13 @@ public class BanHangTaiQuayController {
             throw new RuntimeException("Hóa đơn đã thanh toán, không thể áp dụng voucher");
         }
 
-        // 2️⃣ Lấy voucher
         Voucher voucher = voucherRepository.findById(idVoucher)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy voucher"));
 
-        // 3️⃣ Check trạng thái
         if (voucher.getTrangThai() != 1) {
             throw new RuntimeException("Voucher không còn hiệu lực");
         }
 
-        // 4️⃣ Check số lượng
         int soLuongVoucher = voucher.getSoLuong() != null
                 ? Integer.parseInt(voucher.getSoLuong())
                 : 0;
@@ -302,13 +282,11 @@ public class BanHangTaiQuayController {
             throw new RuntimeException("Voucher đã hết lượt sử dụng");
         }
 
-        // 5️⃣ Check thời gian
         LocalDateTime now = LocalDateTime.now();
         if (now.isBefore(voucher.getNgayBatDau()) || now.isAfter(voucher.getNgayKetThuc())) {
             throw new RuntimeException("Voucher đã hết hạn");
         }
 
-        // 6️⃣ Tính tổng tiền hóa đơn
         int tongTien = hdctRepo.tinhTongTien(idHoaDon);
 
         int dieuKienApDung = voucher.getDieuKienApDung() != null
@@ -316,10 +294,11 @@ public class BanHangTaiQuayController {
                 : 0;
 
         if (tongTien < dieuKienApDung) {
-            throw new RuntimeException("Không đủ điều kiện áp dụng voucher");
+            hoaDon.setVoucher(null);
+            hoaDonRepo.save(hoaDon);
+            return hoaDon.toResponse();
         }
 
-        // 7️⃣ Tính tiền giảm
         int loai = voucher.getLoai() != null ? voucher.getLoai() : 0;
         int giaTriGiam = voucher.getGiaTriGiam() != null
                 ? Integer.parseInt(voucher.getGiaTriGiam())
@@ -339,38 +318,98 @@ public class BanHangTaiQuayController {
             }
         }
 
-        // Không cho giảm quá tổng tiền
         tienGiam = Math.min(tienGiam, tongTien);
 
-        // 8️⃣ Gán voucher + tiền
         hoaDon.setVoucher(voucher);
-        hoaDon.setTongTien(tongTien);
-        hoaDon.setGiamGia(tienGiam);
-        hoaDon.setThanhTien(tongTien - tienGiam);
+        hoaDon.setNgaySua(LocalDateTime.now());
+
+        hoaDonRepo.save(hoaDon);
+        return hoaDon.toResponse();
+    }
+    @PostMapping("/hoa-don/huy-voucher")
+    public HoaDonRespon boVoucher(@RequestParam String idHoaDon) {
+
+        HoaDon hoaDon = hoaDonRepo.findById(idHoaDon)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
+
+        if (hoaDon.getTrangThai() != 0) {
+            throw new RuntimeException("Hóa đơn đã thanh toán");
+        }
+
+        hoaDon.setVoucher(null);
         hoaDon.setNgaySua(LocalDateTime.now());
 
         hoaDonRepo.save(hoaDon);
 
-        // 9️⃣ Trừ số lượng voucher
-        voucher.setSoLuong(String.valueOf(soLuongVoucher - 1));
-        voucherRepository.save(voucher);
-
         return hoaDon.toResponse();
+    }
+
+
+    private int tinhGiamGia(Voucher voucher, int tongTien) {
+
+        if (voucher == null) return 0;
+
+        int dieuKien = voucher.getDieuKienApDung() != null
+                ? Integer.parseInt(voucher.getDieuKienApDung())
+                : 0;
+
+        if (tongTien < dieuKien) return 0;
+
+        int giaTriGiam = voucher.getGiaTriGiam() != null
+                ? Integer.parseInt(voucher.getGiaTriGiam())
+                : 0;
+
+        Integer giamMax = (voucher.getGiamMax() != null && !voucher.getGiamMax().isEmpty())
+                ? Integer.parseInt(voucher.getGiamMax())
+                : null;
+
+        int tienGiam;
+        if (voucher.getLoai() == 0) {
+            // giảm tiền cố định
+            tienGiam = giaTriGiam;
+        } else {
+            // giảm %
+            tienGiam = tongTien * giaTriGiam / 100;
+            if (giamMax != null) {
+                tienGiam = Math.min(tienGiam, giamMax);
+            }
+        }
+
+        return Math.min(tienGiam, tongTien);
+    }
+
+    @GetMapping("/hoa-don/tinh-tien/{idHoaDon}")
+    public HoaDonRespon tinhTienTam(@PathVariable String idHoaDon) {
+
+        int tongTien = hdctRepo.tinhTongTien(idHoaDon);
+
+        HoaDon hd = hoaDonRepo.findById(idHoaDon).orElseThrow();
+
+        int giamGia = 0;
+        Voucher voucher = hd.getVoucher();
+
+        if (voucher != null) {
+            // y hệt logic bạn viết
+            giamGia = tinhGiamGia(voucher, tongTien);
+        }
+
+        return new HoaDonRespon(
+                hd.getId(),
+                tongTien,
+                giamGia,
+                tongTien - giamGia
+        );
     }
 
     @PostMapping("/hoa-don/thanh-toan")
     public HoaDonRespon thanhToan(@RequestParam String idHoaDon) {
-
-        // 1. Lấy hóa đơn
         HoaDon hoaDon = hoaDonRepo.findById(idHoaDon)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
 
-        // 2. Kiểm tra trạng thái
         if (hoaDon.getTrangThai() != 0) {
             throw new RuntimeException("Hóa đơn không ở trạng thái chờ thanh toán");
         }
 
-        // 3. Tính tổng tiền từ HDCT
         Integer tongTien = hdctRepo.tinhTongTien(idHoaDon);
         if (tongTien == null || tongTien <= 0) {
             throw new RuntimeException("Hóa đơn chưa có sản phẩm");
@@ -378,12 +417,9 @@ public class BanHangTaiQuayController {
 
         hoaDon.setTongTien(tongTien);
 
-        // 4. Xử lý voucher (nếu có)
         int tienGiam = 0;
         Voucher voucher = hoaDon.getVoucher();
-
         if (voucher != null) {
-
             if (voucher.getTrangThai() != 1) {
                 throw new RuntimeException("Voucher không còn hiệu lực");
             }
@@ -401,7 +437,10 @@ public class BanHangTaiQuayController {
                     : null;
 
             if (tongTien < dieuKien) {
-                throw new RuntimeException("Không đủ điều kiện áp dụng voucher");
+                hoaDon.setVoucher(null);
+                hoaDonRepo.save(hoaDon);
+
+                return hoaDon.toResponse();
             }
 
             if (voucher.getLoai() == 0) {
@@ -415,7 +454,6 @@ public class BanHangTaiQuayController {
 
             tienGiam = Math.min(tienGiam, tongTien);
 
-            // trừ số lượng voucher
             int soLuongVC = Integer.parseInt(voucher.getSoLuong());
             if (soLuongVC <= 0) {
                 throw new RuntimeException("Voucher đã hết lượt");
@@ -424,12 +462,10 @@ public class BanHangTaiQuayController {
             voucherRepository.save(voucher);
         }
 
-        // 5. Cập nhật tiền
         hoaDon.setGiamGia(tienGiam);
         hoaDon.setThanhTien(tongTien - tienGiam);
 
-        // 6. Cập nhật trạng thái hóa đơn
-        hoaDon.setTrangThai(1); // 1 = ĐÃ THANH TOÁN
+        hoaDon.setTrangThai(1);
         hoaDon.setNgayDatHang(LocalDateTime.now());
         hoaDon.setNgaySua(LocalDateTime.now());
 

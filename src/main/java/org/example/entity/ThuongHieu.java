@@ -67,18 +67,6 @@ public class ThuongHieu {
         this.ngaySua = LocalDateTime.now();
     }
 
-    // ================= DTO =================
-    public ThuongHieuRespon toResponse() {
-        return new ThuongHieuRespon(
-                id,
-                maTH,
-                tenTH,
-                trangThai,
-                moTa,
-                ngayTao,
-                ngaySua
-        );
-    }
 
     // ================= TO STRING =================
     @Override
@@ -93,22 +81,11 @@ public class ThuongHieu {
                 ", ngaySua=" + ngaySua +
                 '}';
     }
-<<<<<<< HEAD
-=======
 
     public ThuongHieu(String id) {
         this.id = id;
     }
 
-    @PrePersist
-    public void onCreate() {
-        this.ngayTao = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.ngaySua = LocalDateTime.now();
-    }
 
     public ThuongHieuRespon toResponse() {
         return new ThuongHieuRespon(
@@ -121,5 +98,4 @@ public class ThuongHieu {
                 ngaySua
         );
     }
->>>>>>> f646fc4ae4c674a10a96daf324d7f58c929dfddc
 }
