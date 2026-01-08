@@ -13,5 +13,10 @@ public interface NhanVienRepo extends JpaRepository<NhanVien, String> {
     boolean existsByEmail(String email);
 
     NhanVien findTopByOrderByMaDesc();
-    Optional<NhanVien> findFirstByTrangThai(Integer trangThai);
+//<<<<<<< Updated upstream
+//    Optional<NhanVien> findFirstByTrangThai(Integer trangThai);
+//=======
+//
+//    Optional<NhanVien> findByEmailAndPassw(String email, String passw);
+//>>>>>>> Stashed changes
 }

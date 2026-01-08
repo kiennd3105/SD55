@@ -106,6 +106,7 @@ app.controller("nhanVienCtrl", function ($scope, $http) {
                 $scope.closeAddModal();
                 $scope.loadDanhSach();
             })
+
             .catch(function (error) {
                 if (error.status === 400) {
                     let msg = "";
@@ -118,6 +119,26 @@ app.controller("nhanVienCtrl", function ($scope, $http) {
                 }
             });
     };
+
+    $scope.uploadAnh = function (input) {
+        var file = input.files[0];
+        if (!file) return;
+
+        var formData = new FormData();
+        formData.append("file", file);
+
+        $http.post("http://localhost:8084/upload/nhanvien", formData, {
+            transformRequest: angular.identity,
+            headers: { "Content-Type": undefined }
+        }).then(function (res) {
+            // backend trả về tên file
+            $scope.newNhanVien.img = res.data;
+            $scope.$applyAsync();
+        }).catch(function () {
+            alert("Upload ảnh thất bại");
+        });
+    };
+
     $scope.generateMaKH = function () {
         let max = 0;
 

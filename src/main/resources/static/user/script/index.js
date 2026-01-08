@@ -7,6 +7,14 @@ userApp.config(function ($routeProvider) {
             templateUrl: '/user/view/index.html',
             controller: 'homePageCtrl'
         })
+        .when('/login', {
+            templateUrl: '/user/view/login.html',
+            controller: 'loginCtrl'
+        })
+        .when('/register', {
+            templateUrl: '/user/view/register.html',
+            controller: 'registerCtrl'
+        })
         .when('/san-pham', {
             templateUrl: '/user/view/sanpham.html',
             controller: 'sanPhamCtrl'
@@ -16,11 +24,25 @@ userApp.config(function ($routeProvider) {
         });
 });
 
-// Header Controller
-userApp.controller('headerCtrl', function ($scope, $http) {
-    // Header logic if needed
+userApp.run(function ($rootScope, $location) {
+    $rootScope.$on('$routeChangeSuccess', function () {
+        const authPages = ['/login', '/register'];
+        $rootScope.isAuthPage = authPages.includes($location.path());
+    });
 });
+// HEADER CONTROLLER ⭐
+userApp.controller("headerCtrl", function ($scope, $location) {
 
+    $scope.user = JSON.parse(localStorage.getItem("user"));
+    $scope.isLogin = !!$scope.user;
+
+    $scope.logout = function () {
+        localStorage.removeItem("user");
+        $location.path('/login');
+    };
+
+
+});
 // Home Page Controller
 userApp.controller('homePageCtrl', function ($scope, $http) {
     $scope.bestSellingProducts = [];

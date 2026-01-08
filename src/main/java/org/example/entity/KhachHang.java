@@ -59,6 +59,8 @@ public class KhachHang {
     private LocalDateTime ngaySua;
 
 
+
+
     @PrePersist
     public void prePersist() {
         if (this.id == null) {

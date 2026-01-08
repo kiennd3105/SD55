@@ -87,6 +87,10 @@ public class NhanVienController {
         NhanVien last = nhanVienRepo.
                 findTopByOrderByMaDesc();
 
+        if (nhanVien.getImg() == null || nhanVien.getImg().isEmpty()) {
+            nhanVien.setImg("default.png"); // ảnh mặc định
+        }
+
         int next = 1;
         if (last != null && last.getMa() != null) {
             next = Integer.parseInt(last.getMa().substring(2)) + 1;

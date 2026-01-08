@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi" ng-app="userApp">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,13 +27,17 @@
     
     <!-- Custom Scripts -->
     <script src="/user/script/index.js"></script>
+    <script src="/user/script/auth.js"></script>
+
+
 </head>
 
 <body>
     <!-- Header -->
-    <header class="header" ng-controller="headerCtrl">
+    <header class="header" ng-if="!isAuthPage" ng-controller="headerCtrl">
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-            <div class="container">
+
+        <div class="container">
                 <a class="navbar-brand fw-bold fs-3" href="#!/">
                     <i class="fas fa-tshirt text-primary"></i> OWEN
                 </a>
@@ -63,9 +68,27 @@
                             <i class="fas fa-shopping-cart fs-5"></i>
                             <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">0</span>
                         </a>
-                        <a href="#!/dang-nhap" class="btn btn-outline-primary">
-                            <i class="fas fa-user me-1"></i> Đăng nhập
-                        </a>
+                        <!-- CHƯA ĐĂNG NHẬP -->
+                        <div ng-if="!isLogin">
+                            <a href="#!/login" class="btn btn-outline-primary me-2">
+                                <i class="fas fa-user me-1"></i> Đăng nhập
+                            </a>
+                            <a href="#!/register" class="btn btn-outline-primary">
+                            <i class="fas fa-user me-1"></i>Đăng ký</a>
+                        </div>
+
+                        <!-- ĐÃ ĐĂNG NHẬP -->
+                        <div ng-if="isLogin" class="d-flex align-items-center">
+                            <span class="me-2">👤</span>
+                            <button class="btn btn-outline-danger btn-sm" ng-click="logout()">
+                                Đăng xuất
+                            </button>
+                        </div>
+<!--                        <a href="#!/login" class="btn btn-outline-primary">-->
+<!--                            <i class="fas fa-user me-1"></i> Đăng nhập-->
+<!--                        </a>-->
+<!--                        <a href="#!/register" class="btn btn-outline-primary> -->
+<!--                        <i class="fas fa-user me-1"></i>Đăng ký</a>-->
                     </div>
                 </div>
             </div>
@@ -76,7 +99,7 @@
     <main ng-view></main>
 
     <!-- Footer -->
-    <footer class="footer mt-5">
+    <footer class="footer mt-5" ng-if="!isAuthPage">
         <div class="container">
             <div class="row py-5">
                 <div class="col-md-4 mb-4">

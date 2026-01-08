@@ -19,6 +19,7 @@
     <thead class="table-dark">
     <tr>
       <th>STT</th>
+<!--      <th>Ảnh</th>-->
       <th>Mã</th>
       <th>Tên</th>
       <th>Email</th>
@@ -32,6 +33,12 @@
     <tbody>
     <tr ng-repeat="nv in dsNhanVien | orderBy:'-ma' | filter: keyword">
       <td>{{$index + 1}}</td>
+<!--      <td class="text-center">-->
+<!--        <img ng-if="nv.img"-->
+<!--             ng-src="http://localhost:8084/uploads/nhanvien/{{nv.img}}"-->
+<!--             style="width:40px;height:40px;object-fit:cover;border-radius:50%">-->
+<!--      </td>-->
+
       <td>{{nv.ma}}</td>
       <td>{{nv.ten}}</td>
       <td>{{nv.email}}</td>
@@ -144,6 +151,18 @@
 <!--                   ng-model="newNhanVien.ma"-->
 <!--                   readonly>-->
 
+<!--            <div class="col-md-6 mb-3">-->
+<!--              <label class="form-label">Ảnh</label>-->
+<!--              <input type="file"-->
+<!--                     class="form-control"-->
+<!--                     accept="image/*"-->
+<!--                     onchange="angular.element(this).scope().uploadAnh(this)">-->
+<!--            </div>-->
+
+<!--            <div class="col-md-6 mb-3" ng-if="newNhanVien.img">-->
+<!--              <img ng-src="http://localhost:8081/uploads/nhanvien/{{newNhanVien.img}}"-->
+<!--                   style="width:80px;height:80px;object-fit:cover;border-radius:6px">-->
+<!--            </div>-->
 
             <div class="col-md-6 mb-3">
               <label class="form-label">Tên nhân viên</label>
