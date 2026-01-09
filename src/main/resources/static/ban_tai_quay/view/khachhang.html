@@ -212,6 +212,9 @@
                      ng-show="addForm.email.$touched && addForm.email.$invalid">
                 Email không hợp lệ
               </small>
+              <small class="text-danger" ng-if="errorEmail">
+                {{ errorEmail }}
+              </small>
             </div>
 
             <div class="col-md-6 mb-3">
@@ -239,6 +242,9 @@
               <small class="text-danger"
                      ng-show="addForm.sdt.$touched && addForm.sdt.$invalid">
                 SĐT bắt đầu bằng 0, 10–11 số
+              </small>
+              <small class="text-danger" ng-if="errorSdt">
+                {{ errorSdt }}
               </small>
             </div>
 

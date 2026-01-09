@@ -46,9 +46,10 @@ public class AuthController {
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String input = req.getUsername();
 
-        // 🔹 1. Kiểm tra ADMIN
-        Optional<Admin> adminOpt = adminRepo.findByUsername(req.getUsername());
+
+        Optional<Admin> adminOpt = adminRepo.findByUsername(input);
         if (adminOpt.isPresent()) {
             Admin admin = adminOpt.get();
 
@@ -56,30 +57,46 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Sai tên đăng nhập hoặc mật khẩu");
             }
-
             return ResponseEntity.ok(new LoginResponse("ADMIN", admin));
         }
 
-        // 🔹 2. Kiểm tra USER
-        Optional<KhachHang> khOpt = khachHangRepo.findByTen(req.getUsername());
-        if (khOpt.isPresent()) {
-            KhachHang kh = khOpt.get();
 
-            if (!encoder.matches(req.getPassword(), kh.getPassw())) {
+        Optional<NhanVien> nvOpt = nhanVienRepo.findByEmail(input);
+        if (nvOpt.isPresent()) {
+            NhanVien nv = nvOpt.get();
+
+            if (!encoder.matches(req.getPassword(), nv.getPassw())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Sai tên đăng nhập hoặc mật khẩu");
             }
-
-            return ResponseEntity.ok(new LoginResponse("USER", kh));
+            return ResponseEntity.ok(new LoginResponse("NHANVIEN", nv));
         }
 
-        // 🔹 3. Không tồn tại
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body("Sai tên đăng nhập hoặc mật khẩu");
+
+        Optional<KhachHang> khOpt;
+
+        if (input.contains("@")) {
+            khOpt = khachHangRepo.findByEmail(input);
+        } else {
+            khOpt = khachHangRepo.findBySdt(input);
+        }
+
+        if (khOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Sai tên đăng nhập hoặc mật khẩu");
+        }
+
+
+        KhachHang kh = khOpt.get();
+
+        if (!encoder.matches(req.getPassword(), kh.getPassw())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Sai tên đăng nhập hoặc mật khẩu");
+        }
+
+        return ResponseEntity.ok(new LoginResponse("USER", kh));
+
     }
-
-
-
 
 
     @PostMapping("/register")
@@ -109,5 +126,6 @@ public class AuthController {
 
         return ResponseEntity.ok("Đăng ký thành công");
     }
-
 }
+
+

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -33,6 +35,10 @@ public class NhanVienController {
 
     @Autowired
     NhanVienRepo nhanVienRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
 
     @GetMapping("/hien-thi")
     public List<NhanVien> hienThi() {
@@ -66,43 +72,30 @@ public class NhanVienController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> add(
-            @Valid @RequestBody NhanVien nhanVien,
-            BindingResult result) {
+    public ResponseEntity<?> add(@RequestBody NhanVien nv) {
 
-        Map<String, String> errors = new HashMap<>();
-
-        if (result.hasErrors()) {
-            result.getFieldErrors().forEach(e ->
-                    errors.put(e.getField(), e.getDefaultMessage())
-            );
-            return ResponseEntity.badRequest().body(errors);
+        if (nv.getEmail() == null || nv.getEmail().isBlank()) {
+            return ResponseEntity.badRequest().body("Email không được trống");
         }
 
-        if (nhanVienRepo.existsByTenIgnoreCase(nhanVien.getTen().trim())) {
-            errors.put("ten", "Tên nhân viên đã tồn tại");
-            return ResponseEntity.badRequest().body(errors);
+        if (nhanVienRepo.existsByEmail(nv.getEmail())) {
+            return ResponseEntity.badRequest().body("Email đã tồn tại");
         }
 
-        NhanVien last = nhanVienRepo.findTopByOrderByMaDesc();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        int next = 1;
-        if (last != null && last.getMa() != null && last.getMa().startsWith("NV")) {
-            try {
-                next = Integer.parseInt(last.getMa().substring(2)) + 1;
-            } catch (Exception e) {
-                next = 1;
-            }
-        }
+        nv.setMa("NV" + UUID.randomUUID().toString().substring(0, 8));
 
-        nhanVien.setMa("NV" + String.format("%08d", next));
 
-        if (nhanVien.getImg() == null || nhanVien.getImg().isEmpty()) {
-            nhanVien.setImg("default.png");
-        }
+        nv.setPassw(encoder.encode("123456"));
 
-        return ResponseEntity.ok(nhanVienRepo.save(nhanVien));
+        nv.setTrangThai(1);
+
+        nv.setNgayTao(LocalDateTime.now());
+
+        return ResponseEntity.ok(nhanVienRepo.save(nv));
     }
+
 
 
 

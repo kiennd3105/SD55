@@ -1,16 +1,19 @@
 <div class="card p-4" style="width: 380px">
-    <h4 class="text-center mb-3">Đăng nhập</h4>
+    <h4 class="text-center mb-3">Đăng nhập hệ thống</h4>
 
     <div class="mb-3">
-        <label>Tên đăng nhập</label>
-        <input type="text" ng-model="login.username" class="form-control">
-
-
+        <label>Email / Số điện thoại</label>
+        <input type="text"
+               ng-model="login.username"
+               class="form-control"
+               >
     </div>
 
     <div class="mb-3">
         <label>Mật khẩu</label>
-        <input type="password" class="form-control" ng-model="login.password">
+        <input type="password"
+               class="form-control"
+               ng-model="login.password">
     </div>
 
     <div class="text-success text-center mb-2" ng-if="success">
@@ -19,7 +22,9 @@
 
     <div class="text-danger mb-2">{{error}}</div>
 
-    <button class="btn btn-primary w-100" ng-click="dangNhap()">Đăng nhập</button>
+    <button class="btn btn-primary w-100" ng-click="dangNhap()">
+        Đăng nhập
+    </button>
 
     <div class="text-center mt-3">
         <a href="#!/register">Đăng ký</a>
