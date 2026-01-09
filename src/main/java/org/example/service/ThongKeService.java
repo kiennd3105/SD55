@@ -21,7 +21,6 @@ public class ThongKeService {
             fromDate = toDate.minusDays(4);
         }
 
-        // ✅ FIX: ép toDate + 1 ngày
         LocalDate toDateFix = toDate.plusDays(1);
 
         return thongKeRepo.thongKeTheoNgayRaw(fromDate, toDateFix)

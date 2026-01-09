@@ -57,19 +57,16 @@ public class HomePageService {
         return buildDTO(sanPham, cheapestCTSP);
     }
 
-    // Convert SanPham sang DTO với CTSP đầu tiên (cho sản phẩm mới)
     private HomePageProductDTO convertSanPhamToDTOWithFirst(SanPham sanPham) {
-        // Tìm CTSP đầu tiên của sản phẩm này
         SanPhamChiTiet firstCTSP = sanPhamChiTietRepo.findFirstBySanPhamId(sanPham.getId());
 
         if (firstCTSP == null) {
-            return null; // Nếu không có CTSP nào, bỏ qua sản phẩm này
+            return null;
         }
 
         return buildDTO(sanPham, firstCTSP);
     }
 
-    // Build DTO từ SanPham và SanPhamChiTiet
     private HomePageProductDTO buildDTO(SanPham sanPham, SanPhamChiTiet ctsp) {
         HomePageProductDTO dto = new HomePageProductDTO();
         dto.setId(ctsp.getId());
@@ -77,18 +74,16 @@ public class HomePageService {
         dto.setGia(ctsp.getGia());
         dto.setHinhAnh(ctsp.getIMG());
         dto.setIdSanPham(sanPham.getId());
-        dto.setTenSanPham(sanPham.getTen()); // Tên sản phẩm từ SanPham.ten
+        dto.setTenSanPham(sanPham.getTen());
         dto.setIdSize(ctsp.getSize().toString());
         dto.setIdMau(ctsp.getMauSac().toString());
 
-        // Lấy tên size
         if (ctsp.getSize() != null) {
             sizeRepo.findById(ctsp.getSize().toString()).ifPresent(size -> {
                 dto.setTenSize(size.getTenSZ());
             });
         }
 
-        // Lấy tên màu
         if (ctsp.getMauSac() != null) {
             mauSacRepo.findById(ctsp.getMauSac().toString()).ifPresent(mau -> {
                 dto.setTenMau(mau.getTenM());

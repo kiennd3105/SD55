@@ -330,31 +330,6 @@
                          $scope.tinhTienTam();
                     $('#modalThanhToan').modal('show');
                 };
-
-//                $scope.boVoucher = function () {
-//                    let hd = $scope.hoaDonDangXem;
-//                    if (!hd) return;
-//
-//                    $http.post(
-//                        "http://localhost:8084/ban-hang/hoa-don/huy-voucher",
-//                        null,
-//                        {
-//                            params: {
-//                                idHoaDon: hd.id
-//                            }
-//                        }
-//                    ).then(function (res) {
-//
-//                        $scope.hoaDonDangXem = res.data;
-//
-//                        $scope.tinhTienTam();
-//                        $scope.loadVoucherApDung();
-//
-//                    }, function () {
-//                        alert("Không thể bỏ voucher");
-//                    });
-//                };
-
                 $scope.tinhTienThoi = function () {
                     let canThanhToan = Number($scope.thanhTien || 0);
                     let tienKhachDua = Number($scope.thanhToan.tienKhachDua || 0);

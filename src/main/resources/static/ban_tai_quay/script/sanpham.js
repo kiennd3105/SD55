@@ -22,6 +22,35 @@
          $scope.dsThuongHieu = [];
          $scope.dsSize = [];
          $scope.dsMauSac = [];
+         $scope.newSanPham = {
+             ten: '',
+             trangThai: 1,
+             theLoai: '',
+             chatLieu: '',
+             thuongHieu: '',
+             moTa: '',
+             sizeIds: [],
+             mauIds: [],
+             ctspList: []
+         };
+
+         $scope.errorMessage = '';
+         $scope.successMessage = '';
+
+        function resetNewSanPham() {
+            $scope.newSanPham = {
+                ten: "",
+                trangThai: 1,
+                moTa: "",
+                theLoai: "",
+                chatLieu: "",
+                thuongHieu: "",
+                sizeIds: [],
+                mauIds: [],
+                ctspList: []
+            };
+        }
+
         $http.get("http://localhost:8084/the-loai/getAll")
              .then(function (res) {
                     console.log("DS THỂ LOẠI:", res.data);
@@ -87,7 +116,6 @@
                         console.log("DS CTSP:", res.data);
                         $scope.dsSPCT = res.data;
 
-                        // mở modal CTSP
                         $timeout(function () {
                             var modal = new bootstrap.Modal(
                                 document.getElementById('ctspModal')
@@ -100,46 +128,104 @@
                     });
             };
 
+            $scope.showError = function (msg) {
+                $scope.errorMessage = msg;
+                setTimeout(() => {
+                    document.querySelector('.alert-danger')?.scrollIntoView({ behavior: 'smooth' });
+                }, 50);
+            };
 
            $scope.addSanPham = function () {
-
-               if (!$scope.newSanPham.ctspList || $scope.newSanPham.ctspList.length === 0) {
-                   alert("Vui lòng chọn Size và Màu sắc");
+                $scope.errorMessage = '';
+                $scope.successMessage = '';
+               if (!$scope.newSanPham.ten || !$scope.newSanPham.ten.trim()) {
                    return;
                }
-               let formData = new FormData();
-               formData.append("ten", $scope.newSanPham.ten);
-               formData.append("trangThai", $scope.newSanPham.trangThai);
-               formData.append("moTa", $scope.newSanPham.moTa);
-               formData.append("theLoaiId", $scope.newSanPham.theLoai);
-               formData.append("chatLieuId", $scope.newSanPham.chatLieu);
-               formData.append("thuongHieuId", $scope.newSanPham.thuongHieu);
-
-               $scope.newSanPham.ctspList.forEach((ct, index) => {
-                   formData.append(`ctspList[${index}].sizeId`, ct.sizeId);
-                   formData.append(`ctspList[${index}].mauId`, ct.mauId);
-                   formData.append(`ctspList[${index}].gia`, ct.gia);
-                   formData.append(`ctspList[${index}].soLuong`, ct.soLuong);
-
-                   if (ct.file) {
-                       formData.append(`ctspList[${index}].image`, ct.file);
+               if ($scope.newSanPham.trangThai === undefined || $scope.newSanPham.trangThai === null) {
+                   return;
+               }
+               if (!$scope.newSanPham.theLoai) {
+                   return;
+               }
+               if (!$scope.newSanPham.chatLieu) {
+                   return;
+               }
+               if (!$scope.newSanPham.thuongHieu) {
+                   return;
+               }
+                if ($scope.newSanPham.sizeIds.length === 0) {
+                    return;
+                }
+                if ($scope.newSanPham.mauIds.length === 0) {
+                    return;
+                }
+               for (let i = 0; i < $scope.newSanPham.ctspList.length; i++) {
+                   let ct = $scope.newSanPham.ctspList[i];
+                   if (!ct.gia || ct.gia <= 0) {
+                       return;
                    }
-               });
-
-               $http.post("http://localhost:8084/san-pham/add", formData, {
-                   transformRequest: angular.identity,
-                   headers: { 'Content-Type': undefined }
-               })
-               .then(function (res) {
-                    alert(res.data.message);
-                   $('#addModal').modal('hide');
-                   $scope.loadSanPham();
-               })
-               .catch(function (err) {
-                   console.error(err);
-                   alert("Có lỗi upload dữ liệu");
-               });
+                   if (ct.soLuong === undefined || ct.soLuong < 0) {
+                       return;
+                   }
+                   if (!ct.file) {
+                       return;
+                   }
+               }
+               if ($scope.tenTrung) {
+                     return;
+               }
+               submitSanPham();
            };
+           $scope.tenTrung = false;
+            $scope.checkTenSanPham = function () {
+                if (!$scope.newSanPham.ten || !$scope.newSanPham.ten.trim()) {
+                    $scope.tenTrung = false;
+                    return;
+                }
+
+                $http.get("http://localhost:8084/san-pham/check-ten", {
+                    params: { ten: $scope.newSanPham.ten }
+                }).then(function (res) {
+                    $scope.tenTrung = res.data === true;
+                }).catch(function () {
+                    $scope.tenTrung = false;
+                });
+            };
+
+            function submitSanPham() {
+                let formData = new FormData();
+
+                formData.append("ten", $scope.newSanPham.ten);
+                formData.append("trangThai", $scope.newSanPham.trangThai);
+                formData.append("moTa", $scope.newSanPham.moTa);
+                formData.append("theLoaiId", $scope.newSanPham.theLoai);
+                formData.append("chatLieuId", $scope.newSanPham.chatLieu);
+                formData.append("thuongHieuId", $scope.newSanPham.thuongHieu);
+
+                $scope.newSanPham.ctspList.forEach((ct, index) => {
+                    formData.append(`ctspList[${index}].sizeId`, ct.sizeId);
+                    formData.append(`ctspList[${index}].mauId`, ct.mauId);
+                    formData.append(`ctspList[${index}].gia`, ct.gia);
+                    formData.append(`ctspList[${index}].soLuong`, ct.soLuong);
+                    formData.append(`ctspList[${index}].image`, ct.file);
+                });
+
+                $http.post("http://localhost:8084/san-pham/add", formData, {
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined }
+                }).then(function (res) {
+                    $scope.successMessage = res.data.message || "Thêm sản phẩm thành công 🎉";
+                     $timeout(function () {
+                            $scope.successMessage = '';
+                            $('#addModal').modal('hide');
+                        }, 2500);
+                    $('#addModal').modal('hide');
+                    resetNewSanPham();
+                    $scope.loadSanPham();
+                }).catch(function () {
+                    $scope.errorMessage = "Thêm thất bại";
+                });
+            }
 
 
             $scope.generateCTSP = function () {
@@ -197,7 +283,9 @@
             };
 
             $scope.openAddModal = function () {
-                $scope.errorMessage = null;
+                $scope.errorMessage = '';
+                  $scope.successMessage = '';
+                 resetNewSanPham();
 
                 $scope.newSanPham = {
                     ten: "",
@@ -223,11 +311,7 @@
 
                let file = files[0];
                if (!file) return;
-
-               // lưu file gửi BE
                ct.file = file;
-
-               // preview ảnh
                let reader = new FileReader();
                reader.onload = function (e) {
                    $scope.$apply(function () {

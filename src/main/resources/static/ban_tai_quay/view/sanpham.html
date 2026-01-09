@@ -2,6 +2,7 @@
 
     <h2>Quản lý sản phẩm</h2>
 
+
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-success" ng-click="openAddModal()">
             ➕ Thêm sản phẩm
@@ -33,8 +34,8 @@
             <td>{{sp.tenTheLoai}}</td>
 
             <td>
-                <span ng-if="sp.trangThai == 1" class="badge bg-success">Hoạt động</span>
-                <span ng-if="sp.trangThai == 0" class="badge bg-secondary">Ngừng</span>
+                <span ng-if="sp.trangThai == 1" class="badge bg-success">Đang bán</span>
+                <span ng-if="sp.trangThai == 0" class="badge bg-secondary">Ngừng bán</span>
             </td>
             <td>{{sp.moTa}}</td>
             <td>
@@ -53,41 +54,41 @@
         </tbody>
     </table>
 
-<div class="modal fade" id="detailModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
 
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Chi tiết sản phẩm</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Chi tiết sản phẩm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p><b>Mã:</b> {{sanPhamDetail.ma}}</p>
+                    <p><b>Tên:</b> {{sanPhamDetail.ten}}</p>
+                    <p><b>Thương hiệu:</b> {{sanPhamDetail.tenThuongHieu}}</p>
+                    <p><b>Chất liệu:</b> {{sanPhamDetail.tenChatLieu}}</p>
+                    <p><b>Thể loại:</b> {{sanPhamDetail.tenTheLoai}}</p>
+
+
+                    <p>
+                        <b>Trạng thái:</b>
+                        <span ng-if="sanPhamDetail.trangThai == 1" class="badge bg-success">Hoạt động</span>
+                        <span ng-if="sanPhamDetail.trangThai == 0" class="badge bg-secondary">Ngừng</span>
+                    </p>
+
+                    <p><b>Mô tả:</b> {{sanPhamDetail.moTa}}</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                </div>
+
             </div>
-
-            <div class="modal-body">
-                <p><b>Mã:</b> {{sanPhamDetail.ma}}</p>
-                <p><b>Tên:</b> {{sanPhamDetail.ten}}</p>
-                <p><b>Thương hiệu:</b> {{sanPhamDetail.tenThuongHieu}}</p>
-                <p><b>Chất liệu:</b> {{sanPhamDetail.tenChatLieu}}</p>
-                <p><b>Thể loại:</b> {{sanPhamDetail.tenTheLoai}}</p>
-
-
-                <p>
-                    <b>Trạng thái:</b>
-                    <span ng-if="sanPhamDetail.trangThai == 1" class="badge bg-success">Hoạt động</span>
-                    <span ng-if="sanPhamDetail.trangThai == 0" class="badge bg-secondary">Ngừng</span>
-                </p>
-
-                <p><b>Mô tả:</b> {{sanPhamDetail.moTa}}</p>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
-                    Đóng
-                </button>
-            </div>
-
         </div>
     </div>
-</div>
 
     <div class="modal fade" id="ctspModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -126,7 +127,10 @@
                             <td>{{ct.soLuong}}</td>
                             <td>{{ct.tenSize}}</td>
                             <td>{{ct.tenMau}}</td>
-                            <td>{{ct.trangThai}}</td>
+                            <td>
+                                <span ng-if="ct.trangThai == 1" class="badge bg-success">Đang bán</span>
+                                <span ng-if="ct.trangThai == 0" class="badge bg-secondary">Ngừng bán</span></td>
+
                             <td>
 
                             </td>
@@ -145,6 +149,11 @@
             </div>
         </div>
     </div>
+    <div class="alert alert-success alert-dismissible fade show"
+         ng-if="successMessage">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {{ successMessage }}
+    </div>
 
     <div class="modal fade" id="addModal" tabindex="-1">
         <div class="modal-dialog modal-xl">
@@ -156,29 +165,33 @@
                 </div>
 
                 <div class="modal-body">
-
-                    <!-- lỗi BE -->
-                    <div class="alert alert-danger" ng-if="errorMessage">
-                        {{errorMessage}}
-                    </div>
-
-                    <!-- ====== THÔNG TIN SẢN PHẨM CHA ====== -->
+                
                     <h6 class="fw-bold text-primary mb-3">Thông tin sản phẩm</h6>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Tên sản phẩm</label>
-                            <input type="text" class="form-control"
+                            <input type="text"
+                                   class="form-control"
+                                   ng-class="{'is-invalid': errorMessage && !newSanPham.ten }"
+                                   ng-change="checkTenSanPham()"
                                    ng-model="newSanPham.ten">
-                        </div>
 
+                            <div class="invalid-feedback">
+                                Tên sản phẩm không được để trống
+                            </div>
+                            <small class="text-danger" ng-if="tenTrung">
+                                Tên sản phẩm đã tồn tại
+                            </small>
+                        </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Trạng thái</label>
                             <select class="form-select"
                                     ng-model="newSanPham.trangThai">
-                                <option value="1">Hoạt động</option>
-                                <option value="0">Ngừng</option>
+                                <option ng-value="1">đang bán</option>
+                                <option ng-value="0">Ngừng bán</option>
                             </select>
+
                         </div>
                     </div>
 
@@ -186,37 +199,52 @@
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Thể loại</label>
                             <select class="form-select"
-                                    ng-model="newSanPham.theLoai">
+                                    ng-model="newSanPham.theLoai"
+                                    ng-class="{'is-invalid': errorMessage && !newSanPham.theLoai}">
                                 <option value="">-- Chọn thể loại --</option>
-                                <option ng-repeat="tl in dsTheLoai"
-                                        value="{{tl.id}}">
+                                <option ng-repeat="tl in dsTheLoai" value="{{tl.id}}">
                                     {{tl.ten}}
                                 </option>
                             </select>
+
+                            <div class="invalid-feedback">
+                                Vui lòng chọn thể loại
+                            </div>
+
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Chất liệu</label>
                             <select class="form-select"
-                                    ng-model="newSanPham.chatLieu">
+                                    ng-model="newSanPham.chatLieu"
+                                    ng-class="{'is-invalid': errorMessage && !newSanPham.chatLieu}">
                                 <option value="">-- Chọn chất liệu --</option>
-                                <option ng-repeat="cl in dsChatLieu"
-                                        value="{{cl.id}}">
+                                <option ng-repeat="cl in dsChatLieu" value="{{cl.id}}">
                                     {{cl.tenCL}}
                                 </option>
                             </select>
+
+                            <div class="invalid-feedback">
+                                Vui lòng chọn chất liệu
+                            </div>
+
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Thương hiệu</label>
                             <select class="form-select"
-                                    ng-model="newSanPham.thuongHieu">
+                                    ng-model="newSanPham.thuongHieu"
+                                    ng-class="{'is-invalid': errorMessage && !newSanPham.thuongHieu}">
                                 <option value="">-- Chọn thương hiệu --</option>
-                                <option ng-repeat="th in dsThuongHieu"
-                                        value="{{th.id}}">
+                                <option ng-repeat="th in dsThuongHieu" value="{{th.id}}">
                                     {{th.tenTH}}
                                 </option>
                             </select>
+
+                            <div class="invalid-feedback">
+                                Vui lòng chọn thương hiệu
+                            </div>
+
                         </div>
                     </div>
 
@@ -229,8 +257,10 @@
                     <hr>
 
                     <!-- ====== CHỌN SIZE ====== -->
-                    <div class="mb-3">
+                    <div class="mb-3"
+                         ng-class="{'border border-danger rounded p-2': errorMessage && newSanPham.sizeIds.length === 0}">
                         <label class="form-label fw-bold">Size</label>
+
                         <div class="d-flex flex-wrap gap-3">
                             <label ng-repeat="s in dsSize">
                                 <input type="checkbox"
@@ -239,12 +269,19 @@
                                 {{s.tenSZ}}
                             </label>
                         </div>
+
+                        <div class="text-danger small mt-1"
+                             ng-if="errorMessage && newSanPham.sizeIds.length === 0">
+                            Vui lòng chọn ít nhất 1 size
+                        </div>
                     </div>
 
 
                     <!-- ====== CHỌN MÀU ====== -->
-                    <div class="mb-3">
+                    <div class="mb-3"
+                         ng-class="{'border border-danger rounded p-2': errorMessage && newSanPham.mauIds.length === 0}">
                         <label class="form-label fw-bold">Màu sắc</label>
+
                         <div class="d-flex flex-wrap gap-3">
                             <label ng-repeat="m in dsMauSac">
                                 <input type="checkbox"
@@ -252,6 +289,11 @@
                                        ng-click="toggleMau(m.id)">
                                 {{m.tenM}}
                             </label>
+                        </div>
+
+                        <div class="text-danger small mt-1"
+                             ng-if="errorMessage && newSanPham.mauIds.length === 0">
+                            Vui lòng chọn ít nhất 1 màu sắc
                         </div>
                     </div>
 
@@ -289,26 +331,42 @@
                                 <td>
                                     <input type="number"
                                            class="form-control"
-                                           ng-model="ct.gia">
+                                           ng-model="ct.gia"
+                                           ng-class="{'is-invalid': errorMessage && (!ct.gia || ct.gia <= 0)}">
+
+                                    <div class="invalid-feedback">
+                                        Giá phải lớn hơn 0
+                                    </div>
+
                                 </td>
                                 <td>
                                     <input type="number"
                                            class="form-control"
-                                           ng-model="ct.soLuong">
+                                           ng-model="ct.soLuong"
+                                           ng-class="{'is-invalid': errorMessage && ct.soLuong < 0}">
+
+                                    <div class="invalid-feedback">
+                                        Số lượng không hợp lệ
+                                    </div>
+
                                 </td>
                                 <td>
                                     <input type="file"
                                            class="form-control"
                                            accept="image/*"
+                                           ng-class="{'is-invalid': errorMessage && !ct.file}"
                                            file-change="onSelectImage(files, ct)">
+
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn ảnh
+                                    </div>
+
 
                                     <img ng-if="ct.preview"
                                          ng-src="{{ct.preview}}"
                                          style="width:80px;height:80px;object-fit:cover;border-radius:5px;margin-top:5px">
 
                                 </td>
-
-
 
 
                             </tr>
@@ -323,9 +381,11 @@
                     <button class="btn btn-secondary" data-bs-dismiss="modal">
                         Hủy
                     </button>
-                    <button class="btn btn-success" ng-click="addSanPham()">
+                    <button class="btn btn-success"
+                            ng-click="addSanPham()">
                         Lưu
                     </button>
+
                 </div>
 
             </div>

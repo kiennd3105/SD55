@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +27,7 @@ public class BanHangTaiQuayController {
     @Autowired
     NhanVienRepo nhanVienRepo;
     @Autowired
-    VoucherRepository voucherRepository ;
+    VoucherRepository voucherRepository;
     @Autowired
     SanPhamChiTietRepo sanPhamChiTietRepo;
 
@@ -56,6 +55,7 @@ public class BanHangTaiQuayController {
                 .map(HDCT::toResponse)
                 .toList();
     }
+
     @GetMapping("/hoa-don/detail-info/{id}")
     public HoaDonRespon getInfo(@PathVariable String id) {
         return hoaDonRepo.findById(id)
@@ -69,7 +69,7 @@ public class BanHangTaiQuayController {
 
 
         HoaDon hd = new HoaDon();
-        hd.setId(UUID.randomUUID().toString().substring(0,8).toUpperCase());
+        hd.setId(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
         hd.setLoaiHoaDon(0);
         hd.setTrangThai(0);
         hd.setKhachHang(null);
@@ -85,6 +85,7 @@ public class BanHangTaiQuayController {
         hoaDonRepo.save(hoaDonSaved);
         return hoaDonSaved;
     }
+
     @GetMapping("/hoa-don/{id}")
     public HoaDonRespon getHoaDonById(@PathVariable String id) {
         return hoaDonRepo.findById(id)
@@ -111,7 +112,6 @@ public class BanHangTaiQuayController {
         }
 
 
-
         HDCT hdct = hdctRepo
                 .findByHoaDonIdAndSanPhamChiTietId(idHoaDon, idSPCT)
                 .orElse(null);
@@ -124,7 +124,7 @@ public class BanHangTaiQuayController {
             hdct.setId(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             hdct.setHoaDon(hoaDon);
             hdct.setSanPhamChiTiet(spct);
-            hdct.setSoLuong("1");
+            hdct.setSoLuong(String.valueOf(soLuong));
             hdct.setGiaBan(spct.getGia());
         }
 
@@ -135,6 +135,7 @@ public class BanHangTaiQuayController {
 
         return hdct.toResponse();
     }
+
     @PostMapping("/hoa-don/cap-nhat-so-luong")
     public HoaDonChiTietRespon capNhatSoLuong(
             @RequestParam String idHDCT,
@@ -177,6 +178,7 @@ public class BanHangTaiQuayController {
         }
         hdctRepo.delete(hdct);
     }
+
     @DeleteMapping("/hoa-don/xoa/{idHoaDon}")
     @Transactional
     public void xoaHoaDon(@PathVariable String idHoaDon) {
@@ -199,6 +201,7 @@ public class BanHangTaiQuayController {
         hdctRepo.deleteAll(dsHDCT);
         hoaDonRepo.delete(hoaDon);
     }
+
     @PostMapping("/hoa-don/them-khach-hang")
     public HoaDonRespon themKhachHangVaoHoaDon(
             @RequestParam String idHoaDon,
@@ -215,6 +218,7 @@ public class BanHangTaiQuayController {
         hoaDonRepo.save(hoaDon);
         return hoaDon.toResponse();
     }
+
     @PostMapping("/hoa-don/xoa-khach-hang")
     public HoaDonRespon xoaKhachHangKhoiHoaDon(
             @RequestParam String idHoaDon
@@ -231,9 +235,10 @@ public class BanHangTaiQuayController {
 
         return hoaDon.toResponse();
     }
+
     @PostMapping("/khach-hang/add")
     public KhachHang addKhachHang(@RequestBody KhachHang kh) {
-        kh.setId(UUID.randomUUID().toString().substring(0,8).toUpperCase());
+        kh.setId(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
         return khachHangRepo.save(kh);
     }
 
@@ -326,6 +331,7 @@ public class BanHangTaiQuayController {
         hoaDonRepo.save(hoaDon);
         return hoaDon.toResponse();
     }
+
     @PostMapping("/hoa-don/huy-voucher")
     public HoaDonRespon boVoucher(@RequestParam String idHoaDon) {
 
@@ -473,9 +479,6 @@ public class BanHangTaiQuayController {
 
         return hoaDon.toResponse();
     }
-
-
-
 
 
 }

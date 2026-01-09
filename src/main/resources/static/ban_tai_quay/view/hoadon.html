@@ -1,19 +1,61 @@
-
 <div ng-controller="hoaDonCtrl">
 
     <h2 class="mb-3">Quản lý Hóa Đơn</h2>
+    <!-- TÌM KIẾM & LỌC -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row g-2">
+
+                <!-- Tìm theo từ khóa -->
+                <div class="col-md-6">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Tìm theo mã hóa đơn / tên NV / tên KH"
+                           ng-model="filter.keyword">
+                </div>
+
+                <!-- Lọc loại hóa đơn -->
+                <div class="col-md-3">
+                    <select class="form-select"
+                            ng-model="filter.loaiHoaDon">
+                        <option value="">-- Tất cả loại hóa đơn --</option>
+                        <option value="1">Online</option>
+                        <option value="0">Tại quầy</option>
+                    </select>
+                </div>
+
+                <!-- Reset -->
+                <div class="col-md-3">
+                    <button class="btn btn-outline-secondary w-100"
+                            ng-click="resetFilter()">
+                        Xóa lọc
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item" ng-repeat="tab in trangThaiTabs">
+            <button type="button"
+                    class="nav-link"
+                    ng-class="{ active: trangThaiDangChon === tab.value }"
+                    ng-click="chonTrangThai(tab.value)">
+                {{tab.label}}
+            </button>
+        </li>
+    </ul>
+
 
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
         <tr>
             <th>STT</th>
-            <th>ID</th>
             <th>Mã</th>
             <th>Nhân viên</th>
             <th>Khác hàng</th>
             <th>Ngày đặt</th>
             <th>Hóa Đơn</th>
-            <th>Thanh toán</th>
             <th>Địa chỉ</th>
             <th>Trạng thái</th>
             <th>Hành Động</th>
@@ -21,9 +63,8 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="hd in dsHoaDon">
+        <tr ng-repeat="hd in dsHoaDon | filter:filterHoaDon">
             <td>{{$index + 1}}</td>
-            <td>{{hd.id}}</td>
             <td>{{hd.ma}}</td>
             <td>{{hd.tenNV}}</td>
             <td>{{hd.tenKH}}</td>
@@ -34,12 +75,11 @@
                 <span ng-if="hd.loaiHoaDon == 0" class="badge bg-secondary">Tại quầy</span>
             </td>
 
-            <td>{{hd.phuongThucThanhToan}}</td>
             <td>{{hd.diaChi}}</td>
 
             <td>
-                <span ng-if="hd.trangThai == 0" class="badge bg-warning">Chờ TT</span>
-                <span ng-if="hd.trangThai == 1" class="badge bg-success">Đã TT</span>
+                <span ng-if="hd.trangThai == 0" class="badge bg-warning">Chờ thanh toán</span>
+                <span ng-if="hd.trangThai == 1" class="badge bg-success">Đã thanh toán</span>
             </td>
             <td class="text-center">
                 <button class="btn btn-info btn-sm" ng-click="openHoaDonDetail(hd.id)">
@@ -57,7 +97,6 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
 
-                <!-- HEADER -->
                 <div class="modal-header">
                     <h4 class="modal-title">Chi Tiết Đơn Hàng</h4>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
@@ -65,8 +104,8 @@
 
                 <div class="modal-body">
 
-                    <!-- TIMELINE -->
-                    <div class="d-flex justify-content-between mb-4 text-center">
+                    <div class="d-flex justify-content-between mb-4 text-center"
+                         ng-if="hoaDonDangXem.loaiHoaDon != 0">
                         <div>
                             <i class="bi bi-check-circle text-primary fs-4"></i>
                             <div>Tạo đơn</div>
@@ -85,10 +124,13 @@
                         </div>
                     </div>
 
-                    <!-- THÔNG TIN ĐƠN HÀNG -->
                     <h5>Thông Tin Đơn Hàng</h5>
                     <div class="row mb-3">
-                        <p>Trạng thái: <b>{{hoaDonDangXem.trangThai}}</b></p>
+                        <p>
+                            Trạng thái:
+                            <b>{{ trangThaiMap[hoaDonDangXem.trangThai] }}</b>
+                        </p>
+
                         <p>Mã đơn: {{hoaDonDangXem.ma}}</p>
                         <p>Loại đơn: {{hoaDonDangXem.loaiHoaDon == 1 ? 'Online' : 'Tại quầy'}}</p>
 
@@ -99,7 +141,6 @@
 
                     </div>
 
-                    <!-- KHÁCH HÀNG -->
                     <h5>Thông Tin Khách Hàng</h5>
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -112,27 +153,30 @@
                         </div>
                     </div>
 
-                    <!-- BẢNG CHI TIẾT SP -->
                     <h5>Chi Tiết Sản Phẩm</h5>
 
                     <div ng-repeat="ct in dsHDCT" class="border rounded p-3 mb-3">
                         <div class="row">
-                            <div class="col-md-6">
-                                <p><b>Sản phẩm:</b> {{ct.tenSanPham}}</p>
-                                <p><b>Size:</b> {{ct.tenSize}}</p>
-                                <p><b>Màu:</b> {{ct.tenMau}}</p>
-                                <p><b>Thể loại:</b> {{ct.tenTL}}</p>
+                            <div class="col-md-3 text-center">
+                                <img ng-src="{{ct.img}}"
+                                     class="img-fluid rounded"
+                                     style="max-height:120px"
+                                     alt="Ảnh sản phẩm">
                             </div>
+                            <div class="col-md-9">
+                                <div class="col-md-6">
+                                    <p><b>Sản phẩm:</b> {{ct.tenSanPham}}</p>
+                                    <p><b>Size:</b> {{ct.tenSize}}</p>
+                                    <p><b>Màu:</b> {{ct.tenMau}}</p>
+                                    <p><b>Thể loại:</b> {{ct.tenTL}}</p>
+                                </div>
 
-                            <div class="col-md-6">
-                                <p><b>Chất liệu:</b> {{ct.tenCL}}</p>
-                                <p><b>Thương hiệu:</b> {{ct.tenTH}}</p>
-                                <p><b>Giá:</b> {{ct.giaBan | number}} đ</p>
-                                <p><b>Số lượng:</b> {{ct.soLuong}}</p>
-                                <p>
-                                    <b>Thành tiền:</b>
-                                    {{ct.giaBan * ct.soLuong | number}} đ
-                                </p>
+                                <div class="col-md-6">
+                                    <p><b>Chất liệu:</b> {{ct.tenCL}}</p>
+                                    <p><b>Thương hiệu:</b> {{ct.tenTH}}</p>
+                                    <p><b>Giá:</b> {{ct.giaBan | number}} đ</p>
+                                    <p><b>Số lượng:</b> {{ct.soLuong}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -148,7 +192,6 @@
             </div>
         </div>
     </div>
-
 
 
 </div>
