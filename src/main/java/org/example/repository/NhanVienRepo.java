@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface NhanVienRepo extends JpaRepository<NhanVien, String> {
 
+
+    Optional<NhanVien> findByEmail(String email);
+
     boolean existsByEmail(String email);
 
-    NhanVien findTopByOrderByMaDesc();
-    Optional<NhanVien> findByTen(String ten);
-    boolean existsByTenIgnoreCase(String ten);
 
 
 }

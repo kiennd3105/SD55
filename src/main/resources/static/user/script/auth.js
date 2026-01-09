@@ -1,6 +1,6 @@
 var app = angular.module("userApp");
 
-/* ===== LOGIN ===== */
+
 app.controller("loginCtrl", function ($scope, $http, $window) {
 
     if (localStorage.getItem("registerSuccess")) {
@@ -8,7 +8,7 @@ app.controller("loginCtrl", function ($scope, $http, $window) {
         localStorage.removeItem("registerSuccess");
     }
 
-    // ✅ PHẢI là username
+
     $scope.login = {
         username: "",
         password: ""
@@ -21,15 +21,23 @@ app.controller("loginCtrl", function ($scope, $http, $window) {
         $http.post("http://localhost:8084/api/auth/login", $scope.login)
             .then(function (res) {
 
-                // lưu user + role
+
                 localStorage.setItem("user", JSON.stringify(res.data));
 
-                // 🔥 PHÂN QUYỀN
+
                 if (res.data.role === "ADMIN") {
+
                     $window.location.href = "/ban_tai_quay/layout.html#!/sanpham";
-                } else {
+                } else if (res.data.role === "NHANVIEN") {
+
+                    $window.location.href = "/ban_tai_quay/layout.html#!/taiquay";
+                } else if (res.data.role === "USER") {
+
                     $window.location.href = "/user/layout-user.html#!/";
+                } else {
+                    $scope.error = "Vai trò không hợp lệ";
                 }
+
 
             })
             .catch(function (err) {

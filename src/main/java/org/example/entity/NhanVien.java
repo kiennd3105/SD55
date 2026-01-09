@@ -28,7 +28,7 @@ public class NhanVien {
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "MA")
+    @Column(name = "MA", length = 10, unique = true)
     private String ma;
 
     @Column(name = "TEN")

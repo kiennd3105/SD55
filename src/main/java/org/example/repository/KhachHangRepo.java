@@ -9,14 +9,16 @@ import java.util.Optional;
 public interface KhachHangRepo extends JpaRepository<KhachHang, String> {
     Optional<KhachHang> findDetailById(String id);
 
-    Optional<KhachHang> findByEmail(String email); // ✅ DÙNG CÁI NÀY
+
 
     boolean existsByEmail(String email);
     boolean existsByTenIgnoreCaseAndIdNot(String ten, String id);
     boolean existsByTenIgnoreCase(String ten);
-
+    boolean existsBySdt(String sdt);
     List<KhachHang> findByTrangThai(Integer trangThai);
     Optional<KhachHang> findByTen(String ten);
+    Optional<KhachHang> findByEmail(String email);
+    Optional<KhachHang> findBySdt(String sdt);
 
 
 }

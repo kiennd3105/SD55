@@ -114,7 +114,7 @@ app.controller("nhanVienCtrl", function ($scope, $http) {
                     });
                     alert(msg);
                 } else {
-                    alert("Lỗi hệ thống");
+                    alert("Email đã tồn tại");
                 }
             });
     };

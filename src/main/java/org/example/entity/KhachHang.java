@@ -34,7 +34,7 @@ public class KhachHang {
     @Column(name = "TEN")
     private String ten;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
     @Column(name = "PASSW")
@@ -43,7 +43,7 @@ public class KhachHang {
     @Column(name = "GIOITINH")
     private String gioiTinh;
 
-    @Column(name = "SDT")
+    @Column(name = "SDT", unique = true)
     private String sdt;
 
     @Column(name = "DIACHI")

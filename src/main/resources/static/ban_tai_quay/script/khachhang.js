@@ -78,7 +78,15 @@ app.controller("khachHangCtrl", function($scope, $http) {
         $scope.showAddModal = false;
     };
 
+    $scope.errorEmail = "";
+    $scope.errorSdt = "";
+
     $scope.addKhachHang = function () {
+
+        // reset lỗi cũ
+        $scope.errorEmail = null;
+        $scope.errorSdt = null;
+
         if ($scope.addForm.$invalid) {
             alert("Vui lòng nhập đầy đủ và đúng thông tin!");
             return;
@@ -91,14 +99,24 @@ app.controller("khachHangCtrl", function($scope, $http) {
                 $scope.loadDanhSach();
             })
             .catch(function (error) {
-                if (error.data) {
-                    alert(error.data); // tên bị trùng sẽ hiện ở đây
+                if (error.data && error.data.field) {
+
+                    if (error.data.field === 'email') {
+                        $scope.errorEmail = error.data.message;
+                    }
+
+                    if (error.data.field === 'sdt') {
+                        $scope.errorSdt = error.data.message;
+                    }
+
+                    if (error.data.field === 'ten') {
+                        alert(error.data.message);
+                    }
+
                 } else {
-                    alert("Tên khách hàng đã tồn tại");
+                    alert("Có lỗi xảy ra");
                 }
             });
     };
-
-
 
 });
