@@ -1,11 +1,9 @@
 spring:
   application:
-  name: demo
-  devtools:
-    restart:
-      enabled: true
+    name: SD55
 
   datasource:
+
 
     url: jdbc:sqlserver://localhost:1433;databaseName=SD55;encrypt=true;trustServerCertificate=true
     username: test2
@@ -15,24 +13,27 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     properties:
       hibernate.format_sql: false
 
+server:
+  port: 8084
   servlet:
     multipart:
       enabled: true
       max-file-size: 10MB
-      max-request-size: 10MB
+      max-request-size: 20MB
+      port: ${API_PORT:8084}
 
-  web:
-    cors:
-      allowed-origin-patterns: http://localhost:3000
-      allow-credentials: true
-      allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+web:
+  cors:
+    allowed-origin-patterns: http://localhost:3000
+    allow-credentials: true
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
 
 logging:
   level:
@@ -44,8 +45,8 @@ logging:
             sql:
               BasicBinder: TRACE
 
-server:
-  port: ${API_PORT:8084}
+#server:
+#  port: ${API_PORT:8084}
 
 payment:
   vnPay:

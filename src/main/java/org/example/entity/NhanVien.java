@@ -61,16 +61,19 @@ public class NhanVien {
 
     @PrePersist
     public void prePersist() {
-        if (this.id == null) {
+        System.out.println(">>> PRE_PERSIST ID BEFORE = [" + this.id + "]");
+        if (this.id == null || this.id.trim().isEmpty()) {
             this.id = UUID.randomUUID()
                     .toString()
                     .replace("-", "")
                     .substring(0, 8)
                     .toUpperCase();
         }
+        System.out.println(">>> PRE_PERSIST ID AFTER = [" + this.id + "]");
         this.ngayTao = LocalDateTime.now();
         this.ngaySua = LocalDateTime.now();
     }
+
 
     @PreUpdate
     public void preUpdate() {

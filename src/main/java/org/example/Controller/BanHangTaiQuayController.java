@@ -215,6 +215,7 @@ public class BanHangTaiQuayController {
         KhachHang kh = khachHangRepo.findById(idKhachHang)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng"));
         hoaDon.setKhachHang(kh);
+
         hoaDonRepo.save(hoaDon);
         return hoaDon.toResponse();
     }
@@ -239,9 +240,9 @@ public class BanHangTaiQuayController {
     @PostMapping("/khach-hang/add")
     public KhachHang addKhachHang(@RequestBody KhachHang kh) {
         kh.setId(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+        kh.setMa("KH" + System.currentTimeMillis() % 100000000);
         return khachHangRepo.save(kh);
     }
-
 
     @GetMapping("/hoa-don/voucher-ap-dung/{idHoaDon}")
     public List<VoucherRespon> voucherApDung(@PathVariable String idHoaDon) {
@@ -257,7 +258,6 @@ public class BanHangTaiQuayController {
                 .map(Voucher::toResponse)
                 .toList();
     }
-
 
     @PostMapping("/hoa-don/ap-dung-voucher")
     public HoaDonRespon apDungVoucher(

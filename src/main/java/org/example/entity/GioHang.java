@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.dto.giohang.GioHangRespon;
 
 @Getter
 @Setter
@@ -19,4 +20,11 @@ public class GioHang {
     @ManyToOne
     @JoinColumn(name = "IDKH")
     private KhachHang khachHang;
+
+    public GioHangRespon toResponse() {
+        return new GioHangRespon(
+                id,
+                khachHang != null ? khachHang.getTen() : null
+        );
+    }
 }

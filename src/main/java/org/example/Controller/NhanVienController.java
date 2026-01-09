@@ -68,8 +68,8 @@ public class NhanVienController {
     @PostMapping("/add")
     public ResponseEntity<?> add(
             @Valid @RequestBody NhanVien nhanVien,
-            BindingResult result,
-            Pageable pageable) {
+            BindingResult result) {
+
         Map<String, String> errors = new HashMap<>();
 
         if (result.hasErrors()) {
@@ -79,24 +79,31 @@ public class NhanVienController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        if (nhanVienRepo.existsByEmail(nhanVien.getEmail())) {
-            errors.put("email", "Email đã tồn tại");
+        if (nhanVienRepo.existsByTenIgnoreCase(nhanVien.getTen().trim())) {
+            errors.put("ten", "Tên nhân viên đã tồn tại");
             return ResponseEntity.badRequest().body(errors);
         }
 
-        NhanVien last = nhanVienRepo.
-                findTopByOrderByMaDesc();
+        NhanVien last = nhanVienRepo.findTopByOrderByMaDesc();
 
         int next = 1;
-        if (last != null && last.getMa() != null) {
-            next = Integer.parseInt(last.getMa().substring(2)) + 1;
+        if (last != null && last.getMa() != null && last.getMa().startsWith("NV")) {
+            try {
+                next = Integer.parseInt(last.getMa().substring(2)) + 1;
+            } catch (Exception e) {
+                next = 1;
+            }
         }
 
         nhanVien.setMa("NV" + String.format("%08d", next));
 
+        if (nhanVien.getImg() == null || nhanVien.getImg().isEmpty()) {
+            nhanVien.setImg("default.png");
+        }
 
         return ResponseEntity.ok(nhanVienRepo.save(nhanVien));
     }
+
 
 
 }

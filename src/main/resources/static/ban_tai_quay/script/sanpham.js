@@ -136,38 +136,57 @@
             };
 
            $scope.addSanPham = function () {
-                $scope.errorMessage = '';
-                $scope.successMessage = '';
+            $scope.errorMessage = '';
+            $scope.successMessage = '';
+
                if (!$scope.newSanPham.ten || !$scope.newSanPham.ten.trim()) {
+                   $scope.errorMessage = "Vui lòng nhập tên sản phẩm";
                    return;
                }
+
                if ($scope.newSanPham.trangThai === undefined || $scope.newSanPham.trangThai === null) {
+                   $scope.errorMessage = "Vui lòng chọn trạng thái";
                    return;
                }
+
                if (!$scope.newSanPham.theLoai) {
+                   $scope.errorMessage = "Vui lòng chọn thể loại";
                    return;
                }
+
                if (!$scope.newSanPham.chatLieu) {
+                   $scope.errorMessage = "Vui lòng chọn chất liệu";
                    return;
                }
+
                if (!$scope.newSanPham.thuongHieu) {
+                   $scope.errorMessage = "Vui lòng chọn thương hiệu";
                    return;
                }
                 if ($scope.newSanPham.sizeIds.length === 0) {
+                    $scope.errorMessage = "Vui lòng chọn ít nhất 1 size";
                     return;
                 }
                 if ($scope.newSanPham.mauIds.length === 0) {
+                    $scope.errorMessage = "Vui lòng chọn ít nhất 1 màu sắc";
                     return;
                 }
+
                for (let i = 0; i < $scope.newSanPham.ctspList.length; i++) {
                    let ct = $scope.newSanPham.ctspList[i];
+
                    if (!ct.gia || ct.gia <= 0) {
+                       $scope.errorMessage = `Giá không hợp lệ tại dòng ${i + 1}`;
                        return;
                    }
+
                    if (ct.soLuong === undefined || ct.soLuong < 0) {
+                       $scope.errorMessage = `Số lượng không hợp lệ tại dòng ${i + 1}`;
                        return;
                    }
+
                    if (!ct.file) {
+                       $scope.errorMessage = `Vui lòng chọn ảnh tại dòng ${i + 1}`;
                        return;
                    }
                }
@@ -215,10 +234,6 @@
                     headers: { 'Content-Type': undefined }
                 }).then(function (res) {
                     $scope.successMessage = res.data.message || "Thêm sản phẩm thành công 🎉";
-                     $timeout(function () {
-                            $scope.successMessage = '';
-                            $('#addModal').modal('hide');
-                        }, 2500);
                     $('#addModal').modal('hide');
                     resetNewSanPham();
                     $scope.loadSanPham();

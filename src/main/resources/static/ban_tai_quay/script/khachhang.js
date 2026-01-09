@@ -43,7 +43,11 @@ app.controller("khachHangCtrl", function($scope, $http) {
             $scope.loadDanhSach();
         }).catch(function (error) {
             console.error(error);
-            alert("Cập nhật thất bại");
+            if (error.data) {
+                alert(error.data); // tên trùng
+            } else {
+                alert("Cập nhật thất bại");
+            }
         });
     };
 
@@ -54,26 +58,12 @@ app.controller("khachHangCtrl", function($scope, $http) {
         $scope.detailKhachHang = null;
     };
 
-    $scope.generateMaKH = function () {
-        let max = 0;
 
-        $scope.dsKhachHang.forEach(function (kh) {
-            if (kh.ma && kh.ma.startsWith("KH")) {
-                let num = parseInt(kh.ma.substring(2));
-                if (!isNaN(num) && num > max) {
-                    max = num;
-                }
-            }
-        });
-
-        let next = max + 1;
-        return "KH" + next.toString().padStart(8, "0");
-    };
 
 
     $scope.openAddModal = function () {
         $scope.newKhachHang = {
-            ma: $scope.generateMaKH(),
+
             ten: "",
             email: "",
             gioiTinh: "",
@@ -100,8 +90,12 @@ app.controller("khachHangCtrl", function($scope, $http) {
                 $scope.closeAddModal();
                 $scope.loadDanhSach();
             })
-            .catch(function () {
-                alert("Thêm khách hàng thất bại");
+            .catch(function (error) {
+                if (error.data) {
+                    alert(error.data); // tên bị trùng sẽ hiện ở đây
+                } else {
+                    alert("Tên khách hàng đã tồn tại");
+                }
             });
     };
 

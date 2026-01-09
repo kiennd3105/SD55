@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.dto.giohang.CTGHRespon;
 
 @Getter
 @Setter
@@ -25,4 +26,17 @@ public class CTGioHang {
     @ManyToOne
     @JoinColumn(name = "IDGH")
     private GioHang gioHang;
+
+    public CTGHRespon toResponse() {
+        return new CTGHRespon(
+                id,
+                gia,
+                soLuong,
+                ngayTao,
+                sanPhamChiTiet.getSanPham().getTen(),
+                sanPhamChiTiet.getMauSac().getTenM(),
+                sanPhamChiTiet.getSize().getTenSZ(),
+                gioHang
+        );
+    }
 }

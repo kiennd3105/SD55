@@ -1,0 +1,114 @@
+<body ng-controller="registerCtrl"
+      class="d-flex justify-content-center align-items-center min-vh-100">
+
+<div class="card p-4" style="width: 420px">
+    <h4 class="text-center fw-bold mb-4">Đăng ký tài khoản</h4>
+
+    <form name="formRegister" novalidate ng-submit="dangKy(formRegister)">
+
+        <div class="input-group mb-2">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input class="form-control"
+                   placeholder="Họ và tên"
+                   ng-model="user.ten"
+                   name="ten"
+                   ng-required="true">
+        </div>
+        <small class="text-danger"
+               ng-show="(formRegister.ten.$touched || submitted) && formRegister.ten.$invalid">
+            Vui lòng nhập họ tên
+        </small>
+
+        <div class="input-group mb-2">
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input type="email"
+                   class="form-control"
+                   placeholder="Email"
+                   ng-model="user.email"
+                   name="email"
+                   ng-required="true">
+        </div>
+        <small class="text-danger"
+               ng-show="(formRegister.email.$touched || submitted) && formRegister.email.$invalid">
+            Email không hợp lệ
+        </small>
+
+        <div class="input-group mb-2">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password"
+                   class="form-control"
+                   placeholder="Mật khẩu"
+                   ng-model="user.passw"
+                   name="passw"
+                   ng-minlength="6"
+                   ng-required="true">
+        </div>
+        <small class="text-danger"
+               ng-show="(formRegister.passw.$touched || submitted) && formRegister.passw.$invalid">
+            Mật khẩu tối thiểu 6 ký tự
+        </small>
+
+        <div class="input-group mb-2">
+            <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+            <input class="form-control"
+                   placeholder="Số điện thoại"
+                   ng-model="user.sdt"
+                   name="sdt"
+                   ng-pattern="/^(0[0-9]{9})$/"
+                   ng-required="true">
+        </div>
+        <small class="text-danger"
+               ng-show="(formRegister.sdt.$touched || submitted) && formRegister.sdt.$invalid">
+            SĐT phải có 10 số, bắt đầu bằng 0
+        </small>
+
+        <div class="input-group mb-2">
+            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+            <input class="form-control"
+                   placeholder="Địa chỉ"
+                   ng-model="user.diaChi"
+                   name="diaChi"
+                   ng-required="true">
+        </div>
+        <small class="text-danger"
+               ng-show="(formRegister.diaChi.$touched || submitted) && formRegister.diaChi.$invalid">
+            Vui lòng nhập địa chỉ
+        </small>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
+            <select class="form-select"
+                    ng-model="user.gioiTinh"
+                    name="gioiTinh"
+                    ng-required="true">
+                <option value="">Chọn giới tính</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+            </select>
+        </div>
+        <small class="text-danger"
+               ng-show="(formRegister.gioiTinh.$touched || submitted) && formRegister.gioiTinh.$invalid">
+            Vui lòng chọn giới tính
+        </small>
+
+        <div class="text-danger text-center mb-2" ng-if="error">
+            {{error}}
+        </div>
+        <div class="text-success text-center mb-2" ng-if="success">
+            {{success}}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 py-2">
+            Đăng ký
+        </button>
+
+    </form>
+
+    <div class="text-center mt-3">
+        <a href="#!/login" class="text-decoration-none fw-medium">
+            ← Quay lại đăng nhập
+        </a>
+    </div>
+</div>
+
+</body>
