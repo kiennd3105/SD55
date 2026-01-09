@@ -3,8 +3,10 @@ package org.example.Controller;
 import org.example.dto.login.LoginRequest;
 import org.example.dto.login.LoginResponse;
 import org.example.dto.login.RegisterRequest;
+import org.example.entity.Admin;
 import org.example.entity.KhachHang;
 import org.example.entity.NhanVien;
+import org.example.repository.AdminRepo;
 import org.example.repository.KhachHangRepo;
 import org.example.repository.NhanVienRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,26 +35,51 @@ public class AuthController {
     private NhanVienRepo nhanVienRepo;
     @Autowired
     private KhachHangRepo khachHangRepo;
+    @Autowired
+    private AdminRepo adminRepo;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
 
-        Optional<KhachHang> opt = khachHangRepo.findByEmail(req.getEmail());
-
-        if (opt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Sai email hoặc mật khẩu");
+        if (req.getUsername() == null || req.getPassword() == null) {
+            return ResponseEntity.badRequest().body("Thiếu thông tin đăng nhập");
         }
-
-        KhachHang kh = opt.get();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        if (!encoder.matches(req.getPassword(), kh.getPassw())) {
-            return ResponseEntity.badRequest().body("Sai email hoặc mật khẩu");
+        // 🔹 1. Kiểm tra ADMIN
+        Optional<Admin> adminOpt = adminRepo.findByUsername(req.getUsername());
+        if (adminOpt.isPresent()) {
+            Admin admin = adminOpt.get();
+
+            if (!encoder.matches(req.getPassword(), admin.getPassword())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Sai tên đăng nhập hoặc mật khẩu");
+            }
+
+            return ResponseEntity.ok(new LoginResponse("ADMIN", admin));
         }
 
-        return ResponseEntity.ok(kh);
+        // 🔹 2. Kiểm tra USER
+        Optional<KhachHang> khOpt = khachHangRepo.findByTen(req.getUsername());
+        if (khOpt.isPresent()) {
+            KhachHang kh = khOpt.get();
+
+            if (!encoder.matches(req.getPassword(), kh.getPassw())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Sai tên đăng nhập hoặc mật khẩu");
+            }
+
+            return ResponseEntity.ok(new LoginResponse("USER", kh));
+        }
+
+        // 🔹 3. Không tồn tại
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Sai tên đăng nhập hoặc mật khẩu");
     }
+
+
+
 
 
     @PostMapping("/register")

@@ -6,7 +6,7 @@ spring:
 
 
 
-    url: jdbc:sqlserver://localhost:1433;databaseName=SD59  ;encrypt=true;trustServerCertificate=true
+    url: jdbc:sqlserver://localhost:1433;databaseName=SD70;encrypt=true;trustServerCertificate=true
     username: sa
     password: 12345
 
@@ -14,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true

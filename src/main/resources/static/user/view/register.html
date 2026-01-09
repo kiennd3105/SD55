@@ -6,7 +6,6 @@
 
     <form name="formRegister" novalidate ng-submit="dangKy(formRegister)">
 
-        <!-- Tên -->
         <div class="input-group mb-2">
             <span class="input-group-text"><i class="bi bi-person"></i></span>
             <input class="form-control"
@@ -20,7 +19,6 @@
             Vui lòng nhập họ tên
         </small>
 
-        <!-- Email -->
         <div class="input-group mb-2">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
             <input type="email"
@@ -35,7 +33,6 @@
             Email không hợp lệ
         </small>
 
-        <!-- Password -->
         <div class="input-group mb-2">
             <span class="input-group-text"><i class="bi bi-lock"></i></span>
             <input type="password"
@@ -51,7 +48,6 @@
             Mật khẩu tối thiểu 6 ký tự
         </small>
 
-        <!-- SĐT -->
         <div class="input-group mb-2">
             <span class="input-group-text"><i class="bi bi-telephone"></i></span>
             <input class="form-control"
@@ -66,7 +62,6 @@
             SĐT phải có 10 số, bắt đầu bằng 0
         </small>
 
-        <!-- Địa chỉ -->
         <div class="input-group mb-2">
             <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
             <input class="form-control"
@@ -80,7 +75,6 @@
             Vui lòng nhập địa chỉ
         </small>
 
-        <!-- Giới tính -->
         <div class="input-group mb-3">
             <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
             <select class="form-select"
@@ -97,7 +91,6 @@
             Vui lòng chọn giới tính
         </small>
 
-        <!-- THÔNG BÁO ĐỎ -->
         <div class="text-danger text-center mb-2" ng-if="error">
             {{error}}
         </div>

@@ -27,6 +27,17 @@ public class KhachHangController {
     @Autowired
     KhachHangRepo khachHangRepo;
 
+    private void validateTen(String ten) {
+        if (ten == null || ten.trim().isEmpty()) {
+            throw new RuntimeException("Tên không được để trống");
+        }
+
+        if (ten.trim().length() < 2) {
+            throw new RuntimeException("Tên phải có ít nhất 2 ký tự");
+        }
+    }
+
+
     @GetMapping("/hien-thi")
     public List<KhachHang> hienThi() {
         return khachHangRepo.findAll(
@@ -41,7 +52,17 @@ public class KhachHangController {
     }
 
     @PutMapping("/update/{id}")
-    public KhachHang updateKhachHang(@PathVariable("id") String id, @RequestBody KhachHang updated) {
+    public KhachHang updateKhachHang(
+            @PathVariable("id") String id,
+            @RequestBody KhachHang updated) {
+
+        validateTen(updated.getTen());
+
+        if (khachHangRepo.existsByTenIgnoreCaseAndIdNot(
+                updated.getTen().trim(), id)) {
+            throw new RuntimeException("Tên khách hàng đã tồn tại");
+        }
+
         KhachHang kh = khachHangRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng"));
 
@@ -56,12 +77,18 @@ public class KhachHangController {
         return khachHangRepo.save(kh);
     }
 
+
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody KhachHang kh) {
-        kh.setId(UUID.randomUUID().toString().substring(0,8).toUpperCase());
-        kh.setNgayTao(LocalDateTime.now());
-        kh.setNgaySua(LocalDateTime.now());
+
+        validateTen(kh.getTen());
+
+        if (khachHangRepo.existsByTenIgnoreCase(kh.getTen().trim())) {
+            return ResponseEntity.badRequest().body("Tên khách hàng đã tồn tại");
+        }
 
         return ResponseEntity.ok(khachHangRepo.save(kh));
     }
+
+
 }

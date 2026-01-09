@@ -106,11 +106,10 @@ app.controller("nhanVienCtrl", function ($scope, $http) {
                 $scope.closeAddModal();
                 $scope.loadDanhSach();
             })
-
             .catch(function (error) {
-                if (error.status === 400) {
+                if (error.status === 400 && angular.isObject(error.data)) {
                     let msg = "";
-                    angular.forEach(error.data, function (value) {
+                    angular.forEach(error.data, function (value, key) {
                         msg += value + "\n";
                     });
                     alert(msg);
@@ -119,6 +118,7 @@ app.controller("nhanVienCtrl", function ($scope, $http) {
                 }
             });
     };
+
 
     $scope.uploadAnh = function (input) {
         var file = input.files[0];
