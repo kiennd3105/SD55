@@ -2,18 +2,31 @@
 
     <h2 class="mb-3">Quản lý chất liệu</h2>
 
-    <!-- SEARCH BAR -->
+    <!-- SEARCH BAR (TỔNG + THÊM Ở GÓC PHẢI) -->
     <div class="card mb-3">
         <div class="card-body">
 
-            <div class="d-flex justify-content-between align-items-center mb-2">
+            <!-- Tiêu đề + Tổng + Thêm -->
+            <div class="d-flex justify-content-between align-items-start mb-2">
                 <div class="fw-bold">Tìm kiếm</div>
-                <div class="fw-bold">Tổng: {{dsChatLieu.length}}</div>
+
+                <div class="text-end">
+                    <div class="fw-bold">Tổng: {{dsChatLieu.length}}</div>
+
+                    <!-- NÚT THÊM NẰM DƯỚI TỔNG -->
+                    <button type="button"
+                            class="btn btn-success btn-sm mt-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalForm"
+                            ng-click="openAdd()">
+                        Thêm
+                    </button>
+                </div>
             </div>
 
-            <div class="row g-3 align-items-start">
+            <!-- Input + select + buttons thẳng hàng -->
+            <div class="row g-3 align-items-end">
 
-                <!-- keyword ngắn lại -->
                 <div class="col-md-4">
                     <input type="text"
                            class="form-control"
@@ -37,7 +50,6 @@
                     <div style="height:18px;margin-top:4px"></div>
                 </div>
 
-                <!-- nút sát trạng thái -->
                 <div class="col-md-2">
                     <button type="button"
                             class="btn btn-outline-primary w-100"
@@ -77,12 +89,7 @@
                         <th>Tên chất liệu</th>
                         <th style="width:140px">Trạng thái</th>
                         <th>Mô tả</th>
-
-                        <!-- THÊM nằm trong thanh HÀNH ĐỘNG -->
-                        <th style="width:240px" class="text-nowrap">
-                            Hành động
-
-                        </th>
+                        <th style="width:200px" class="text-nowrap text-center">Hành động</th>
                     </tr>
                     </thead>
 
@@ -91,19 +98,14 @@
                         <td>{{getSTT($index)}}</td>
                         <td>{{cl.maCL}}</td>
                         <td>{{cl.tenCL}}</td>
-                        <td>
+                        <td class="text-center">
                             <span ng-if="cl.trangThai==1" class="badge bg-success">Hoạt động</span>
                             <span ng-if="cl.trangThai==0" class="badge bg-secondary">Ngừng</span>
                         </td>
                         <td>{{cl.moTa}}</td>
 
-                        <td class="text-nowrap">
-                            <button type="button"
-                                    class="btn btn-sm btn-success ms-2"
-                                    data-bs-toggle="modal" data-bs-target="#modalForm"
-                                    ng-click="openAdd()">
-                                Thêm
-                            </button>
+                        <!-- CHỈ CÒN SỬA / CHI TIẾT -->
+                        <td class="text-nowrap text-center align-middle">
                             <button class="btn btn-sm btn-outline-primary"
                                     data-bs-toggle="modal" data-bs-target="#modalForm"
                                     ng-click="openEdit(cl)">
@@ -146,7 +148,6 @@
                     <form name="clForm" novalidate>
                         <div class="row g-3 align-items-start">
 
-                            <!-- MÃ -->
                             <div class="col-md-4">
                                 <label class="form-label">Mã</label>
                                 <input type="text"
@@ -164,7 +165,6 @@
                                 </div>
                             </div>
 
-                            <!-- TÊN -->
                             <div class="col-md-5">
                                 <label class="form-label">Tên chất liệu</label>
                                 <input type="text"
@@ -182,7 +182,6 @@
                                 </div>
                             </div>
 
-                            <!-- TRẠNG THÁI -->
                             <div class="col-md-3">
                                 <label class="form-label">Trạng thái</label>
                                 <select class="form-select"
@@ -194,10 +193,11 @@
                                 <div style="height:18px;margin-top:4px"></div>
                             </div>
 
-                            <!-- MÔ TẢ -->
                             <div class="col-md-12">
                                 <label class="form-label">Mô tả</label>
-                                <textarea class="form-control" rows="3" ng-model="form.moTa" placeholder="VD: Cotton 100%..."></textarea>
+                                <textarea class="form-control" rows="3"
+                                          ng-model="form.moTa"
+                                          placeholder="VD: Cotton 100%..."></textarea>
                             </div>
 
                         </div>
@@ -251,20 +251,16 @@
                             <label class="form-label">Mô tả</label>
                             <textarea class="form-control" rows="3" ng-model="detail.moTa" disabled></textarea>
                         </div>
+
                         <div class="col-md-6">
                             <label class="form-label">Ngày tạo</label>
-                            <input class="form-control"
-                                   ng-value="formatDateTime(detail.ngayTao)"
-                                   disabled>
+                            <input class="form-control" ng-value="formatDateTime(detail.ngayTao)" disabled>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label">Ngày sửa</label>
-                            <input class="form-control"
-                                   ng-value="formatDateTime(detail.ngaySua)"
-                                   disabled>
+                            <input class="form-control" ng-value="formatDateTime(detail.ngaySua)" disabled>
                         </div>
-
                     </div>
                 </div>
 

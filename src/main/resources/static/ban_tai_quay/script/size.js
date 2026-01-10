@@ -1,29 +1,28 @@
-// size.js
 angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
 
     const API = "http://localhost:8084/san-pham/size";
 
+    // =====================
+    // STATE
+    // =====================
     $scope.dsSize = [];
 
-    // FORM MODAL
-    $scope.form = { trangThai: 1 };
+    $scope.form = { trangThai: 1, moTa: "" };
+    $scope.detail = null;
+
     $scope.isEdit = false;
     $scope.submitted = false;
 
+    $scope.err = { maSZ: "", tenSZ: "" };
+
     // FILTER
     $scope.keyword = "";
-    $scope.filterTrangThai = ""; // ""=Tất cả, "1"=Hoạt động, "0"=Ngừng
-    $scope.filterSubmitted = false;
+    $scope.filterTrangThai = "";
     $scope.filterErr = "";
+    $scope.filterSubmitted = false;
 
-    // Suggest list (autocomplete)
+    // Suggest
     $scope.suggest = [];
-
-    // DETAIL
-    $scope.detail = null;
-
-    // ERROR MESSAGE form
-    $scope.err = { maSZ: "", tenSZ: "" };
 
     // =====================
     // HELPERS
@@ -33,52 +32,55 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
         $scope.err.tenSZ = "";
     }
 
-    function clearFilterErr() {
-        $scope.filterErr = "";
-    }
-
     function norm(s) {
         return (s || "").toString().trim().toLowerCase();
     }
 
-    // MA: chỉ chữ/số/_/- , không khoảng trắng
     function isValidMa(ma) {
         if (!ma) return false;
         return /^[A-Za-z0-9_-]+$/.test(ma.trim());
     }
 
-    // keyword/tên size: cho phép chữ/số/space và "/"
-    function isValidKeyword(kw) {
-        if (!kw) return false;
-        return /^[A-Za-zÀ-ỹ0-9 \/]+$/.test(kw.trim());
+    function isValidTen(ten) {
+        if (!ten) return false;
+        return /^[A-Za-zÀ-ỹ0-9 \/]+$/.test(ten.trim());
+    }
+
+    function extractBackendMessage(err) {
+        if (!err) return "";
+        if (err.data) {
+            if (typeof err.data === "string") return err.data;
+            if (err.data.message) return err.data.message;
+            if (err.data.error) return err.data.error;
+        }
+        return err.status ? ("HTTP " + err.status) : "";
+    }
+
+    function buildSuggest() {
+        const map = {};
+        ($scope.dsSize || []).forEach(x => {
+            const t = (x.tenSZ || "").trim();
+            if (t) map[t.toLowerCase()] = t;
+        });
+        $scope.suggest = Object.values(map).slice(0, 12);
     }
 
     function isDuplicateMa(ma, currentId) {
         const m = norm(ma);
-        if (!m) return false;
         return ($scope.dsSize || []).some(x => x.id !== currentId && norm(x.maSZ) === m);
     }
 
     function isDuplicateTen(ten, currentId) {
         const t = norm(ten);
-        if (!t) return false;
         return ($scope.dsSize || []).some(x => x.id !== currentId && norm(x.tenSZ) === t);
     }
 
-    function extractBackendMessage(err) {
-        if (err && err.data) {
-            if (typeof err.data === "string") return err.data;
-            if (err.data.message) return err.data.message;
-        }
-        return "";
-    }
-
-    // LocalDateTime -> dd/MM/yyyy HH:mm:ss
+    // LocalDateTime -> dd/MM/yyyy HH:mm:ss (cho modal chi tiết)
     $scope.formatDateTime = function (val) {
         if (!val) return "";
         const d = new Date(val);
         if (!isNaN(d.getTime())) {
-            const pad = (n) => (n < 10 ? "0" + n : "" + n);
+            const pad = n => (n < 10 ? "0" + n : "" + n);
             return (
                 pad(d.getDate()) + "/" + pad(d.getMonth() + 1) + "/" + d.getFullYear() +
                 " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
@@ -88,96 +90,39 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
     };
 
     // =====================
-    // LOAD (GET ALL / SEARCH / FILTER)
+    // LOAD
     // =====================
     $scope.load = function () {
         const params = {};
+
         if ($scope.keyword && $scope.keyword.trim()) params.ten = $scope.keyword.trim();
         if ($scope.filterTrangThai !== "" && $scope.filterTrangThai !== null && $scope.filterTrangThai !== undefined) {
             params.trangThai = Number($scope.filterTrangThai);
         }
 
-        $http.get(API, { params }).then(function (res) {
+        $http.get(API, { params }).then(res => {
             $scope.dsSize = res.data || [];
-            buildSuggest(); // update gợi ý theo data đang có
-        }).catch(function (err) {
-            console.error("Lỗi load size", err);
-            alert("Không load được danh sách size!");
-        });
-    };
-
-    // load all ban đầu
-    $scope.loadAllForSuggest = function () {
-        $http.get(API).then(function (res) {
-            // lưu 1 bản all để gợi ý luôn chuẩn
-            $scope._all = res.data || [];
-            buildSuggestFromAll();
-        }).catch(function () {
-            $scope._all = [];
-            $scope.suggest = [];
+            buildSuggest();
+        }).catch(err => {
+            console.error("Lỗi load size:", err);
+            alert(extractBackendMessage(err) || "Không load được danh sách size!");
         });
     };
 
     $scope.load();
-    $scope.loadAllForSuggest();
-
-    $scope.getSTT = function (i) { return i + 1; };
 
     // =====================
-    // AUTOCOMPLETE "liên quan" khi gõ
+    // FILTER
     // =====================
-    function buildSuggest() {
-        // gợi ý từ list hiện tại
-        const map = {};
-        ($scope.dsSize || []).forEach(function (x) {
-            const t = (x.tenSZ || "").trim();
-            if (t) map[t.toLowerCase()] = t;
-        });
-        $scope.suggest = Object.values(map).slice(0, 12);
-    }
-
-    function buildSuggestFromAll() {
-        const map = {};
-        ($scope._all || []).forEach(function (x) {
-            const t = (x.tenSZ || "").trim();
-            if (t) map[t.toLowerCase()] = t;
-        });
-        $scope.suggest = Object.values(map).slice(0, 12);
-    }
-
-    // gõ -> update gợi ý theo prefix
     $scope.onKeywordChange = function () {
         $scope.filterSubmitted = false;
-        clearFilterErr();
-
-        const kw = norm($scope.keyword);
-        if (!kw) {
-            buildSuggestFromAll();
-            return;
-        }
-
-        // validate realtime: nếu chứa ký tự đặc biệt -> báo nhẹ
-        if (!isValidKeyword($scope.keyword)) {
-            $scope.filterErr = "Từ khóa không được chứa ký tự đặc biệt";
-            $scope.filterSubmitted = true;
-        }
-
-        // lọc suggest theo prefix (bắt đầu bằng)
-        const list = ($scope._all || []).map(x => (x.tenSZ || "").trim()).filter(Boolean);
-        const uniq = {};
-        list.forEach(function (t) {
-            const low = t.toLowerCase();
-            if (low.startsWith(kw)) uniq[low] = t;
-        });
-        $scope.suggest = Object.values(uniq).slice(0, 12);
+        $scope.filterErr = "";
+        buildSuggest();
     };
 
-    // =====================
-    // SEARCH / RESET
-    // =====================
     $scope.search = function () {
         $scope.filterSubmitted = true;
-        clearFilterErr();
+        $scope.filterErr = "";
 
         const hasKeyword = !!($scope.keyword && $scope.keyword.trim());
         const hasTrangThai = ($scope.filterTrangThai !== "" && $scope.filterTrangThai !== null && $scope.filterTrangThai !== undefined);
@@ -187,8 +132,8 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
             return;
         }
 
-        if (hasKeyword && !isValidKeyword($scope.keyword)) {
-            $scope.filterErr = "Từ khóa không được chứa ký tự đặc biệt";
+        if (hasKeyword && !isValidTen($scope.keyword)) {
+            $scope.filterErr = "Từ khóa không được chứa ký tự đặc biệt (cho phép “/”)";
             return;
         }
 
@@ -199,9 +144,8 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
         $scope.keyword = "";
         $scope.filterTrangThai = "";
         $scope.filterSubmitted = false;
-        clearFilterErr();
-        $scope.load(); // load lại full list
-        buildSuggestFromAll();
+        $scope.filterErr = "";
+        $scope.load();
     };
 
     // =====================
@@ -211,7 +155,8 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
         clearErr();
         $scope.isEdit = false;
         $scope.submitted = false;
-        $scope.form = { trangThai: 1, moTa: "" };
+
+        $scope.form = { maSZ: "", tenSZ: "", trangThai: 1, moTa: "" };
 
         if ($scope.szForm) {
             $scope.szForm.$setPristine();
@@ -225,8 +170,10 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
         clearErr();
         $scope.isEdit = true;
         $scope.submitted = false;
+
         $scope.form = angular.copy(s);
         if ($scope.form.trangThai === undefined || $scope.form.trangThai === null) $scope.form.trangThai = 1;
+        if ($scope.form.moTa === undefined || $scope.form.moTa === null) $scope.form.moTa = "";
 
         if ($scope.szForm) {
             $scope.szForm.$setPristine();
@@ -236,17 +183,27 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
         bootstrap.Modal.getOrCreateInstance(document.getElementById("modalSizeForm")).show();
     };
 
+    // ✅ ĐỂ Ở NGOÀI save()
     $scope.openDetailModal = function (s) {
         $scope.detail = angular.copy(s);
         bootstrap.Modal.getOrCreateInstance(document.getElementById("modalSizeDetail")).show();
     };
 
     // =====================
-    // SAVE (ADD/UPDATE)
+    // SAVE
     // =====================
     $scope.save = function (form) {
         $scope.submitted = true;
         clearErr();
+
+        if (form) {
+            form.$setSubmitted();
+            angular.forEach(form.$error, function (fields) {
+                angular.forEach(fields, function (f) {
+                    if (f && f.$setTouched) f.$setTouched();
+                });
+            });
+        }
 
         if (form && form.$invalid) return;
 
@@ -257,7 +214,7 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
             $scope.err.maSZ = "Mã chỉ được gồm chữ/số/_/- và không có khoảng trắng";
             return;
         }
-        if (!isValidKeyword(ten)) {
+        if (!isValidTen(ten)) {
             $scope.err.tenSZ = "Tên không được chứa ký tự đặc biệt (cho phép “/”)";
             return;
         }
@@ -271,24 +228,28 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
             return;
         }
 
-        let payload = angular.copy($scope.form);
+        const payload = angular.copy($scope.form);
         payload.maSZ = ma;
         payload.tenSZ = ten;
+        payload.moTa = (payload.moTa || "").toString();
         payload.trangThai = Number(payload.trangThai);
 
         if (!$scope.isEdit) {
             delete payload.id;
-            $http.post(API, payload).then(function () {
+
+            $http.post(API, payload).then(() => {
                 alert("Thêm size thành công!");
                 bootstrap.Modal.getOrCreateInstance(document.getElementById("modalSizeForm")).hide();
                 $scope.load();
-                $scope.loadAllForSuggest();
-            }).catch(function (err) {
+            }).catch(err => {
+                console.error("POST lỗi:", err);
                 const msg = extractBackendMessage(err);
-                if (msg.includes("Mã")) $scope.err.maSZ = msg;
-                else if (msg.includes("Tên")) $scope.err.tenSZ = msg;
+
+                if (msg.toLowerCase().includes("mã")) $scope.err.maSZ = msg;
+                else if (msg.toLowerCase().includes("tên")) $scope.err.tenSZ = msg;
                 else alert(msg || "Thêm thất bại!");
             });
+
             return;
         }
 
@@ -297,33 +258,17 @@ angular.module("myApp").controller("sizeCtrl", function ($scope, $http) {
             return;
         }
 
-        $http.put(API + "/" + payload.id, payload).then(function () {
+        $http.put(API + "/" + payload.id, payload).then(() => {
             alert("Cập nhật thành công!");
             bootstrap.Modal.getOrCreateInstance(document.getElementById("modalSizeForm")).hide();
             $scope.load();
-            $scope.loadAllForSuggest();
-        }).catch(function (err) {
+        }).catch(err => {
+            console.error("PUT lỗi:", err);
             const msg = extractBackendMessage(err);
-            if (msg.includes("Mã")) $scope.err.maSZ = msg;
-            else if (msg.includes("Tên")) $scope.err.tenSZ = msg;
+
+            if (msg.toLowerCase().includes("mã")) $scope.err.maSZ = msg;
+            else if (msg.toLowerCase().includes("tên")) $scope.err.tenSZ = msg;
             else alert(msg || "Cập nhật thất bại!");
         });
     };
-
-    // =====================
-    // DELETE
-    // =====================
-    $scope.remove = function (s) {
-        if (!s || !s.id) return;
-        if (!confirm("Bạn chắc chắn muốn xóa size này?")) return;
-
-        $http.delete(API + "/" + s.id).then(function () {
-            alert("Xóa thành công!");
-            $scope.load();
-            $scope.loadAllForSuggest();
-        }).catch(function (err) {
-            alert(extractBackendMessage(err) || "Xóa thất bại!");
-        });
-    };
-
 });
