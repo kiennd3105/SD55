@@ -13,11 +13,11 @@ import java.util.UUID;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/san-pham/chat-lieu")
-public class ControllerCL {
+public class ChatLieuController {
 
     private final ChatLieuRepo chatLieuRepo;
 
-    public ControllerCL(ChatLieuRepo chatLieuRepo) {
+    public ChatLieuController(ChatLieuRepo chatLieuRepo) {
         this.chatLieuRepo = chatLieuRepo;
     }
 

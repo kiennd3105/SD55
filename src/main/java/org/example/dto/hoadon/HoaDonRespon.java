@@ -23,7 +23,21 @@ public class HoaDonRespon {
     private LocalDateTime ngayDatHang;
     private LocalDateTime ngayTao;
     private LocalDateTime ngaySua;
-    private String idNhanVien;
-    private String idKhachHang;
-    private String idVoucher;
+    private String tenNV;
+    private String tenKH;
+    private String sdt;
+    private String email;
+    private String tenVC;
+    private String maVC;
+    private int tongTien;
+    private int giamGia;
+    private int thanhTien;
+    private VoucherRespon voucher;
+    public HoaDonRespon(String id, Integer tongTien, Integer giamGia, Integer thanhTien) {
+        this.id = id;
+        this.tongTien = tongTien;
+        this.giamGia = giamGia;
+        this.thanhTien = thanhTien;
+    }
+
 }

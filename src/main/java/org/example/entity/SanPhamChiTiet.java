@@ -9,6 +9,7 @@ import org.example.dto.CTSP.SanPhamChiTietRespon;
 import org.example.dto.sanpham.SanPhamRespon;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,27 +40,32 @@ public class SanPhamChiTiet {
     @ManyToOne
     @JoinColumn(name = "IDSANPHAM")
     private SanPham sanPham;
+    @ManyToOne
+    @JoinColumn(name = "IDSIZE")
+    private Size size;
+    @ManyToOne
+    @JoinColumn(name = "IDMAU")
+    private MauSac mauSac;
 
-    @Column(name = "IDSIZE")
-    private String idSize;
-    @Column(name = "IDMAU")
-    private String idMau;
-
-    public SanPhamChiTietRespon toResponse(SanPhamChiTiet ctsp) {
+    public SanPhamChiTietRespon toResponse() {
         return new SanPhamChiTietRespon(
-                ctsp.getId(),
-                ctsp.getMa(),
-                ctsp.getGia(),
-                ctsp.getSoLuong(),
-                ctsp.getTrangThai(),
-                ctsp.getNgayTao(),
-                ctsp.getNgaySua(),
-                ctsp.getIMG(),
-                ctsp.getMoTa(),
-                ctsp.getSanPham() != null ? ctsp.getSanPham().getId() : null,
-                ctsp.getIdSize(),
-                ctsp.getIdMau()
+                id,
+                ma,
+                gia,
+                soLuong,
+                trangThai,
+                ngayTao,
+                ngaySua,
+                IMG == null
+                        ? null
+                        : "http://localhost:8084/uploads/" + IMG,
+                moTa,
+                sanPham != null ? sanPham.getId() : null,
+                sanPham != null ? sanPham.getTen() : null,
+                size != null ? size.getTenSZ() : null,
+                mauSac != null ? mauSac.getTenM() : null
         );
     }
+
 
 }

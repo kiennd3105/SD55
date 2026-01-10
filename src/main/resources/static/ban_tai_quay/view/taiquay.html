@@ -1,0 +1,407 @@
+
+
+<div ng-controller="taiQuayCtrl">
+
+    <h3 class="mb-3">BÁN TẠI QUẦY</h3>
+
+    <!-- 🔍 TÌM KIẾM -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Tìm sản phẩm theo tên / mã"
+                   ng-model="keyword">
+        </div>
+    </div>
+
+    <div class="list-group" ng-if="keyword && keyword.length > 0">
+
+        <a class="list-group-item list-group-item-action"
+           ng-repeat="sp in dsSanPham | filter:timSanPham">
+
+            <div class="row align-items-center">
+
+                <!-- ẢNH -->
+                <div class="col-md-2">
+                    <img ng-src="{{sp.img}}"
+                         class="img-fluid rounded"
+                         style="height:80px; object-fit:cover">
+                </div>
+
+                <!-- THÔNG TIN -->
+                <div class="col-md-5">
+                    <h6 class="mb-1">{{sp.tenSP}}</h6>
+
+                    <div class="small text-muted">
+                        Mã: {{sp.ma}}
+                    </div>
+
+                    <div class="small">
+                        Size: <b>{{sp.tenSize}}</b> |
+                        Màu: <b>{{sp.tenMau}}</b>
+                    </div>
+
+                    <div class="small">
+                        Tồn kho: <b>{{sp.soLuong}}</b>
+                    </div>
+                </div>
+
+                <!-- NHẬP SỐ LƯỢNG -->
+                <div class="col-md-2">
+                    <input type="number"
+                           class="form-control form-control-sm"
+                           min="1"
+                           ng-model="sp.soLuongThem"
+                           ng-init="sp.soLuongThem = 1"
+                           ng-disabled="sp.soLuong <= 0">
+                </div>
+
+                <!-- GIÁ + BUTTON -->
+                <div class="col-md-3 text-end">
+                    <div class="fw-bold text-danger mb-1">
+                        {{sp.gia | number}} đ
+                    </div>
+
+                    <button class="btn btn-sm btn-success w-100"
+                            ng-click="themSanPham(sp)"
+                            ng-disabled="sp.soLuong <= 0">
+                        ➕ Thêm
+                    </button>
+                </div>
+
+            </div>
+        </a>
+    </div>
+
+
+
+    <!-- 🧾 TAB HÓA ĐƠN -->
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item" ng-repeat="hd in dsHoaDon">
+            <a class="nav-link"
+               ng-class="{active: hd.id === hoaDonDangXem.id}"
+               ng-click="chonHoaDon(hd)">
+                {{hd.ma}}
+                <span class="text-danger ms-2"
+                      ng-click="dongHoaDon(hd, $event)">✕</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="javascript:void(0)"
+               class="nav-link text-success"
+               ng-click="taoHoaDonMoi()">
+                + Hóa đơn
+            </a>
+        </li>
+    </ul>
+
+    <div class="alert alert-info text-center"
+         ng-if="!hoaDonDangXem">
+        Chưa có hóa đơn nào. Vui lòng bấm <b>+ Hóa đơn</b> để bắt đầu bán hàng.
+    </div>
+    <div class="row" ng-if="hoaDonDangXem">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header fw-bold">Chi tiết hóa đơn</div>
+                <div class="card-body p-0">
+                    <table class="table table-bordered mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Sản phẩm</th>
+                            <th>Size</th>
+                            <th>Màu</th>
+                            <th>Giá</th>
+                            <th>số lượng</th>
+                            <th>Thành tiền</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="ct in dsHDCT">
+                            <td style="width:70px">
+                                <img ng-if="ct.img"
+                                     ng-src="{{ct.img}}"
+                                     class="img-fluid rounded"
+                                     style="height:60px; object-fit:cover">
+                            </td>
+
+                            <td>{{ct.tenSanPham}}</td>
+                            <td>{{ct.tenSize}}</td>
+                            <td>{{ct.tenMau}}</td>
+                            <td>{{ct.giaBan | number}} đ</td>
+                            <td style="width:90px">
+                                <input type="number" min="1"
+                                       class="form-control form-control-sm"
+                                       ng-model="ct.soLuong"
+                                       ng-change="capNhatSoLuong(ct)">
+                            </td>
+                            <td>{{ct.giaBan * ct.soLuong | number}} đ</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger"
+                                        ng-click="xoaCTHD(ct)">✕</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card">
+                <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                    Khách hàng
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-1"
+                                ng-if="!hoaDonDangXem.khachHang"
+                                ng-click="moModalChonKhachHang()">
+                            ➕ Chọn
+                        </button>
+
+                        <button class="btn btn-sm btn-outline-danger"
+                                ng-if="hoaDonDangXem.khachHang"
+                                ng-click="xoaKhachHang()">
+                            ❌ Xóa
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body" ng-if="hoaDonDangXem.khachHang">
+                    <p class="mb-1"><b>Tên:</b> {{hoaDonDangXem.khachHang.ten}}</p>
+                    <p class="mb-0"><b>SĐT:</b> {{hoaDonDangXem.khachHang.sdt}}</p>
+                </div>
+
+                <div class="card-body text-muted"
+                     ng-if="!hoaDonDangXem.khachHang">
+                    Chưa chọn khách hàng
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header fw-bold">
+                    Voucher áp dụng
+                </div>
+
+                <div class="card-body p-2">
+
+                    <div class="list-group d-flex justify-content-between align-items-center"
+                         ng-if="dsVoucher && dsVoucher.length > 0">
+
+                        <a class="list-group-item list-group-item-action"
+                           ng-repeat="vc in dsVoucher"
+                           ng-class="{
+                              'active': hoaDonDangXem.voucher && hoaDonDangXem.voucher.id === vc.idVoucher,
+                              'voucher-active': hoaDonDangXem.voucher && hoaDonDangXem.voucher.id === vc.idVoucher
+                            }"
+                           ng-click="chonVoucher(vc)">
+
+                            <div class="fw-bold">{{vc.ten}}</div>
+                            <div class="small text-muted">
+                                Mã: {{vc.ma}} |
+                                Giảm: {{vc.giaTriGiam}}
+                            </div>
+
+                            <div class="small">
+                                Điều kiện: {{vc.dieuKienApDung}}
+                            </div>
+                            <i class="bi bi-check-circle-fill text-primary fs-4"
+                               ng-if="hoaDonDangXem.voucher && hoaDonDangXem.voucher.id === vc.idVoucher">
+                            </i>
+
+                        </a>
+
+                    </div>
+
+                    <div class="text-muted text-center"
+                         ng-if="!dsVoucher || dsVoucher.length === 0">
+                        Không có voucher phù hợp
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-2">
+                        <div class="d-flex justify-content-between">
+                            <span>Tổng tiền:</span>
+                            <strong>{{ hoaDonDangXem.tongTien | number }} đ</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between text-danger"
+                             ng-if="hoaDonDangXem.giamGia > 0">
+                            <span>Giảm giá:</span>
+                            <strong>- {{ hoaDonDangXem.giamGia | number }} đ</strong>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between fs-5">
+                            <span>Thành tiền:</span>
+                            <strong class="text-success">
+                                {{ hoaDonDangXem.thanhTien | number }} đ
+                            </strong>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success w-100"
+                            ng-click="moModalThanhToan()">
+                        THANH TOÁN
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="modalThanhToan" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Thanh toán hóa đơn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Tổng tiền -->
+                    <div class="mb-3">
+                        <label class="fw-bold">Số tiền cần thanh toán</label>
+                        <div class="fs-4 text-danger">
+                            {{hoaDonDangXem.thanhTien | number}} đ
+                        </div>
+                    </div>
+
+                    <!-- Phương thức -->
+                    <div class="mb-3">
+                        <label class="fw-bold">Phương thức thanh toán</label>
+                        <select class="form-select"
+                                ng-model="phuongThucTT">
+                            <option value="TIEN_MAT">Tiền mặt</option>
+                            <option value="VNPAY">VNPAY</option>
+                        </select>
+                    </div>
+
+                    <!-- TIỀN MẶT -->
+                    <div ng-if="phuongThucTT === 'TIEN_MAT'">
+
+                        <div class="mb-3">
+                            <label>Tiền khách đưa</label>
+                            <input type="number"
+                                   class="form-control"
+                                   ng-model="thanhToan.tienKhachDua"
+                                   ng-change="tinhTienThoi()">
+
+
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Tiền thối lại</label>
+
+                            <div class="fs-5"
+                                 ng-if="thanhToan.tienKhachDua !== null"
+                                 ng-class="{
+                                'text-success': thanhToan.tienThoi >= 0,
+                                'text-danger': thanhToan.tienThoi < 0
+                                 }">
+                                {{thanhToan.tienThoi | number}} đ
+                            </div>
+
+
+                            <small class="text-danger"
+                                   ng-if="thanhToan.tienKhachDua !== null && thanhToan.tienThoi < 0">
+                                Khách đưa chưa đủ tiền
+                            </small>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <!-- VNPAY -->
+                    <div ng-if="phuongThucTT === 'VNPAY'"
+                         class="alert alert-info">
+                        Thanh toán bằng VNPAY – Quét mã QR
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Hủy
+                    </button>
+
+                    <button class="btn btn-success"
+                            ng-click="xacNhanThanhToan()"
+                            ng-disabled="phuongThucTT === 'TIEN_MAT' && thanhToan.tienThoi < 0">
+                        Xác nhận thanh toán
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalKhachHang">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Chọn khách hàng</h5>
+                    <button class="btn btn-sm btn-success"
+                            ng-click="hienFormThemKH = true">
+                        ➕ Thêm KH
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <input class="form-control mb-2"
+                           placeholder="Tìm theo tên / SĐT"
+                           ng-model="keywordKH">
+                    <div ng-if="hienFormThemKH" class="border p-3 mb-3">
+                        <input class="form-control mb-2"
+                               placeholder="Tên khách hàng"
+                               ng-model="khMoi.ten">
+
+                        <input class="form-control mb-2"
+                               placeholder="SĐT"
+                               ng-model="khMoi.sdt">
+
+                        <button class="btn btn-primary"
+                                ng-click="luuKhachHangMoi()">
+                            Lưu
+                        </button>
+
+                        <button class="btn btn-secondary ms-2"
+                                ng-click="hienFormThemKH = false">
+                            Hủy
+                        </button>
+                    </div>
+                    <table class="table table-hover">
+                        <tr ng-repeat="kh in dsKhachHang | filter:keywordKH">
+                            <td>{{kh.ten}}</td>
+                            <td>{{kh.sdt}}</td>
+                            <td>
+                                <button class="btn btn-sm btn-success"
+                                        ng-click="chonKhachHang(kh)">
+                                    Chọn
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

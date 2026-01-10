@@ -28,13 +28,13 @@ public class KhachHang {
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "MA")
+    @Column(name = "MA", length = 20)
     private String ma;
 
     @Column(name = "TEN")
     private String ten;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
     @Column(name = "PASSW")
@@ -43,7 +43,7 @@ public class KhachHang {
     @Column(name = "GIOITINH")
     private String gioiTinh;
 
-    @Column(name = "SDT")
+    @Column(name = "SDT", unique = true)
     private String sdt;
 
     @Column(name = "DIACHI")
@@ -59,6 +59,8 @@ public class KhachHang {
     private LocalDateTime ngaySua;
 
 
+
+
     @PrePersist
     public void prePersist() {
         if (this.id == null) {
@@ -68,12 +70,15 @@ public class KhachHang {
                     .substring(0, 8)
                     .toUpperCase();
         }
+
+        // CHỈ GEN 1 CÁI
+        if (this.ma == null) {
+            this.ma = "KH" + this.id;
+        }
+
         this.ngayTao = LocalDateTime.now();
         this.ngaySua = LocalDateTime.now();
     }
 
-    @PreUpdate
-    public void preUpdate() {
-        this.ngaySua = LocalDateTime.now();
-    }
+
 }

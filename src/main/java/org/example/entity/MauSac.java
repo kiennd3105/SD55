@@ -19,11 +19,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-
 @Table(name ="MAU")
 public class MauSac {
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", length = 8, updatable = false, nullable = false)
     private String id;
 
     @Column(name = "MA")
@@ -38,11 +37,13 @@ public class MauSac {
     @Column(name = "MOTA")
     private String moTa;
 
-    @Column(name = "NGAYTAO")
+    @Column(name = "NGAYTAO", updatable = false)
     private LocalDateTime ngayTao;
 
     @Column(name = "NGAYSUA")
     private LocalDateTime ngaySua;
+
+
 
     @Override
     public String toString() {
@@ -61,7 +62,9 @@ public class MauSac {
     public void onCreate() {
         this.ngayTao = LocalDateTime.now();
     }
-
+    public MauSac(String id) {
+        this.id = id;
+    }
     @PreUpdate
     public void onUpdate() {
         this.ngaySua = LocalDateTime.now();

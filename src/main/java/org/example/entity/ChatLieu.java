@@ -43,6 +43,9 @@ public class ChatLieu {
 
     @Column(name = "NGAYSUA")
     private LocalDateTime ngaySua;
+    public ChatLieu(String id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {

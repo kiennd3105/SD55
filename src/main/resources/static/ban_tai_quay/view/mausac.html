@@ -1,30 +1,206 @@
-<div ng-controller="mauSacCtrl">
+<div ng-controller="mauSacCtrl" class="container-fluid mt-4 px-4">
 
-    <h2>Danh sách màu sắc</h2>
+    <div class="card border-0 shadow-sm rounded-4">
 
-    <table class="table table-bordered">
-        <thead class="table-dark">
-        <tr>
-            <th>#</th>
-            <th>Mã</th>
-            <th>Tên màu</th>
-            <th>Trạng thái</th>
-            <th>Mô tả</th>
-        </tr>
-        </thead>
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3 px-4">
+            <div>
+                <h4 class="mb-0 fw-bold text-primary">
+                    <i class="fa-solid fa-palette me-2"></i> Quản lý màu sắc
+                </h4>
+                <small class="text-muted">Quản lý danh mục màu sắc của sản phẩm</small>
+            </div>
 
-        <tbody>
-        <tr ng-repeat="m in dsMauSac">
-            <td>{{ getSTT($index) }}</td>
-            <td>{{ m.maM }}</td>
-            <td>{{ m.tenM }}</td>
-            <td>
-                <span ng-if="m.trangThai == 1" class="badge bg-success">Hoạt động</span>
-                <span ng-if="m.trangThai == 0" class="badge bg-secondary">Ngừng</span>
-            </td>
-            <td>{{ m.moTa }}</td>
-        </tr>
-        </tbody>
-    </table>
+            <button class="btn btn-success px-4 shadow-sm" ng-click="moModalThem()">
+                <i class="fa fa-plus me-1"></i> Thêm màu sắc
+            </button>
+        </div>
+
+        <div class="card-body border-bottom px-4">
+            <div class="row g-3 align-items-center">
+                <div class="col-lg-5">
+                    <div class="input-group shadow-sm">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fa fa-search text-muted"></i>
+                        </span>
+                        <input type="text"
+                               class="form-control border-start-0 ps-0"
+                               placeholder="Tìm theo tên màu sắc..."
+                               ng-model="search.tenM"
+                               ng-change="timKiem()">
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <select class="form-select shadow-sm"
+                            ng-model="search.trangThai"
+                            ng-change="timKiem()">
+                        <option ng-value="null">-- Tất cả trạng thái --</option>
+                        <option ng-value="1">Hoạt động</option>
+                        <option ng-value="0">Ngừng hoạt động</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <button class="btn btn-outline-secondary w-100 shadow-sm"
+                            ng-click="reset()">
+                        <i class="fa fa-rotate me-1"></i>  Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-center">
+                <tr>
+                    <th width="60">STT</th>
+                    <th width="140">Mã màu</th>
+                    <th class="text-start">Tên màu</th>
+                    <th width="150">Trạng thái</th>
+                    <th class="text-start">Mô tả</th>
+                    <th width="160">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="m in dsMauSac track by m.id">
+                    <td class="text-center">{{$index + 1}}</td>
+                    <td class="fw-bold text-primary text-center">{{m.maM}}</td>
+                    <td class="fw-medium text-dark">{{m.tenM}}</td>
+                    <td class="text-center">
+                        <span class="badge rounded-pill bg-success-subtle text-success px-3" ng-if="m.trangThai === 1">Hoạt động</span>
+                        <span class="badge rounded-pill bg-secondary-subtle text-secondary px-3" ng-if="m.trangThai === 0">Ngừng</span>
+                    </td>
+                    <td class="text-muted small text-truncate" style="max-width: 200px;">{{m.moTa || '—'}}</td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-info btn-sm me-1"
+                                ng-click="xemChiTiet(m.id)" title="Xem chi tiết">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <button class="btn btn-outline-warning btn-sm me-1"
+                                ng-click="moModalSua(m.id)" title="Chỉnh sửa">
+                            <i class="fa fa-pen"></i>
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm"
+                                ng-click="xoaMauSac(m)" title="Xóa">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-if="dsMauSac.length === 0">
+                    <td colspan="6" class="text-center text-muted py-5">
+                        <img src="https://cdn-icons-png.flaticon.com/512/7486/7486744.png" width="50" class="mb-2 opacity-50"><br>
+                        Không tìm thấy màu sắc nào
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalMauSac" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+                <form ng-submit="luuMauSac()" novalidate>
+                    <div class="modal-header px-4 py-3" ng-class="isEdit ? 'bg-warning text-dark' : 'bg-success text-white'">
+                        <h5 class="modal-title fw-bold">
+                            <i class="fa" ng-class="isEdit ? 'fa-pen-to-square' : 'fa-plus-circle'"></i>
+                            {{ isEdit ? 'Cập nhật màu sắc' : 'Thêm màu sắc mới' }}
+                        </h5>
+                        <button type="button" class="btn-close" ng-class="{'btn-close-white': !isEdit}" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body px-4 pt-4">
+                        <div class="alert alert-danger small py-2" ng-if="loi">
+                            <i class="fa fa-circle-exclamation me-2"></i> {{loi}}
+                        </div>
+
+                        <div class="mb-3" ng-if="isEdit">
+                            <label class="form-label fw-bold small text-uppercase text-muted">Mã màu</label>
+                            <input type="text" class="form-control bg-light fw-bold" ng-model="mauSacMoi.maM" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-uppercase text-muted">Tên màu <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control"
+                                   placeholder="VD: Đỏ, Xanh dương, Neon..."
+                                   ng-model="mauSacMoi.tenM" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-uppercase text-muted">Trạng thái <span class="text-danger">*</span></label>
+                            <select class="form-select" ng-model="mauSacMoi.trangThai">
+                                <option ng-value="1">Hoạt động</option>
+                                <option ng-value="0">Ngừng hoạt động</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-uppercase text-muted">Mô tả</label>
+                            <textarea class="form-control" rows="3"
+                                      placeholder="Nhập ghi chú về màu sắc này..."
+                                      ng-model="mauSacMoi.moTa"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer border-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn px-4 shadow-sm"
+                                ng-class="isEdit ? 'btn-warning' : 'btn-success'"
+                                ng-disabled="dangGui">
+                            <span ng-if="dangGui" class="spinner-border spinner-border-sm me-1"></span>
+                            <i class="fa fa-save me-1" ng-if="!dangGui"></i>
+                            {{ isEdit ? 'Cập nhật ngay' : 'Lưu màu sắc' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalXemChiTiet" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+                <div class="modal-header bg-info text-white px-4">
+                    <h5 class="modal-title fw-bold"><i class="fa fa-circle-info me-2"></i>Chi tiết màu sắc</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <table class="table mb-0">
+                        <tr class="border-bottom">
+                            <th class="bg-light ps-4 py-3" width="40%">ID Hệ thống</th>
+                            <td class="ps-3 py-3 text-muted small">{{mauSacView.id}}</td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <th class="bg-light ps-4 py-3">Mã định danh</th>
+                            <td class="ps-3 py-3 fw-bold text-primary">{{mauSacView.maM}}</td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <th class="bg-light ps-4 py-3">Tên màu</th>
+                            <td class="ps-3 py-3 fw-bold text-dark">{{mauSacView.tenM}}</td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <th class="bg-light ps-4 py-3">Trạng thái</th>
+                            <td class="ps-3 py-3">
+                                <span class="badge" ng-class="mauSacView.trangThai === 1 ? 'bg-success' : 'bg-secondary'">
+                                    {{mauSacView.trangThai === 1 ? 'Đang kinh doanh' : 'Ngừng hoạt động'}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="border-bottom">
+                            <th class="bg-light ps-4 py-3">Ngày tạo</th>
+                            <td class="ps-3 py-3 text-muted">{{mauSacView.ngayTao | date:'dd/MM/yyyy HH:mm'}}</td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light ps-4 py-3">Mô tả</th>
+                            <td class="ps-3 py-3 text-muted">{{mauSacView.moTa || 'Không có mô tả'}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer border-0 px-4">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>

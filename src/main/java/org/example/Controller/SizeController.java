@@ -11,11 +11,11 @@ import java.util.*;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/san-pham/size")
-public class ControllerSZ {
+public class SizeController {
 
     private final SizeRepo sizeRepo;
 
-    public ControllerSZ(SizeRepo sizeRepo) {
+    public SizeController(SizeRepo sizeRepo) {
         this.sizeRepo = sizeRepo;
     }
 

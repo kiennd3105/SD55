@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,9 @@ public class Size {
 
     @Column(name = "NGAYSUA")
     private LocalDateTime ngaySua;
+
+    public Size(@NotBlank(message = "Chưa chọn size") String sizeId) {
+    }
 
     @Override
     public String toString() {

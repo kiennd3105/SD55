@@ -1,48 +1,231 @@
-<divgusienCtrl">
+<div class="container mt-4" ng-controller="nhanVienCtrl">
 
-  <h2> Danh sách nhân viên</h2>
+  <button class="btn btn-primary mb-3" ng-click="openAddModal()">
+    Thêm nhân viên
+  </button>
 
-<table class="table table-bordered table-hover">
-  <thead class="table-dark">
-  <tr>
-    <th>STT</th>
-    <th>Mã</th>
-    <th>Tên</th>
-    <th>Email</th>
-    <th>Giới tính</th>
-<!--    <th>Ảnh</th>-->
-    <th>Trạng thái</th>
-    <th>Hành động</th>
-  </tr>
-  </thead>
+  <h2>Danh sách nhân viên</h2>
 
-  <tbody>
-  <tr ng-repeat="nv in dsNhanVien">
-    <td>{{$index + 1}}</td>
-    <td>{{nv.ma}}</td>
-    <td>{{nv.ten}}</td>
-    <td>{{nv.email}}</td>
-    <td>{{nv.gioiTinh}}</td>
-<!--    <td>-->
-<!--      <img ng-if="nv.img" ng-src="{{nv.img}}" width="50">-->
-<!--    </td>-->
-    <td>
-      {{nv.trangThai == 1 ? 'Hoạt động' : 'Ngưng'}}
-    </td>
-    <td>
-      <button class="btn btn-warning btn-sm"
-              ng-click="detailNhanVien(nv.id)">
-        Sửa
-      </button>
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <input type="text"
+             class="form-control"
+             placeholder="Tìm kiếm"
+             ng-model="keyword">
+    </div>
+  </div>
 
-      <button class="btn btn-danger btn-sm"
-              ng-click="deleteNhanVien(nv.id)">
-        Xóa
-      </button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+    <tr>
+      <th>STT</th>
+<!--      <th>Ảnh</th>-->
+      <th>Mã</th>
+      <th>Tên</th>
+      <th>Email</th>
+      <th>Giới tính</th>
+<!--      <th>SĐT</th>-->
+<!--      <th>Địa chỉ</th>-->
+      <th>Trạng thái</th>
+      <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="nv in dsNhanVien | orderBy:'-ma' | filter: keyword">
+      <td>{{$index + 1}}</td>
+<!--      <td class="text-center">-->
+<!--        <img ng-if="nv.img"-->
+<!--             ng-src="http://localhost:8084/uploads/nhanvien/{{nv.img}}"-->
+<!--             style="width:40px;height:40px;object-fit:cover;border-radius:50%">-->
+<!--      </td>-->
 
-</body>
-</html>
+      <td>{{nv.ma}}</td>
+      <td>{{nv.ten}}</td>
+      <td>{{nv.email}}</td>
+      <td>{{nv.gioiTinh}}</td>
+<!--      <td>{{nv.sdt}}</td>-->
+<!--      <td>{{nv.diaChi}}</td>-->
+      <td>{{nv.trangThai == 1 ? 'Hoạt động' : 'Ngưng'}}</td>
+      <td>
+        <button class="btn btn-info btn-sm"
+                ng-click="showDetail(nv.id)">
+          Chi tiết
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="modal" ng-show="showDetailModal"
+       style="display:block; background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Chi tiết nhân viên</h5>
+          <button class="btn-close" ng-click="closeDetailModal()"></button>
+        </div>
+
+        <form name="nvForm" novalidate>
+          <div class="modal-body">
+
+            <div class="mb-3">
+              <label>Tên</label>
+              <input type="text" class="form-control"
+                     ng-model="detailNhanVien.ten"
+                     name="ten" required ng-minlength="3">
+              <small class="text-danger"
+                     ng-show="nvForm.ten.$touched && nvForm.ten.$invalid">
+                Tên ít nhất 3 ký tự
+              </small>
+            </div>
+
+            <div class="mb-3">
+              <label>Email</label>
+              <input type="email" class="form-control"
+                     ng-model="detailNhanVien.email"
+                     name="email" required>
+              <small class="text-danger"
+                     ng-show="nvForm.email.$touched && nvForm.email.$invalid">
+                Email không hợp lệ
+              </small>
+            </div>
+
+            <div class="mb-3">
+              <label>Giới tính</label>
+              <select class="form-control"
+                      ng-model="detailNhanVien.gioiTinh" required>
+                <option value="">-- Chọn --</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+              </select>
+            </div>
+
+
+
+            <div class="mb-3">
+              <label>Trạng thái</label>
+              <select class="form-control"
+                      ng-model="detailNhanVien.trangThai">
+                <option value="1">Hoạt động</option>
+                <option value="0">Ngưng</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-success"
+                    ng-click="updateNhanVien()"
+                    ng-disabled="nvForm.$invalid">
+              Cập nhật
+            </button>
+            <button class="btn btn-secondary"
+                    ng-click="closeDetailModal()">
+              Đóng
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal" ng-show="showAddModal"
+       style="display:block; background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog">
+      <form class="modal-content" name="addForm" novalidate>
+
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Thêm nhân viên</h5>
+          <button class="btn-close btn-close-white"
+                  ng-click="closeAddModal()"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+
+<!--            <input type="text"-->
+<!--                   class="form-control"-->
+<!--                   ng-model="newNhanVien.ma"-->
+<!--                   readonly>-->
+
+<!--            <div class="col-md-6 mb-3">-->
+<!--              <label class="form-label">Ảnh</label>-->
+<!--              <input type="file"-->
+<!--                     class="form-control"-->
+<!--                     accept="image/*"-->
+<!--                     onchange="angular.element(this).scope().uploadAnh(this)">-->
+<!--            </div>-->
+
+<!--            <div class="col-md-6 mb-3" ng-if="newNhanVien.img">-->
+<!--              <img ng-src="http://localhost:8081/uploads/nhanvien/{{newNhanVien.img}}"-->
+<!--                   style="width:80px;height:80px;object-fit:cover;border-radius:6px">-->
+<!--            </div>-->
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Tên nhân viên</label>
+              <input type="text" class="form-control"
+                     ng-model="newNhanVien.ten"
+                     name="ten" required>
+              <small class="text-danger"
+                     ng-show="addForm.ten.$touched && addForm.ten.$invalid">
+                Tên không được để trống
+              </small>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control"
+                     ng-model="newNhanVien.email"
+                     name="email" required>
+              <small class="text-danger"
+                     ng-show="addForm.email.$touched && addForm.email.$invalid">
+                Email không hợp lệ
+              </small>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Giới tính</label>
+              <select class="form-select"
+                      ng-model="newNhanVien.gioiTinh"
+                      name="gioiTinh" required>
+                <option value="">-- Chọn --</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+              </select>
+              <small class="text-danger"
+                     ng-show="addForm.gioiTinh.$touched && addForm.gioiTinh.$invalid">
+                Vui lòng chọn giới tính
+              </small>
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Trạng thái</label>
+              <select class="form-select"
+                      ng-model="newNhanVien.trangThai">
+                <option value="1">Hoạt động</option>
+                <option value="0">Ngưng</option>
+              </select>
+            </div>
+
+
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-success" ng-click="addNhanVien()">Thêm</button>
+
+
+            <button class="btn btn-secondary"
+                    ng-click="closeAddModal()">
+              Đóng
+            </button>
+          </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>

@@ -10,6 +10,7 @@
             <th>ID</th>
             <th>Mã</th>
             <th>Nhân viên</th>
+            <th>Khác hàng</th>
             <th>Ngày đặt</th>
             <th>Hóa Đơn</th>
             <th>Thanh toán</th>
@@ -24,7 +25,8 @@
             <td>{{$index + 1}}</td>
             <td>{{hd.id}}</td>
             <td>{{hd.ma}}</td>
-            <td>{{hd.idNhanVien}}</td>
+            <td>{{hd.tenNV}}</td>
+            <td>{{hd.tenKH}}</td>
             <td>{{hd.ngayDatHang | date:'dd/MM/yyyy HH:mm'}}</td>
 
             <td>
@@ -40,13 +42,115 @@
                 <span ng-if="hd.trangThai == 1" class="badge bg-success">Đã TT</span>
             </td>
             <td class="text-center">
-                <button class="btn btn-info btn-sm" ng-click="openDetail(hd.id)">
+                <button class="btn btn-info btn-sm" ng-click="openHoaDonDetail(hd.id)">
                     Chi tiết
                 </button>
+
+
             </td>
         </tr>
         </tbody>
     </table>
+
+
+    <div class="modal fade" id="hoaDonDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <!-- HEADER -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Chi Tiết Đơn Hàng</h4>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- TIMELINE -->
+                    <div class="d-flex justify-content-between mb-4 text-center">
+                        <div>
+                            <i class="bi bi-check-circle text-primary fs-4"></i>
+                            <div>Tạo đơn</div>
+                        </div>
+                        <div>
+                            <i class="bi bi-check-circle text-primary fs-4"></i>
+                            <div>Xác nhận</div>
+                        </div>
+                        <div>
+                            <i class="bi bi-truck text-success fs-4"></i>
+                            <div>Giao hàng</div>
+                        </div>
+                        <div>
+                            <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                            <div>Hoàn thành</div>
+                        </div>
+                    </div>
+
+                    <!-- THÔNG TIN ĐƠN HÀNG -->
+                    <h5>Thông Tin Đơn Hàng</h5>
+                    <div class="row mb-3">
+                        <p>Trạng thái: <b>{{hoaDonDangXem.trangThai}}</b></p>
+                        <p>Mã đơn: {{hoaDonDangXem.ma}}</p>
+                        <p>Loại đơn: {{hoaDonDangXem.loaiHoaDon == 1 ? 'Online' : 'Tại quầy'}}</p>
+
+                        <p>Phí VC: {{hoaDonDangXem.phiVanChuyen | number}} đ</p>
+                        <p>Tổng tiền: {{hoaDonDangXem.tongTien | number}} đ</p>
+                        <p>Tiền được giảm: {{hoaDonDangXem.giamGia | number}} đ</p>
+                        <p>Phải thanh toán: {{hoaDonDangXem.thanhTien | number}} đ</p>
+
+                    </div>
+
+                    <!-- KHÁCH HÀNG -->
+                    <h5>Thông Tin Khách Hàng</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p>Tên KH: {{hoaDonDangXem.khachHang.ten}}</p>
+                            <p>SĐT: {{hoaDonDangXem.khachHang.sdt}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Email: {{hoaDonDangXem.khachHang.email}}</p>
+                            <p>Địa chỉ: {{hoaDonDangXem.diaChi}}</p>
+                        </div>
+                    </div>
+
+                    <!-- BẢNG CHI TIẾT SP -->
+                    <h5>Chi Tiết Sản Phẩm</h5>
+
+                    <div ng-repeat="ct in dsHDCT" class="border rounded p-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><b>Sản phẩm:</b> {{ct.tenSanPham}}</p>
+                                <p><b>Size:</b> {{ct.tenSize}}</p>
+                                <p><b>Màu:</b> {{ct.tenMau}}</p>
+                                <p><b>Thể loại:</b> {{ct.tenTL}}</p>
+                            </div>
+
+                            <div class="col-md-6">
+                                <p><b>Chất liệu:</b> {{ct.tenCL}}</p>
+                                <p><b>Thương hiệu:</b> {{ct.tenTH}}</p>
+                                <p><b>Giá:</b> {{ct.giaBan | number}} đ</p>
+                                <p><b>Số lượng:</b> {{ct.soLuong}}</p>
+                                <p>
+                                    <b>Thành tiền:</b>
+                                    {{ct.giaBan * ct.soLuong | number}} đ
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 
 

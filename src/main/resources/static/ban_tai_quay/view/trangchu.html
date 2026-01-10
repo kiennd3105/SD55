@@ -1,4 +1,86 @@
+<div class="container mt-3">
 
-<h2>
-  trang 1
-</h2>
+  <!-- ===== TỔNG QUAN ===== -->
+  <div class="row text-center mb-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h6 class="text-muted">💰 TỔNG DOANH THU</h6>
+        <h3 class="text-success fw-bold">
+          {{tongDoanhThu | number}} đ
+        </h3>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h6 class="text-muted">🧾 TỔNG SỐ ĐƠN</h6>
+        <h3 class="text-primary fw-bold">
+          {{tongDon}}
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BIỂU ĐỒ ===== -->
+  <div class="container mt-3">
+
+    <!-- ===== BỘ LỌC NGÀY ===== -->
+    <div class="card shadow-sm p-3 mb-4">
+      <div class="row align-items-end">
+
+        <div class="col-md-4">
+          <label class="form-label">Từ ngày</label>
+          <input type="date" class="form-control" ng-model="filter.fromDate">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Đến ngày</label>
+          <input type="date" class="form-control" ng-model="filter.toDate">
+        </div>
+
+        <div class="col-md-4 text-end">
+          <button class="btn btn-primary w-100" ng-click="locThongKe()">
+            🔍 Lọc thống kê
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card shadow-sm p-3 mb-4">
+    <h6 class="mb-3">📊 DOANH THU THEO NGÀY</h6>
+    <canvas id="doanhThuChart" height="90"></canvas>
+  </div>
+
+  <!-- ===== TOP SẢN PHẨM ===== -->
+  <div class="card shadow-sm p-3">
+    <h6 class="mb-3 text-center">🔥 TOP 5 SẢN PHẨM BÁN CHẠY</h6>
+
+    <div class="list-group">
+
+      <div class="list-group-item text-center"
+           ng-repeat="sp in dsTopSP | limitTo:5"
+           ng-class="{
+           'fw-bold text-success': $index === 0,
+           'fw-semibold': $index > 0
+         }">
+
+        <div class="fs-5 mb-1">
+          🏆 Top {{$index + 1}}
+        </div>
+
+        <div class="fs-6">
+          {{sp.tenSanPham}}
+        </div>
+
+        <small class="text-muted">
+          Số lượng bán: {{sp.tongSoLuong}}
+        </small>
+
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
