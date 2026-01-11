@@ -68,7 +68,6 @@ public class BanHangTaiQuayController {
     @PostMapping("/hoa-don/add")
     public HoaDon addHoaDon() {
 
-
         HoaDon hd = new HoaDon();
         hd.setId(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
         hd.setLoaiHoaDon(0);
@@ -78,9 +77,7 @@ public class BanHangTaiQuayController {
         hd.setTongTien(null);
         hd.setGiamGia(null);
         hd.setThanhTien(null);
-
         hd.setPhiVanChuyen(0);
-
         HoaDon hoaDonSaved = hoaDonRepo.save(hd);
         hoaDonSaved.setMa("HD" + hoaDonSaved.getId());
         hoaDonRepo.save(hoaDonSaved);
@@ -111,12 +108,9 @@ public class BanHangTaiQuayController {
         if (tonKho <= soLuong) {
             throw new RuntimeException("Sản phẩm trong kho không đủ");
         }
-
-
         HDCT hdct = hdctRepo
                 .findByHoaDonIdAndSanPhamChiTietId(idHoaDon, idSPCT)
                 .orElse(null);
-
         if (hdct != null) {
             int slCu = Integer.parseInt(hdct.getSoLuong());
             hdct.setSoLuong(String.valueOf(slCu + soLuong));
@@ -128,7 +122,6 @@ public class BanHangTaiQuayController {
             hdct.setSoLuong(String.valueOf(soLuong));
             hdct.setGiaBan(spct.getGia());
         }
-
         spct.setSoLuong(String.valueOf(tonKho - soLuong));
 
         sanPhamChiTietRepo.save(spct);

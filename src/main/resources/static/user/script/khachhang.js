@@ -9,7 +9,9 @@ userApp.controller("profileCtrl", function ($scope, $location) {
 
     $scope.user = auth.user;
     $scope.role = auth.role;
-
+      $scope.diDenLichSu = function() {
+            $location.path("/hoa-don");
+        };
     $scope.logout = function () {
         localStorage.removeItem("user");
         $location.path("/login");

@@ -30,10 +30,14 @@ userApp.config(function ($routeProvider) {
             templateUrl: '/user/view/giohang.html',
             controller: 'cartCtrl'
         })
-         .when('/checkout', {
-                    templateUrl: '/user/view/thanhtoan.html',
-                    controller: 'checkoutCtrl'
-                })
+        .when('/checkout', {
+             templateUrl: '/user/view/thanhtoan.html',
+             controller: 'checkoutCtrl'
+        })
+        .when('/hoa-don', {
+             templateUrl: '/user/view/hoadonkh.html',
+             controller: 'hoaDonKHCtrl'
+        })
 
         .otherwise({
             redirectTo: '/'
