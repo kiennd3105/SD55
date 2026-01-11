@@ -1,11 +1,10 @@
 var userApp = angular.module("userApp", ['ngRoute']);
 
-// Route configuration
 userApp.config(function ($routeProvider) {
     $routeProvider
         .when('/', {
             templateUrl: '/user/view/index.html',
-            controller: 'homePageCtrl'
+            controller: 'homePageCtrl',
         })
         .when('/login', {
             templateUrl: '/user/view/login.html',
@@ -16,41 +15,70 @@ userApp.config(function ($routeProvider) {
             controller: 'registerCtrl'
         })
         .when('/san-pham', {
-            templateUrl: '/user/view/sanpham.html',
-            controller: 'sanPhamCtrl'
+            templateUrl: '/user/view/sponline.html',
+            controller: 'homePageCtrl'
         })
+        .when('/san-pham/:id', {
+            templateUrl: '/user/view/ctsponlie.html',
+            controller: 'ctspCtrl'
+        })
+        .when('/thong-tin-ca-nhan', {
+            templateUrl: '/user/view/khachhang.html',
+            controller: 'profileCtrl'
+        })
+        .when('/gio-hang/:idKH', {
+            templateUrl: '/user/view/giohang.html',
+            controller: 'cartCtrl'
+        })
+         .when('/checkout', {
+                    templateUrl: '/user/view/thanhtoan.html',
+                    controller: 'checkoutCtrl'
+                })
+
         .otherwise({
             redirectTo: '/'
         });
 });
 
 userApp.run(function ($rootScope, $location) {
-    $rootScope.$on('$routeChangeSuccess', function () {
+    $rootScope.$on('$routeChangeStart', function (event) {
+
         const authPages = ['/login', '/register'];
-        $rootScope.isAuthPage = authPages.includes($location.path());
+        const publicRoutes = ['/', '/san-pham'];
+
+        const path = $location.path();
+
+        // ẩn header/footer cho login, register
+        $rootScope.isAuthPage = authPages.includes(path);
+
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        const isPublic =
+            authPages.includes(path) ||
+            publicRoutes.includes(path) ||
+            path.startsWith('/san-pham/');
+
+        if (!user && !isPublic) {
+            event.preventDefault();
+            $location.path("/login");
+        }
     });
 });
-// HEADER CONTROLLER ⭐
-userApp.controller("headerCtrl", function ($scope, $location) {
 
+userApp.controller("headerCtrl", function ($scope, $location) {
     $scope.user = JSON.parse(localStorage.getItem("user"));
     $scope.isLogin = !!$scope.user;
-
+     $scope.idKH = $scope.user?.user?.id;
     $scope.logout = function () {
         localStorage.removeItem("user");
-        $location.path('/login');
+        $location.path("/login");
     };
-
-
 });
-// Home Page Controller
-userApp.controller('homePageCtrl', function ($scope, $http) {
+userApp.controller('homePageCtrl', function ($scope, $http, $location) {
     $scope.bestSellingProducts = [];
     $scope.newProducts = [];
     $scope.loadingBestSelling = true;
     $scope.loadingNewProducts = true;
-
-    // Load best selling products
     $scope.loadBestSellingProducts = function () {
         $scope.loadingBestSelling = true;
         $http.get("http://localhost:8084/user/san-pham-ban-chay?limit=8")
@@ -64,8 +92,10 @@ userApp.controller('homePageCtrl', function ($scope, $http) {
                 $scope.loadingBestSelling = false;
             });
     };
+    $scope.viewProduct = function (idSanPham) {
+        $location.path("/san-pham/" + idSanPham);
+    };
 
-    // Load new products
     $scope.loadNewProducts = function () {
         $scope.loadingNewProducts = true;
         $http.get("http://localhost:8084/user/san-pham-moi?limit=8")
@@ -80,69 +110,14 @@ userApp.controller('homePageCtrl', function ($scope, $http) {
             });
     };
 
-    // View product details
-    $scope.viewProduct = function (productId) {
-        // Navigate to product detail page
-        window.location.href = "#!/san-pham/" + productId;
-    };
 
-    // Add to cart
-    $scope.addToCart = function (product) {
-        // Get cart from localStorage or initialize
-        var cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        
-        // Check if product already in cart
-        var existingItem = cart.find(function(item) {
-            return item.id === product.id;
-        });
-
-        if (existingItem) {
-            existingItem.quantity = (existingItem.quantity || 1) + 1;
-        } else {
-            cart.push({
-                id: product.id,
-                ma: product.ma,
-                tenSanPham: product.tenSanPham,
-                gia: product.gia,
-                hinhAnh: product.hinhAnh,
-                quantity: 1
-            });
-        }
-
-        // Save to localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
-        
-        // Show notification
-        alert('Đã thêm sản phẩm vào giỏ hàng!');
-        
-        // Update cart badge (if exists)
-        updateCartBadge();
-    };
-
-    // Update cart badge
-    function updateCartBadge() {
-        var cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        var totalItems = cart.reduce(function(sum, item) {
-            return sum + (item.quantity || 1);
-        }, 0);
-        
-        var badge = document.querySelector('.cart-icon .badge');
-        if (badge) {
-            badge.textContent = totalItems;
-        }
-    }
-
-    // Initialize
     $scope.loadBestSellingProducts();
     $scope.loadNewProducts();
-    updateCartBadge();
-});
 
-// Product list controller (for future use)
+});
 userApp.controller('sanPhamCtrl', function ($scope, $http) {
     $scope.products = [];
     $scope.loading = true;
-
     $http.get("http://localhost:8084/san-pham/getAll")
         .then(function (response) {
             $scope.products = response.data;
@@ -154,7 +129,6 @@ userApp.controller('sanPhamCtrl', function ($scope, $http) {
         });
 });
 
-// Format number filter
 userApp.filter('number', function() {
     return function(input) {
         if (!input) return '0';

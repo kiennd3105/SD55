@@ -19,5 +19,7 @@ public class CTGHRespon {
     private String tenSP;
     private String mauSac;
     private String size;
+    private String img;
     private GioHang gioHang;
+    private String idCTSP;
 }

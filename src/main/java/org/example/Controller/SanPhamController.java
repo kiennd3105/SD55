@@ -77,34 +77,7 @@ public class SanPhamController {
 
         return ResponseEntity.ok(list);
     }
-
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateSanPham(
-            @PathVariable String id,
-            @RequestBody SanPham sanPhamReq
-    ) {
-
-        return sanPhamRepo.findById(id)
-                .map(sp -> {
-                    sp.setTen(sanPhamReq.getTen());
-                    sp.setSoLuong(sanPhamReq.getSoLuong());
-                    sp.setTrangThai(sanPhamReq.getTrangThai());
-                    sp.setMoTa(sanPhamReq.getMoTa());
-
-                    sp.setTheLoai(sanPhamReq.getTheLoai());
-                    sp.setChatLieu(sanPhamReq.getChatLieu());
-                    sp.setThuongHieu(sanPhamReq.getThuongHieu());
-
-                    sp.setNgaySua(java.time.LocalDateTime.now());
-
-                    sanPhamRepo.save(sp);
-
-                    return ResponseEntity.ok(sp.toResponse());
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
+    
 
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional

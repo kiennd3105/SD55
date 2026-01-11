@@ -15,8 +15,9 @@ import org.example.dto.giohang.GioHangRespon;
 @Table(name = "GIOHANG")
 public class GioHang {
     @Id
-    @Column
+    @Column(name = "ID", length = 8)
     private String id;
+
     @ManyToOne
     @JoinColumn(name = "IDKH")
     private KhachHang khachHang;

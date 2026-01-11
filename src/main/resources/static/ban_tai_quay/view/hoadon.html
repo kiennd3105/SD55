@@ -1,12 +1,10 @@
 <div ng-controller="hoaDonCtrl">
 
     <h2 class="mb-3">Quản lý Hóa Đơn</h2>
-    <!-- TÌM KIẾM & LỌC -->
     <div class="card mb-3">
         <div class="card-body">
             <div class="row g-2">
 
-                <!-- Tìm theo từ khóa -->
                 <div class="col-md-6">
                     <input type="text"
                            class="form-control"
@@ -14,7 +12,6 @@
                            ng-model="filter.keyword">
                 </div>
 
-                <!-- Lọc loại hóa đơn -->
                 <div class="col-md-3">
                     <select class="form-select"
                             ng-model="filter.loaiHoaDon">
@@ -24,7 +21,6 @@
                     </select>
                 </div>
 
-                <!-- Reset -->
                 <div class="col-md-3">
                     <button class="btn btn-outline-secondary w-100"
                             ng-click="resetFilter()">
@@ -135,7 +131,7 @@
                         <p>Loại đơn: {{hoaDonDangXem.loaiHoaDon == 1 ? 'Online' : 'Tại quầy'}}</p>
 
                         <p>Phí VC: {{hoaDonDangXem.phiVanChuyen | number}} đ</p>
-                        <p>Tổng tiền: {{hoaDonDangXem.tongTien | number}} đ</p>
+                        <p>Tổng tiền: {{hoaDonDangXem.tongTien + hoaDonDangXem.phiVanChuyen | number}} đ</p>
                         <p>Tiền được giảm: {{hoaDonDangXem.giamGia | number}} đ</p>
                         <p>Phải thanh toán: {{hoaDonDangXem.thanhTien | number}} đ</p>
 
@@ -144,17 +140,15 @@
                     <h5>Thông Tin Khách Hàng</h5>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <p>Tên KH: {{hoaDonDangXem.khachHang.ten}}</p>
-                            <p>SĐT: {{hoaDonDangXem.khachHang.sdt}}</p>
+                            <p>Tên KH: {{hoaDonDangXem .tenKH}}</p>
+                            <p>SĐT: {{hoaDonDangXem .sdt}}</p>
                         </div>
                         <div class="col-md-6">
-                            <p>Email: {{hoaDonDangXem.khachHang.email}}</p>
+                            <p>Email: {{hoaDonDangXem .email}}</p>
                             <p>Địa chỉ: {{hoaDonDangXem.diaChi}}</p>
                         </div>
                     </div>
-
                     <h5>Chi Tiết Sản Phẩm</h5>
-
                     <div ng-repeat="ct in dsHDCT" class="border rounded p-3 mb-3">
                         <div class="row">
                             <div class="col-md-3 text-center">

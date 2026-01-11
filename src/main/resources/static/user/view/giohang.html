@@ -1,0 +1,70 @@
+<div class="card shadow-sm" ng-if="cart.length > 0">
+    <div class="card-body row">
+        <!-- Bảng giỏ hàng -->
+        <div class="card-body row">
+            <!-- Bảng giỏ hàng -->
+            <div class="col-md-8 mb-3">
+                <table class="table table-hover align-middle text-center">
+                    <thead class="table-light">
+                    <tr>
+                        <th style="width:40px;">Chọn</th>
+                        <th>Sản phẩm</th>
+                        <th style="width:100px;">Giá</th>
+                        <th style="width:120px;">Số lượng</th>
+                        <th style="width:120px;">Thành tiền</th>
+                        <th style="width:50px;"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in cart">
+                        <td>
+                            <input type="checkbox" ng-model="item.selected" ng-change="updateSelected()" />
+                        </td>
+                        <td class="text-start">
+                            <div class="d-flex align-items-center">
+                                <img ng-src="http://localhost:8084/uploads/{{item.img}}"
+                                     width="60" height="60"
+                                     class="rounded me-2"
+                                     style="object-fit: cover;">
+
+                                <div>
+                                    <div class="fw-bold">{{item.tenSP}}</div>
+                                    <small class="text-muted">{{item.ma}}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{item.gia | number}} đ</td>
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <button class="btn btn-outline-secondary btn-sm p-0 me-1" type="button"
+                                        ng-click="giam(item)" style="width:28px; height:28px; line-height:1;">−</button>
+                                <input type="text" class="form-control text-center p-0" ng-model="item.soLuong" readonly
+                                       style="width:40px; height:28px; font-size:0.85rem; line-height:28px;">
+                                <button class="btn btn-outline-secondary btn-sm p-0 ms-1" type="button"
+                                        ng-click="tang(item)" style="width:28px; height:28px; line-height:1;">+</button>
+                            </div>
+                        </td>
+                        <td class="fw-bold">{{item.gia * item.soLuong | number}} đ</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" ng-click="xoa(item)">🗑</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        <!-- Thanh toán bên phải -->
+        <div class="col-md-4">
+            <div class="mb-3">
+                <button class="btn btn-outline-secondary w-100 mb-2" ng-click="xoaChon()">Xóa sản phẩm chọn</button>
+            </div>
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+                <span>Tổng tiền chọn:</span>
+                <span class="fw-bold text-danger">{{tongTienChon | number}} đ</span>
+            </div>
+            <div class="text-end mt-4">
+                <a href="#!/san-pham" class="btn btn-outline-secondary me-2">← Tiếp tục mua</a>
+                <button class="btn btn-primary" ng-click="diDenThanhToan()">💳 Mua hàng</button>
+            </div>
+        </div>
+    </div>
+</div>

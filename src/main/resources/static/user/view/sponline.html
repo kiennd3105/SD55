@@ -1,0 +1,77 @@
+<div class="container my-4" ng-controller="homePageCtrl">
+
+    <!-- 🔍 TÌM KIẾM -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <input type="text"
+                   class="form-control form-control-lg"
+                   placeholder="🔍 Tìm kiếm sản phẩm theo tên..."
+                   ng-model="keyword">
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 🧭 BỘ LỌC (3 PHẦN) -->
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h6 class="fw-bold">Sắp xếp</h6>
+                <select class="form-select" ng-model="sortType">
+                    <option value="">Mặc định</option>
+                    <option value="new">Sản phẩm mới nhất</option>
+                    <option value="priceAsc">Giá tăng dần</option>
+                    <option value="priceDesc">Giá giảm dần</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <!-- 🛍️ DANH SÁCH SẢN PHẨM -->
+            <section class="new-products-section mb-5">
+                <div class="container">
+                    <div class="section-header text-center mb-5">
+                        <h2 class="section-title fw-bold">Sản phẩm mới</h2>
+                        <p class="text-muted">Những sản phẩm mới nhất từ OWEN</p>
+                    </div>
+                    <div ng-if="loadingNewProducts" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div ng-if="!loadingNewProducts && newProducts.length === 0" class="text-center py-5">
+                        <p class="text-muted">Chưa có sản phẩm mới</p>
+                    </div>
+                    <div class="row g-4" ng-if="!loadingNewProducts && newProducts.length > 0">
+                        <div class="col-md-3 col-sm-6" ng-repeat="product in newProducts">
+                            <div class="product-card">
+                                <div class="product-image-wrapper">
+                                    <span class="badge bg-danger position-absolute top-0 start-0 m-2">Mới</span>
+                                    <img ng-src="http://localhost:8084/uploads/{{product.hinhAnh}}"
+                                         alt="{{product.tenSanPham}}"
+                                         class="product-image">
+                                    <div class="product-overlay">
+                                        <button class="btn btn-light btn-sm"
+                                                ng-click="viewProduct(product.idSanPham)">
+                                            <i class="fas fa-eye"></i> Xem chi tiết
+                                        </button>
+
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <h6 class="product-name">{{product.tenSanPham}}</h6>
+                                    <div class="product-meta mb-2">
+                                    <span class="badge bg-secondary me-1"
+                                          ng-if="product.tenSize">{{product.tenSize}}</span>
+                                        <span class="badge bg-secondary"
+                                              ng-if="product.tenMau">{{product.tenMau}}</span>
+                                    </div>
+                                    <div class="product-price">
+                                        <span class="price">{{product.gia | number}} đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

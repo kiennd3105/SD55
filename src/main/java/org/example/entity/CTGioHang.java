@@ -15,10 +15,13 @@ import org.example.dto.giohang.CTGHRespon;
 @Table(name = "CTGIOHANG")
 public class CTGioHang {
     @Id
-    @Column
+    @Column(name = "ID")
     private String id;
+    @Column(name = "GIA")
     private String gia;
+    @Column(name = "SOLUONG")
     private String soLuong;
+    @Column(name = "NGAYTAO")
     private String ngayTao;
     @ManyToOne
     @JoinColumn(name = "IDCTSP")
@@ -36,7 +39,9 @@ public class CTGioHang {
                 sanPhamChiTiet.getSanPham().getTen(),
                 sanPhamChiTiet.getMauSac().getTenM(),
                 sanPhamChiTiet.getSize().getTenSZ(),
-                gioHang
+                sanPhamChiTiet.getIMG(),
+                gioHang,
+                sanPhamChiTiet.getId()
         );
     }
 }

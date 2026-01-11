@@ -7,6 +7,7 @@ import org.example.dto.hoadon.VoucherRespon;
 import org.example.entity.*;
 import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,11 +57,11 @@ public class BanHangTaiQuayController {
                 .toList();
     }
 
-    @GetMapping("/hoa-don/detail-info/{id}")
-    public HoaDonRespon getInfo(@PathVariable String id) {
-        return hoaDonRepo.findById(id)
-                .map(HoaDon::toResponse)
-                .orElse(null);
+    @GetMapping("/hoa-don/detail-info/{idHD}")
+    public ResponseEntity<?> getHoaDonDetail(@PathVariable String idHD) {
+        HoaDon hd = hoaDonRepo.findById(idHD)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
+        return ResponseEntity.ok(hd.toResponse()); // trả về DTO với tenKH, sdt, email
     }
 
 

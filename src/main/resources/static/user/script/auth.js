@@ -1,7 +1,7 @@
 var app = angular.module("userApp");
 
 
-app.controller("loginCtrl", function ($scope, $http, $window) {
+app.controller("loginCtrl", function ($scope, $http, $window,$location) {
 
     if (localStorage.getItem("registerSuccess")) {
         $scope.success = "Đăng ký thành công. Vui lòng đăng nhập.";
@@ -23,6 +23,7 @@ app.controller("loginCtrl", function ($scope, $http, $window) {
 
 
                 localStorage.setItem("user", JSON.stringify(res.data));
+                console.log("kh:", res.data);
 
 
                 if (res.data.role === "ADMIN") {
@@ -33,7 +34,8 @@ app.controller("loginCtrl", function ($scope, $http, $window) {
                     $window.location.href = "/ban_tai_quay/layout.html#!/taiquay";
                 } else if (res.data.role === "USER") {
 
-                    $window.location.href = "/user/layout-user.html#!/";
+//                    $window.location.href = "/user/layout-user.html#!/";
+                     $location.path("/");
                 } else {
                     $scope.error = "Vai trò không hợp lệ";
                 }

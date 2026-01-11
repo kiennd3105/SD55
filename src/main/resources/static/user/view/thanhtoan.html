@@ -1,0 +1,170 @@
+<div class="container my-5" ng-controller="checkoutCtrl">
+
+    <h3 class="mb-4">💳 Thanh toán</h3>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm p-3">
+                <h5 class="mb-3">Thông tin khách hàng</h5>
+                <div class="mb-2">
+                    <label class="form-label">Họ và tên:</label>
+                    <input type="text" class="form-control" ng-model="khachHang.ten" readonly>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Email:</label>
+                    <input type="email" class="form-control" ng-model="khachHang.email" readonly>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Số điện thoại:</label>
+                    <input type="text" class="form-control" ng-model="khachHang.sdt" readonly>
+                </div>
+
+                <hr>
+
+                <h5 class="mb-3">Địa chỉ giao hàng</h5>
+                <select class="form-select"
+                        ng-model="diaChi.tinh"
+                        ng-options="t as t.name for t in listTinh"
+                        ng-change="loadHuyen(diaChi.tinh)">
+                    <option value="">-- Chọn Tỉnh/Thành phố --</option>
+                </select>
+
+                <div class="mb-2">
+                    <label class="form-label">Huyện/Quận</label>
+                    <select class="form-select" ng-model="diaChi.huyen" ng-change="loadXa(diaChi.huyen)">
+                        <option value="">-- Chọn Huyện/Quận --</option>
+                        <option ng-repeat="h in listHuyen" ng-value="h">{{h.name}}</option>
+                    </select>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Xã/Phường</label>
+                    <select class="form-select" ng-model="diaChi.xa">
+                        <option value="">-- Chọn Xã/Phường --</option>
+                        <option ng-repeat="x in listXa" ng-value="x">{{x.name}}</option>
+                    </select>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Địa chỉ chi tiết</label>
+                    <input type="text" class="form-control" ng-model="diaChi.chiTiet" placeholder="Số nhà, đường...">
+                </div>
+
+                <div class="mt-3">
+                    <label>Địa chỉ đầy đủ:</label>
+                    <div class="fw-bold">{{getDiaChiDayDu()}}</div>
+                </div>
+
+
+                <div class="mt-3">
+                    <label>Phí vận chuyển:</label>
+                    <div class="fw-bold">{{phiVanChuyen | number}} đ</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm p-3">
+                <h5 class="mb-3">Đơn hàng</h5>
+                <div class="mb-3" style="max-height: 250px; overflow-y: auto;">
+                    <div class="d-flex align-items-center mb-2" ng-repeat="item in cart">
+                        <img ng-src="http://localhost:8084/uploads/{{item.img}}" width="50" height="50"
+                             class="rounded me-2" style="object-fit: cover;">
+                        <div class="flex-grow-1">
+                            <div>{{item.tenSP}}</div>
+                            <small>Số lượng: {{item.soLuong}}</small>
+                        </div>
+                        <div class="fw-bold">{{item.gia * item.soLuong | number}} đ</div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h6>Voucher có thể áp dụng</h6>
+                <div style="max-height: 120px; overflow-y: auto; border: 1px solid #ddd; padding: 5px;">
+                    <div ng-repeat="v in vouchers" class="p-2 mb-1 bg-light rounded">
+                        <input type="radio" ng-click="chonVoucher(v)"
+                               ng-checked="voucherSelected && voucherSelected.idVoucher === v.idVoucher">
+                        {{v.ten}} - {{v.ma}}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-2">
+                    <span>Tổng tiền sau giảm:</span>
+                    <span class="fw-bold text-danger">{{tongSauGiam() | number}} đ</span>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tổng tiền sản phẩm:</span>
+                    <span class="fw-bold">{{tongTien | number}} đ</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Giảm giá voucher:</span>
+                    <span class="fw-bold text-success">{{tienDuocGiam() | number}} đ</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Phí vận chuyển:</span>
+                    <span class="fw-bold">{{phiVanChuyen | number}} đ</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2 fs-5 fw-bold">
+                    <span>Thanh toán:</span>
+                    <span class="fw-bold text-danger">{{tongSauGiam() | number}} đ</span>
+                </div>
+
+                <button class="btn btn-danger w-100" ng-click="moModalThanhToan()">
+                    Thanh toán
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="paymentModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title">Chọn phương thức thanh toán</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           ng-model="phuongThucThanhToan"
+                                           value="COD"
+                                           id="cod">
+                                    <label class="form-check-label" for="cod">
+                                        Thanh toán khi nhận hàng (COD)
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           ng-model="phuongThucThanhToan"
+                                           value="VNPAY"
+                                           id="vnpay">
+                                    <label class="form-check-label" for="vnpay">
+                                        Thanh toán VNPay
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Huỷ
+                                </button>
+                                <button class="btn btn-primary" ng-click="xacNhanThanhToan()">
+                                    Xác nhận
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,41 @@
+<div class="container my-5" ng-controller="profileCtrl">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-lg rounded-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">👤 Thông tin khách hàng</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <p><strong>Họ tên:</strong> {{user.ten}}</p>
+                    <p><strong>Email:</strong> {{user.email}}</p>
+                    <p><strong>Số điện thoại:</strong> {{user.sdt}}</p>
+                    <p><strong>Địa chỉ:</strong> {{user.diaChi}}</p>
+                    <p><strong>Giới tính:</strong>
+                        <span ng-if="user.gioiTinh == 'NAM'">Nam</span>
+                        <span ng-if="user.gioiTinh == 'NU'">Nữ</span>
+                    </p>
+                    <p>
+                        <strong>Vai trò:</strong>
+                        <span class="badge bg-success">{{user.role}}</span>
+                    </p>
+
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <button class="btn btn-outline-primary">
+                        ✏️ Cập nhật thông tin
+                    </button>
+
+                    <button class="btn btn-danger"
+                            ng-click="logout()">
+                        🚪 Đăng xuất
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

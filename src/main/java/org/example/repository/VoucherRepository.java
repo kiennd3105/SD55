@@ -24,14 +24,16 @@ public interface VoucherRepository extends JpaRepository<Voucher, String> {
     Page<Voucher> search(String s, Pageable pageable);
 
     @Query("""
-    SELECT v FROM Voucher v
-    WHERE v.trangThai = 1
-      AND CAST(v.soLuong AS integer) > 0
-      AND v.ngayBatDau <= CURRENT_TIMESTAMP
-      AND v.ngayKetThuc >= CURRENT_TIMESTAMP
-      AND CAST(v.dieuKienApDung AS integer) <= :tongTien
-""")
+                SELECT v FROM Voucher v
+                WHERE v.trangThai = 1
+                  AND CAST(v.soLuong AS integer) > 0
+                  AND v.ngayBatDau <= CURRENT_TIMESTAMP
+                  AND v.ngayKetThuc >= CURRENT_TIMESTAMP
+                  AND CAST(v.dieuKienApDung AS integer) <= :tongTien
+            """)
     List<Voucher> findVoucherApDung(@Param("tongTien") int tongTien);
+
+    List<Voucher> findByTrangThai(Integer trangThai);
 
 
 }
