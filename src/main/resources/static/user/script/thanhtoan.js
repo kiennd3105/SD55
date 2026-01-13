@@ -195,8 +195,42 @@ $scope.$watch('diaChi.tinh', function(newVal) {
         }
     };
 
+    $scope.thanhToanVNPay = function () {
+        if ($scope.cart.length === 0) {
+            alert("Chưa có sản phẩm nào để thanh toán!");
+            return;
+        }
+        if (!$scope.diaChi.tinh || !$scope.diaChi.huyen || !$scope.diaChi.xa) {
+            alert("Vui lòng chọn đầy đủ địa chỉ giao hàng!");
+            return;
+        }
+        const payload = {
+            idKH: auth.user.id,
+            diaChi: $scope.getDiaChiDayDu(),
+            phiVanChuyen: $scope.phiVanChuyen || 0,
+            tongTien: $scope.tongTien,
+            giamGia: Math.floor($scope.tienDuocGiam()),
+            thanhTien: Math.floor($scope.tongSauGiam()),
+            idVoucher: $scope.voucherSelected ? $scope.voucherSelected.idVoucher : null,
+            items: $scope.cart.map(item => ({
+                idCTSP: item.idCTSP,
+                giaBan: String(item.gia),
+                soLuong: String(item.soLuong)
+            }))
+        };
+        console.log("Payload thanh toán:", payload);
+        $http.post("http://localhost:8084/vnpay/urlpayment", payload)
+            .then(function (res) {
+                var urlPayment = res.data.url;
+                window.location.href = urlPayment;
+            })
+            .catch(function (err) {
+                console.error(err);
+                alert(err.data || "Thanh toán thất bại!");
+            });
+    };
 
-   $scope.thanhToanCOD = function () {
+    $scope.thanhToanCOD = function () {
        if ($scope.cart.length === 0) {
            alert("Chưa có sản phẩm nào để thanh toán!");
            return;

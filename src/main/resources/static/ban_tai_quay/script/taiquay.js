@@ -319,6 +319,26 @@
                        alert(err.data?.message || "Thanh toán thất bại");
                    });
                };
+
+               $scope.xacNhanThanhToanVnpay = function () {
+                   $http.post(
+                       "http://localhost:8084/vnpay/tao-link-tai-quay",
+                       null,
+                       {
+                           params: {
+                               idHoaDon: $scope.hoaDonDangXem.id,
+                               phuongThuc: $scope.phuongThucTT
+                           }
+                       }
+                   ).then(function (res) {
+                       var urlPayment = res.data.url;
+                       window.location.href = urlPayment;
+                   }, function (err) {
+                       alert(err.data?.message || "Tạo link Thanh toán thất bại");
+                   });
+               };
+
+
                 $scope.moModalThanhToan = function () {
                     if (!$scope.hoaDonDangXem) return;
 

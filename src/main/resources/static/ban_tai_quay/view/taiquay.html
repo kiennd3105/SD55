@@ -340,8 +340,15 @@
 
                     <button class="btn btn-success"
                             ng-click="xacNhanThanhToan()"
+                            ng-if="phuongThucTT === 'TIEN_MAT'"
                             ng-disabled="phuongThucTT === 'TIEN_MAT' && thanhToan.tienThoi < 0">
                         Xác nhận thanh toán
+                    </button>
+
+                    <button class="btn btn-success"
+                            ng-click="xacNhanThanhToanVnpay()"
+                            ng-if="phuongThucTT === 'VNPAY'">
+                        Xác nhận thanh toán vnpay
                     </button>
 
                 </div>
