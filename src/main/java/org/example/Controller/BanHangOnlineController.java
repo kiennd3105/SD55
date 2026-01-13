@@ -246,7 +246,12 @@ public class BanHangOnlineController {
 
             hdctRepo.save(hdct);
         }
+        GioHang gh = gioHangRepo.findByKhachHang_Id(req.getIdKH())
+                .orElseThrow();
 
+        ctGioHangRepo.deleteAll(
+                ctGioHangRepo.findByGioHang(gh)
+        );
         return ResponseEntity.ok(hd);
     }
 
