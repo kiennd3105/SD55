@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.dto.sanpham.SanPhamRespon;
-import org.example.dto.theloai.TheLoaiRespon;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,8 +23,6 @@ public class SanPham {
     private String ma;
     @Column(name = "TENSP")
     private String ten;
-    @Column(name = "SOLUONG")
-    private String soLuong;
     @Column(name = "TRANGTHAI")
     private int trangThai;
     @Column(name = "NGAYTAO")
@@ -52,7 +50,6 @@ public class SanPham {
                 id,
                 ma,
                 ten,
-                soLuong,
                 trangThai,
                 ngayTao,
                 ngaySua,

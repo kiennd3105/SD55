@@ -7,12 +7,16 @@ import org.example.dto.hoadon.VoucherRespon;
 import org.example.entity.*;
 import org.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
@@ -31,6 +35,8 @@ public class BanHangTaiQuayController {
     VoucherRepository voucherRepository;
     @Autowired
     SanPhamChiTietRepo sanPhamChiTietRepo;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @GetMapping("/dang-ban")
     public List<SanPhamChiTietRespon> getDangBan() {
@@ -42,7 +48,7 @@ public class BanHangTaiQuayController {
 
     @GetMapping("/hoa-don/tai-quay")
     public List<HoaDonRespon> getHoaDonTaiQuay() {
-        return hoaDonRepo.findByLoaiHoaDonAndTrangThai(0, 0)
+        return hoaDonRepo.findByLoaiHoaDonAndTrangThaiOrderByNgayTaoDesc(0, 0)
                 .stream()
                 .map(HoaDon::toResponse)
                 .toList();
@@ -66,21 +72,44 @@ public class BanHangTaiQuayController {
 
 
     @PostMapping("/hoa-don/add")
-    public HoaDon addHoaDon() {
+    public HoaDon addHoaDon(
+            @RequestParam String idNhanVien,
+            @RequestParam String maLoaiHoaDon
+    ) {
+        long soHoaDonDangMo =
+                hoaDonRepo.countByLoaiHoaDonAndTrangThai(0, 0);
+
+        if (soHoaDonDangMo >= 10) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Chỉ được tạo tối đa 10 hóa đơn tại quầy chưa thanh toán"
+            );
+        }
+
+        // 🔎 LẤY NHÂN VIÊN
+        NhanVien nv = nhanVienRepo.findById(idNhanVien)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
 
         HoaDon hd = new HoaDon();
+
+        // ID nội bộ
         hd.setId(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+
         hd.setLoaiHoaDon(0);
         hd.setTrangThai(0);
         hd.setKhachHang(null);
-        hd.setNhanVien(null);
+        hd.setNhanVien(nv);
         hd.setTongTien(null);
         hd.setGiamGia(null);
         hd.setThanhTien(null);
         hd.setPhiVanChuyen(0);
+
         HoaDon hoaDonSaved = hoaDonRepo.save(hd);
+
+        // mã hóa đơn hiển thị
         hoaDonSaved.setMa("HD" + hoaDonSaved.getId());
         hoaDonRepo.save(hoaDonSaved);
+
         return hoaDonSaved;
     }
 
@@ -232,10 +261,22 @@ public class BanHangTaiQuayController {
     }
 
     @PostMapping("/khach-hang/add")
-    public KhachHang addKhachHang(@RequestBody KhachHang kh) {
+    public ResponseEntity<?> addKhachHang(@RequestBody KhachHang kh) {
+        if (khachHangRepo.existsBySdt(kh.getSdt().trim())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("field", "sdt", "message", "Số điện thoại đã tồn tại"));
+        }
+
         kh.setId(UUID.randomUUID().toString().substring(0, 8).toUpperCase());
         kh.setMa("KH" + System.currentTimeMillis() % 100000000);
-        return khachHangRepo.save(kh);
+        kh.setNgayTao(LocalDateTime.now());
+        kh.setTrangThai(1);
+        if (kh.getPassw() == null || kh.getPassw().isBlank()) {
+            kh.setPassw("123456");
+        }
+        kh.setPassw(encoder.encode(kh.getPassw()));
+        KhachHang saved = khachHangRepo.save(kh);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("/hoa-don/voucher-ap-dung/{idHoaDon}")

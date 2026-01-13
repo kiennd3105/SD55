@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChiTietSanPhamRequest {
+    private String sanPhamId;
     private String sizeId;
     private String mauId;
     private String gia;

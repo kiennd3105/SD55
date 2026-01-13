@@ -66,6 +66,12 @@ userApp.run(function ($rootScope, $location) {
             event.preventDefault();
             $location.path("/login");
         }
+               const nvRoutes = ['/taiquay', '/sanpham', '/hoadon','trangchu','nhanvien']; // Các route chỉ NV được vào
+                if (nvRoutes.includes(path) && user?.role !== 'NHANVIEN') {
+                    event.preventDefault();
+                    alert("Bạn không có quyền truy cập trang này!");
+                    $location.path("/");
+                }
     });
 });
 

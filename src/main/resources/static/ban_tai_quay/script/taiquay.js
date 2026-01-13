@@ -1,4 +1,11 @@
             app.controller("taiQuayCtrl", function ($scope, $http) {
+                $scope.userDangNhap = JSON.parse(localStorage.getItem("user"));
+
+                if (!$scope.userDangNhap) {
+                    alert("Bạn chưa đăng nhập");
+                    window.location.href = "/user/layout-user.html#!/login";
+                    return;
+                }
 
                 $scope.dsHoaDon = [];
                 $scope.dsHDCT = [];
@@ -51,26 +58,54 @@
                             $scope.loadVoucherApDung();
                         });
                 };
-                $scope.capNhatSoLuong = function (ct) {
+               $scope.capNhatSoLuong = function (ct) {
+                   if (ct.soLuong <= 0) {
+                       ct.soLuong = 1;
+                       return;
+                   }
 
-                    if (ct.soLuong <= 0) {
-                        ct.soLuong = 1;
-                        return;
-                    }
-                    $http.post("http://localhost:8084/ban-hang/hoa-don/cap-nhat-so-luong", null, {
-                        params: {
-                            idHDCT: ct.id,
-                            soLuongMoi: ct.soLuong
-                        }
-                    }).then(function (res) {
-                        ct.soLuong = res.data.soLuong;
-                      $scope.loadCTHD($scope.hoaDonDangXem.id);
-                      $scope.reloadHoaDon();
-                    }, function (err) {
-                        alert(err.data.message || "Không đủ tồn kho");
-                        $scope.loadCTHD($scope.hoaDonDangXem.id);
-                    });
-                };
+                   $http.post("http://localhost:8084/ban-hang/hoa-don/cap-nhat-so-luong", null, {
+                       params: {
+                           idHDCT: ct.id,
+                           soLuongMoi: ct.soLuong
+                       }
+                   }).then(function (res) {
+                       // Cập nhật lại số lượng
+                       ct.soLuong = res.data.soLuong;
+
+                       // 🔹 Hủy voucher hiện tại (nếu có)
+                       if ($scope.hoaDonDangXem?.voucher) {
+                           $http.post(
+                               "http://localhost:8084/ban-hang/hoa-don/huy-voucher",
+                               null,
+                               { params: { idHoaDon: $scope.hoaDonDangXem.id } }
+                           ).then(function (res) {
+                               // backend trả về hóa đơn không còn voucher
+                               $scope.hoaDonDangXem = res.data;
+                               $scope.hoaDonDangXem.voucher = null;
+                               $scope.loadVoucherApDung();
+
+                               // Reload chi tiết hóa đơn và tính tiền
+                               $scope.loadCTHD($scope.hoaDonDangXem.id);
+                               $scope.reloadHoaDon();
+                           }, function (err) {
+                               console.error("Lỗi hủy voucher:", err);
+                               // vẫn reload để cập nhật số lượng
+                               $scope.loadCTHD($scope.hoaDonDangXem.id);
+                               $scope.reloadHoaDon();
+                           });
+                       } else {
+                           // Nếu không có voucher, chỉ reload bình thường
+                           $scope.loadCTHD($scope.hoaDonDangXem.id);
+                           $scope.reloadHoaDon();
+                       }
+
+                   }, function (err) {
+                       alert(err.data?.message || "Không đủ tồn kho");
+                       $scope.loadCTHD($scope.hoaDonDangXem.id);
+                   });
+               };
+
                 $scope.xoaCTHD = function (ct) {
                     if (!confirm("Xóa sản phẩm khỏi hóa đơn?")) return;
                     $http.delete("http://localhost:8084/ban-hang/hoa-don/xoa-san-pham/" + ct.id)
@@ -87,19 +122,33 @@
                     $scope.loadCTHD(hd.id);
                 };
                 $scope.taoHoaDonMoi = function () {
+
+                    const user = JSON.parse(localStorage.getItem("user"));
+
+                    if (!user || !user.user || !user.user.id) {
+                        alert("Chưa đăng nhập nhân viên");
+                        return;
+                    }
+
                     $http.post(
                         "http://localhost:8084/ban-hang/hoa-don/add",
                         null,
-                        { params: { maLoaiHoaDon: "TAI_QUAY" } }
+                        {
+                            params: {
+                                idNhanVien: user.user.id,
+                                maLoaiHoaDon: "TAI_QUAY"
+                            }
+                        }
                     ).then(function (res) {
 
                         let hoaDonMoi = res.data;
-
                         $scope.dsHoaDon.push(hoaDonMoi);
-
                         $scope.hoaDonDangXem = hoaDonMoi;
-
                         $scope.loadCTHD(hoaDonMoi.id);
+
+                    }, function (err) {
+                        console.error(err);
+                        alert(err.data?.message || "Không thể tạo hóa đơn");
                     });
                 };
 
@@ -212,18 +261,27 @@
                         alert("Vui lòng nhập đủ thông tin");
                         return;
                     }
-                    $http.post("http://localhost:8084/khach-hang/add", $scope.khMoi)
+
+                    $http.post("http://localhost:8084/ban-hang/khach-hang/add", $scope.khMoi)
                         .then(function (res) {
                             let kh = res.data;
                             $scope.dsKhachHang.unshift(kh);
                             $scope.chonKhachHang(kh);
                             $scope.khMoi = {};
                             $scope.hienFormThemKH = false;
-
-                        }, function () {
-                            alert("Lỗi thêm khách hàng");
+                        })
+                        .catch(function (err) {
+                            // Xử lý lỗi từ backend
+                            if (err.status === 409 && err.data && err.data.field === "sdt") {
+                                alert("Số điện thoại đã tồn tại!");
+                            } else if (err.status === 400) {
+                                alert("Thiếu thông tin khách hàng, vui lòng kiểm tra lại!");
+                            } else {
+                                alert("Lỗi thêm khách hàng");
+                            }
                         });
                 };
+
                 $scope.loadVoucherApDung = function () {
                     if (!$scope.hoaDonDangXem) return;
 

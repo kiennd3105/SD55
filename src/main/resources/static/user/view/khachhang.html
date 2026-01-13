@@ -12,10 +12,10 @@
                     <p><strong>Họ tên:</strong> {{user.ten}}</p>
                     <p><strong>Email:</strong> {{user.email}}</p>
                     <p><strong>Số điện thoại:</strong> {{user.sdt}}</p>
+                    <!--                    <p><strong>Password:</strong> {{user.passw}}</p>-->
                     <p><strong>Địa chỉ:</strong> {{user.diaChi}}</p>
                     <p><strong>Giới tính:</strong>
-                        <span ng-if="user.gioiTinh == 'NAM'">Nam</span>
-                        <span ng-if="user.gioiTinh == 'NU'">Nữ</span>
+                        {{user.gioiTinh}}
                     </p>
                     <p>
                         <strong>Vai trò:</strong>

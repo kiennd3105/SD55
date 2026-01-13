@@ -2,18 +2,15 @@
 
     <h2 class="mb-3">Quản lý thể loại</h2>
 
-    <!-- SEARCH BAR (TỔNG + THÊM Ở GÓC PHẢI) -->
     <div class="card mb-3">
         <div class="card-body">
 
-            <!-- Tiêu đề + Tổng + Thêm -->
             <div class="d-flex justify-content-between align-items-start mb-2">
                 <div class="fw-bold">Tìm kiếm</div>
 
                 <div class="text-end">
                     <div class="fw-bold">Tổng: {{dsTheLoai.length}}</div>
 
-                    <!-- NÚT THÊM NẰM DƯỚI TỔNG -->
                     <button type="button"
                             class="btn btn-success btn-sm mt-2"
                             data-bs-toggle="modal"
@@ -24,7 +21,6 @@
                 </div>
             </div>
 
-            <!-- Input + select + buttons thẳng hàng -->
             <div class="row g-3 align-items-end">
 
                 <div class="col-md-4">
@@ -76,7 +72,6 @@
         </div>
     </div>
 
-    <!-- TABLE (CÓ CỘT KIỂU) -->
     <div class="card">
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -134,24 +129,18 @@
             </div>
         </div>
     </div>
-
-    <!-- MODAL FORM: THÊM / SỬA -->
     <div class="modal fade" id="modalTheLoaiForm" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <h5 class="modal-title">
                         {{isEdit ? 'Cập nhật thể loại' : 'Thêm thể loại'}}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body">
                     <form name="tlForm" novalidate>
                         <div class="row g-3 align-items-start">
-
-                            <!-- MÃ -->
                             <div class="col-md-4">
                                 <label class="form-label">Mã</label>
                                 <input type="text"
@@ -163,7 +152,8 @@
                                        ng-class="{'is-invalid': (submitted && tlForm.ma.$invalid) || (submitted && err.ma)}"
                                        placeholder="VD: TL01">
 
-                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"
+                                     class="text-danger">
                                     <span ng-show="submitted && tlForm.ma.$error.required">Vui lòng nhập mã thể loại</span>
                                     <span ng-show="submitted && !tlForm.ma.$error.required && err.ma">{{err.ma}}</span>
                                 </div>
@@ -181,7 +171,8 @@
                                        ng-class="{'is-invalid': (submitted && tlForm.ten.$invalid) || (submitted && err.ten)}"
                                        placeholder="VD: Áo thun">
 
-                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"
+                                     class="text-danger">
                                     <span ng-show="submitted && tlForm.ten.$error.required">Vui lòng nhập tên thể loại</span>
                                     <span ng-show="submitted && !tlForm.ten.$error.required && err.ten">{{err.ten}}</span>
                                 </div>
@@ -211,7 +202,8 @@
                                        ng-class="{'is-invalid': (submitted && tlForm.kieu.$invalid) || (submitted && err.kieu)}"
                                        placeholder="VD: AO, QUAN, GIAY">
 
-                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"
+                                     class="text-danger">
                                     <span ng-show="submitted && tlForm.kieu.$error.required">Vui lòng nhập kiểu quần áo</span>
                                     <span ng-show="submitted && !tlForm.kieu.$error.required && err.kieu">{{err.kieu}}</span>
                                 </div>

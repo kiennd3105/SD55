@@ -9,16 +9,12 @@ import java.util.Optional;
 public interface ChatLieuRepo extends JpaRepository<ChatLieu, String> {
     List<ChatLieu> findByTenCLContainingIgnoreCase(String tenCL);
 
-
     List<ChatLieu> findByTrangThai(Integer trangThai);
 
-    // tìm theo tên + trạng thái
     List<ChatLieu> findByTenCLContainingIgnoreCaseAndTrangThai(String tenCL, Integer trangThai);
 
-    // check trùng mã
     Optional<ChatLieu> findByMaCLIgnoreCase(String maCL);
 
-    // check trùng tên
     Optional<ChatLieu> findByTenCLIgnoreCase(String tenCL);
 }
 

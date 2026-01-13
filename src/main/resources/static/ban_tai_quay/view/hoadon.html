@@ -75,7 +75,11 @@
 
             <td>
                 <span ng-if="hd.trangThai == 0" class="badge bg-warning">Chờ thanh toán</span>
-                <span ng-if="hd.trangThai == 1" class="badge bg-success">Đã thanh toán</span>
+                <span ng-if="hd.trangThai == 1" class="badge bg-success">Hoàn thành</span>
+                <span ng-if="hd.trangThai == 2" class="badge bg-primary">Chờ xác nhận</span>
+                <span ng-if="hd.trangThai == 3" class="badge bg-primary">Đã xác nhận</span>
+                <span ng-if="hd.trangThai == 4" class="badge bg-primary">Giao Hàng</span>
+                <span ng-if="hd.trangThai == 5" class="badge bg-danger">Hủy</span>
             </td>
             <td class="text-center">
                 <button class="btn btn-info btn-sm" ng-click="openHoaDonDetail(hd.id)">
@@ -100,26 +104,106 @@
 
                 <div class="modal-body">
 
-                    <div class="d-flex justify-content-between mb-4 text-center"
-                         ng-if="hoaDonDangXem.loaiHoaDon != 0">
-                        <div>
-                            <i class="bi bi-check-circle text-primary fs-4"></i>
+                    <div class="progress-icons d-flex justify-content-between position-relative">
+
+                        <div class="step text-center"
+                             ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 0}">
+                            <i class="bi bi-check-circle fs-3"></i>
                             <div>Tạo đơn</div>
                         </div>
-                        <div>
-                            <i class="bi bi-check-circle text-primary fs-4"></i>
+                        <i class="bi bi-dash fs-1 mx-2"
+                           ng-class="{'text-primary': getStepIndex(hoaDonDangXem.trangThai) >= 1, 'text-secondary': getStepIndex(hoaDonDangXem.trangThai) < 1}"></i>
+                        <div class="step text-center"
+                             ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 1}">
+                            <i class="bi bi-hourglass-split fs-3"></i>
+                            <div>Chờ xác nhận</div>
+                        </div>
+                        <i class="bi bi-dash fs-1 mx-2"
+                           ng-class="{'text-primary': getStepIndex(hoaDonDangXem.trangThai) >= 2, 'text-secondary': getStepIndex(hoaDonDangXem.trangThai) < 2}"></i>
+
+                        <div class="step text-center"
+                             ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 2}">
+                            <i class="bi bi-person-check fs-3"></i>
                             <div>Xác nhận</div>
                         </div>
-                        <div>
-                            <i class="bi bi-truck text-success fs-4"></i>
+                        <i class="bi bi-dash fs-1 mx-2"
+                           ng-class="{'text-primary': getStepIndex(hoaDonDangXem.trangThai) >= 3, 'text-secondary': getStepIndex(hoaDonDangXem.trangThai) < 3}"></i>
+
+                        <div class="step text-center"
+                             ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 3}">
+                            <i class="bi bi-truck fs-3"></i>
                             <div>Giao hàng</div>
                         </div>
-                        <div>
-                            <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                        <i class="bi bi-dash fs-1 mx-2"
+                           ng-class="{'text-primary': getStepIndex(hoaDonDangXem.trangThai) >= 4, 'text-secondary': getStepIndex(hoaDonDangXem.trangThai) < 4}"></i>
+
+                        <div class="step text-center"
+                             ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 4}">
+                            <i class="bi bi-check-circle-fill fs-3"></i>
                             <div>Hoàn thành</div>
                         </div>
+
+                        <div class="progress-line"></div>
+
                     </div>
 
+                    <div class="progress-bar-container position-relative mt-2">
+                        <div class="progress-bar" ng-style="{'width': getProgressWidth() + '%'}"></div>
+                    </div>
+                </div>
+                <hr>
+                <h5>Chuyển trạng thái</h5>
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <button class="btn"
+                            ng-class="coTheChuyenTrangThai(hoaDonDangXem.trangThai, 2)
+                ? 'btn-warning'
+                : 'btn-outline-secondary'"
+                            ng-disabled="!coTheChuyenTrangThai(hoaDonDangXem.trangThai, 2)"
+                            ng-click="doiTrangThaiHoaDon(hoaDonDangXem, 2)">
+                        Chờ xác nhận
+                    </button>
+
+                    <button class="btn"
+                            ng-class="coTheChuyenTrangThai(hoaDonDangXem.trangThai, 3)
+                ? 'btn-info'
+                : 'btn-outline-secondary'"
+                            ng-disabled="!coTheChuyenTrangThai(hoaDonDangXem.trangThai, 3)"
+                            ng-click="doiTrangThaiHoaDon(hoaDonDangXem, 3)">
+                        Xác nhận
+                    </button>
+
+                    <button class="btn"
+                            ng-class="coTheChuyenTrangThai(hoaDonDangXem.trangThai, 4)
+                ? 'btn-primary'
+                : 'btn-outline-secondary'"
+                            ng-disabled="!coTheChuyenTrangThai(hoaDonDangXem.trangThai, 4)"
+                            ng-click="doiTrangThaiHoaDon(hoaDonDangXem, 4)">
+                        Đang giao
+                    </button>
+
+                    <button class="btn"
+                            ng-class="coTheChuyenTrangThai(hoaDonDangXem.trangThai, 1)
+                ? 'btn-success'
+                : 'btn-outline-secondary'"
+                            ng-disabled="!coTheChuyenTrangThai(hoaDonDangXem.trangThai, 1)"
+                            ng-click="doiTrangThaiHoaDon(hoaDonDangXem, 1)">
+                        Hoàn thành
+                    </button>
+
+                    <button class="btn"
+                            ng-class="coTheChuyenTrangThai(hoaDonDangXem.trangThai, 5)
+                ? 'btn-danger'
+                : 'btn-outline-secondary'"
+                            ng-disabled="!coTheChuyenTrangThai(hoaDonDangXem.trangThai, 5)"
+                            ng-click="doiTrangThaiHoaDon(hoaDonDangXem, 5)">
+                        Hủy đơn
+                    </button>
+
+                </div>
+
+                <hr>
                     <h5>Thông Tin Đơn Hàng</h5>
                     <div class="row mb-3">
                         <p>

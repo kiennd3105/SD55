@@ -78,7 +78,7 @@
                 <span ng-if="hd.trangThai == 2" class="badge bg-primary">Chờ xác nhận</span>
                 <span ng-if="hd.trangThai == 3" class="badge bg-primary">Đã xác nhận</span>
                 <span ng-if="hd.trangThai == 4" class="badge bg-primary">Giao Hàng</span>
-                <span ng-if="hd.trangThai == 5" class="badge bg-">Hủy đặt hàng</span>
+                <span ng-if="hd.trangThai == 5" class="badge bg-danger-">Hủy đặt hàng</span>
             </td>
             <td class="text-center">
                 <button class="btn btn-info btn-sm" ng-click="openHoaDonDetail(hd.id)">
@@ -106,7 +106,6 @@
                     <div class="order-progress" ng-if="hoaDonDangXem.loaiHoaDon != 0">
                         <div class="progress-icons d-flex justify-content-between position-relative">
 
-                            <!-- Step 1 -->
                             <div class="step text-center"
                                  ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 0}">
                                 <i class="bi bi-check-circle fs-3"></i>
@@ -114,7 +113,6 @@
                             </div>
                             <i class="bi bi-dash fs-1 mx-2"
                                ng-class="{'text-primary': getStepIndex(hoaDonDangXem.trangThai) >= 1, 'text-secondary': getStepIndex(hoaDonDangXem.trangThai) < 1}"></i>
-                            <!-- Step 2 -->
                             <div class="step text-center"
                                  ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 1}">
                                 <i class="bi bi-hourglass-split fs-3"></i>
@@ -123,7 +121,6 @@
                             <i class="bi bi-dash fs-1 mx-2"
                                ng-class="{'text-primary': getStepIndex(hoaDonDangXem.trangThai) >= 2, 'text-secondary': getStepIndex(hoaDonDangXem.trangThai) < 2}"></i>
 
-                            <!-- Step 3 -->
                             <div class="step text-center"
                                  ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 2}">
                                 <i class="bi bi-person-check fs-3"></i>
@@ -132,7 +129,6 @@
                             <i class="bi bi-dash fs-1 mx-2"
                                ng-class="{'text-primary': getStepIndex(hoaDonDangXem.trangThai) >= 3, 'text-secondary': getStepIndex(hoaDonDangXem.trangThai) < 3}"></i>
 
-                            <!-- Step 4 -->
                             <div class="step text-center"
                                  ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 3}">
                                 <i class="bi bi-truck fs-3"></i>
@@ -141,24 +137,20 @@
                             <i class="bi bi-dash fs-1 mx-2"
                                ng-class="{'text-primary': getStepIndex(hoaDonDangXem.trangThai) >= 4, 'text-secondary': getStepIndex(hoaDonDangXem.trangThai) < 4}"></i>
 
-                            <!-- Step 5 -->
                             <div class="step text-center"
                                  ng-class="{'active': getStepIndex(hoaDonDangXem.trangThai) >= 4}">
                                 <i class="bi bi-check-circle-fill fs-3"></i>
                                 <div>Hoàn thành</div>
                             </div>
 
-                            <!-- Line connectors -->
                             <div class="progress-line"></div>
 
                         </div>
 
-                        <!-- Thanh năng lượng -->
                         <div class="progress-bar-container position-relative mt-2">
                             <div class="progress-bar" ng-style="{'width': getProgressWidth() + '%'}"></div>
                         </div>
                     </div>
-
                     <hr>
                     <h5>Thông Tin Đơn Hàng</h5>
                     <div class="row mb-3">

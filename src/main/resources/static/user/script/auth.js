@@ -34,7 +34,6 @@ app.controller("loginCtrl", function ($scope, $http, $window,$location) {
                     $window.location.href = "/ban_tai_quay/layout.html#!/taiquay";
                 } else if (res.data.role === "USER") {
 
-//                    $window.location.href = "/user/layout-user.html#!/";
                      $location.path("/");
                 } else {
                     $scope.error = "Vai trò không hợp lệ";

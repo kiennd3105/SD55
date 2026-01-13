@@ -1,8 +1,12 @@
 <div ng-controller="sanPhamCtrl">
 
     <h2>Quản lý sản phẩm</h2>
-
-
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Tìm theo tên hoặc mã"
+                   ng-model="searchText">
+        </div>
+    </div>
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-success" ng-click="openAddModal()">
             ➕ Thêm sản phẩm
@@ -25,7 +29,7 @@
         </thead>
         <tbody>
 
-        <tr ng-repeat="sp in dsSanPham">
+        <tr ng-repeat="sp in dsSanPham  | filter:customFilter">
             <td>{{sp.id}}</td>
             <td>{{sp.ma}}</td>
             <td>{{sp.ten}}</td>
@@ -40,12 +44,12 @@
             <td>{{sp.moTa}}</td>
             <td>
 
-                <button class="btn btn-info btn-sm" ng-click="openDetail(sp.id)">
-                    Chi tiết
+                <button class="btn btn-info btn-sm" ng-click="openUpdate(sp.id)">
+                    <i class="bi bi-pencil"></i>
                 </button>
                 <button class="btn btn-warning btn-sm mb-3"
                         ng-click="openCTSP(sp.id)">
-                    Xem sản phẩm chi tiết
+                    <i class="bi bi-eye"></i>
                 </button>
 
 
@@ -54,35 +58,82 @@
         </tbody>
     </table>
 
-    <div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal fade" id="editModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Chi tiết sản phẩm</h5>
+                    <h5 class="modal-title">Cập nhật sản phẩm</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-                    <p><b>Mã:</b> {{sanPhamDetail.ma}}</p>
-                    <p><b>Tên:</b> {{sanPhamDetail.ten}}</p>
-                    <p><b>Thương hiệu:</b> {{sanPhamDetail.tenThuongHieu}}</p>
-                    <p><b>Chất liệu:</b> {{sanPhamDetail.tenChatLieu}}</p>
-                    <p><b>Thể loại:</b> {{sanPhamDetail.tenTheLoai}}</p>
+                    <div class="mb-3">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input type="text" class="form-control"
+                               ng-model="editSanPham.ten">
+                    </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Thương hiệu</label>
+                        <select class="form-select"
+                                ng-model="editSanPham.thuongHieuId"
+                                ng-options="th.id as th.tenTH for th in dsThuongHieu">
+                            <option value="">-- Chọn thương hiệu --</option>
+                        </select>
 
-                    <p>
-                        <b>Trạng thái:</b>
-                        <span ng-if="sanPhamDetail.trangThai == 1" class="badge bg-success">Hoạt động</span>
-                        <span ng-if="sanPhamDetail.trangThai == 0" class="badge bg-secondary">Ngừng</span>
-                    </p>
+                    </div>
 
-                    <p><b>Mô tả:</b> {{sanPhamDetail.moTa}}</p>
+                    <div class="mb-3">
+                        <label class="form-label">Chất liệu</label>
+                        <select class="form-select"
+                                ng-model="editSanPham.chatLieuId"
+                                ng-options="cl.id as cl.tenCL for cl in dsChatLieu">
+                            <option value="">-- Chọn chất liệu --</option>
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Thể loại</label>
+                        <select class="form-select"
+                                ng-model="editSanPham.theLoaiId"
+                                ng-options="tl.id as tl.ten for tl in dsTheLoai">
+                            <option value="">-- Chọn thể loại --</option>
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Trạng thái</label>
+                        <select class="form-select" ng-model="editSanPham.trangThai">
+                            <option ng-value="1">Hoạt động</option>
+                            <option ng-value="0">Ngừng</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả</label>
+                        <textarea class="form-control"
+                                  ng-model="editSanPham.moTa"
+                                  rows="3"></textarea>
+                    </div>
+                    <div class="alert alert-danger" ng-if="errorMessage">
+                        {{ errorMessage }}
+                    </div>
+                    <div class="alert alert-success" ng-if="successMessage">
+                        {{ successMessage }}
+                    </div>
+
                 </div>
 
+                <!-- FOOTER -->
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">
                         Đóng
+                    </button>
+                    <button class="btn btn-primary" ng-click="updateSanPham()">
+                        Lưu thay đổi
                     </button>
                 </div>
 
@@ -91,17 +142,26 @@
     </div>
 
     <div class="modal fade" id="ctspModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
 
                 <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title">Danh sách sản phẩm chi tiết</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                    <button class="btn btn-success ms-3"
+                            ng-click="showAddCTSP = !showAddCTSP">
+                        ➕ Thêm CTSP
+                    </button>
+
+                    <button type="button" class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-
-                    <table class="table table-sm table-bordered">
+                    <div class="alert alert-success mt-2" ng-if="ctspSuccess">
+                        {{ctspSuccess}}
+                    </div>
+                    <table class="table table-sm table-bordered mb-3">
                         <thead class="table-secondary">
                         <tr>
                             <th>Mã</th>
@@ -110,8 +170,9 @@
                             <th>Số lượng</th>
                             <th>Size</th>
                             <th>Màu</th>
-                            <th>trạng thái</th>
+                            <th>Trạng thái</th>
                             <th>Hành động</th>
+
                         </tr>
                         </thead>
 
@@ -122,33 +183,104 @@
                                 <img ng-src="{{ct.img}}"
                                      style="width:60px;height:60px;object-fit:cover">
                             </td>
-
-                            <td>{{ct.gia}}</td>
+                            <td>{{ct.gia | number}}</td>
                             <td>{{ct.soLuong}}</td>
                             <td>{{ct.tenSize}}</td>
                             <td>{{ct.tenMau}}</td>
                             <td>
-                                <span ng-if="ct.trangThai == 1" class="badge bg-success">Đang bán</span>
-                                <span ng-if="ct.trangThai == 0" class="badge bg-secondary">Ngừng bán</span></td>
-
-                            <td>
-
+                            <span ng-if="ct.trangThai == 1"
+                                  class="badge bg-success">Đang bán</span>
+                                <span ng-if="ct.trangThai == 0"
+                                      class="badge bg-secondary">Ngừng bán</span>
                             </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-warning"
+                                        ng-click="openEditCTSP(ct.id)">
+                                    ✏️ Sửa
+                                </button>
+                            </td>
+
                         </tr>
                         </tbody>
                     </table>
 
-                </div>
+                    <div ng-show="showAddCTSP"
+                         class="border rounded p-3 bg-light">
 
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">
-                        Đóng
-                    </button>
+                        <h6 class="mb-3">
+                            {{ isEditCTSP ? '✏️ Cập nhật chi tiết sản phẩm' : '➕ Thêm chi tiết sản phẩm' }}
+                        </h6>
+
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Size</label>
+                                <select class="form-select"
+                                        ng-model="ctspForm.sizeId"
+                                        ng-options="s.id as s.tenSZ for s in dsSize">
+                                    <option value=""></option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Màu</label>
+                                <select class="form-select"
+                                        ng-model="ctspForm.mauId"
+                                        ng-options="m.id as m.tenM for m in dsMauSac">
+                                    <option value=""></option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Giá</label>
+                                <input class="form-control" ng-model="ctspForm.gia">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Số lượng</label>
+                                <input class="form-control" ng-model="ctspForm.soLuong">
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <label>Ảnh</label>
+                            <input type="file"
+                                   file-change="onSelectImageCTSP(files)"
+                                   class="form-control">
+
+
+                        </div>
+
+                        <img ng-if="ctspForm.preview"
+                             ng-src="{{ctspForm.preview}}"
+                             style="width:80px"
+                             class="mt-2">
+
+                        <div class="text-danger mt-2" ng-if="ctspError">
+                            {{ctspError}}
+                        </div>
+
+                        <div class="mt-3 text-end">
+                            <button class="btn btn-primary"
+                                    ng-click="saveCTSP()">Lưu
+                            </button>
+
+                            <button class="btn btn-secondary"
+                                    ng-click="cancelCTSP()">Hủy
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
         </div>
     </div>
+
+
     <div class="alert alert-success alert-dismissible fade show"
          ng-if="successMessage">
         <i class="bi bi-check-circle-fill me-2"></i>
@@ -165,7 +297,7 @@
                 </div>
 
                 <div class="modal-body">
-                
+
                     <h6 class="fw-bold text-primary mb-3">Thông tin sản phẩm</h6>
 
                     <div class="row">

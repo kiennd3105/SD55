@@ -3,25 +3,21 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
 
     const API = "http://localhost:8084/san-pham/chat-lieu";
 
-    // ===== DATA =====
-    $scope.dsChatLieu = [];        // danh sách hiển thị
-    $scope.allChatLieu = [];       // danh sách gốc (lọc client)
+    $scope.dsChatLieu = [];
+    $scope.allChatLieu = [];
     $scope.form = { trangThai: 1 };
     $scope.isEdit = false;
     $scope.submitted = false;
     $scope.err = { maCL: "", tenCL: "" };
 
-    // ===== SEARCH/FILTER =====
     $scope.keyword = "";
-    $scope.filterTrangThai = "";     // "" | "1" | "0"
+    $scope.filterTrangThai = "";
     $scope.searchSubmitted = false;
     $scope.searchErr = "";
     let searchTimer = null;
 
-    // ===== DETAIL =====
     $scope.detail = null;
 
-    // ===== helpers =====
     function clearErr() {
         $scope.err.maCL = "";
         $scope.err.tenCL = "";
@@ -29,25 +25,18 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
     function clearSearchErr() {
         $scope.searchErr = "";
     }
-
-    // Mã: chỉ chữ/số/_/- , không khoảng trắng
     function isValidMa(ma) {
         if (!ma) return false;
         return /^[A-Za-z0-9_-]+$/.test(ma.trim());
     }
-
-    // Tên: chữ có dấu + số + khoảng trắng (không ký tự đặc biệt)
     function isValidTen(ten) {
         if (!ten) return false;
         return /^[A-Za-zÀ-ỹ0-9 ]+$/.test(ten.trim());
     }
-
-    // Tìm kiếm: cho phép chữ/số/khoảng trắng/_/-
     function isValidSearchKeyword(text) {
-        if (!text) return true; // cho phép rỗng
+        if (!text) return true;
         return /^[A-Za-zÀ-ỹ0-9 _-]+$/.test(text.trim());
     }
-
     function isDuplicateMa(ma, currentId) {
         const m = (ma || "").trim().toLowerCase();
         if (!m) return false;
@@ -55,7 +44,6 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
             return x.id !== currentId && (x.maCL || "").trim().toLowerCase() === m;
         });
     }
-
     function isDuplicateTen(ten, currentId) {
         const t = (ten || "").trim().toLowerCase();
         if (!t) return false;
@@ -63,7 +51,6 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
             return x.id !== currentId && (x.tenCL || "").trim().toLowerCase() === t;
         });
     }
-
     function extractBackendMessage(err) {
         if (err && err.data) {
             if (typeof err.data === "string") return err.data;
@@ -71,12 +58,10 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
         }
         return "";
     }
-
-    // ===== LOAD ALL =====
     $scope.load = function () {
         $http.get(API).then(function (res) {
             $scope.allChatLieu = res.data || [];
-            $scope.applyFilterClient(); // lọc client sau khi load
+            $scope.applyFilterClient();
         }).catch(function (err) {
             console.error("Lỗi load chất liệu", err);
             alert("Không load được danh sách chất liệu!");
@@ -86,7 +71,6 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
 
     $scope.getSTT = function (i) { return i + 1; };
 
-    // ===== FILTER (CLIENT CONTAINS) =====
     $scope.applyFilterClient = function () {
         const kw = ($scope.keyword || "").trim().toLowerCase();
         const tt = $scope.filterTrangThai;
@@ -116,46 +100,33 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
         $scope.searchErr = "";
     }
 
-// Tìm kiếm: cho phép chữ/số/khoảng trắng/_/-
     function isValidSearchKeyword(text) {
         if (!text) return true;
         return /^[A-Za-zÀ-ỹ0-9 _-]+$/.test(text.trim());
     }
 
-// ✅ bấm nút Tìm mới validate bắt buộc nhập
     $scope.applyFilter = function () {
         $scope.searchSubmitted = true;
         clearSearchErr();
-
         const kw = ($scope.keyword || "").trim();
-
-        // ✅ validate chưa nhập gì
         if (!kw) {
             $scope.searchErr = "Vui lòng nhập nội dung tìm kiếm";
             return;
         }
-
-        // ✅ validate ký tự đặc biệt
         if (!isValidSearchKeyword(kw)) {
             $scope.searchErr = "Tìm kiếm không được chứa ký tự đặc biệt";
             return;
         }
-
         $scope.applyFilterClient();
     };
-
-
-    // realtime gõ -> tự lọc (debounce)
     $scope.onKeywordChange = function () {
         $scope.searchSubmitted = true;
         clearSearchErr();
-
         const kw = ($scope.keyword || "").trim();
         if (!isValidSearchKeyword(kw)) {
             $scope.searchErr = "Tìm kiếm không được chứa ký tự đặc biệt";
             return;
         }
-
         if (searchTimer) $timeout.cancel(searchTimer);
         searchTimer = $timeout(function () {
             $scope.applyFilterClient();
@@ -163,10 +134,8 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
     };
 
     $scope.onTrangThaiChange = function () {
-        // đổi trạng thái thì lọc luôn
         $scope.searchSubmitted = true;
         clearSearchErr();
-
         const kw = ($scope.keyword || "").trim();
         if (!isValidSearchKeyword(kw)) {
             $scope.searchErr = "Tìm kiếm không được chứa ký tự đặc biệt";
@@ -176,7 +145,6 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
     };
     $scope.formatDateTime = function (val) {
         if (!val) return "";
-        // nếu backend trả string ISO
         const d = new Date(val);
         if (!isNaN(d.getTime())) {
             const pad = (n) => (n < 10 ? "0" + n : "" + n);
@@ -185,11 +153,8 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
                 " " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
             );
         }
-
-        // fallback nếu parse fail
         return val;
     };
-
     $scope.clearFilter = function () {
         $scope.keyword = "";
         $scope.filterTrangThai = "";
@@ -198,14 +163,12 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
         $scope.dsChatLieu = angular.copy($scope.allChatLieu || []);
     };
 
-    // ===== MODAL ADD/EDIT =====
     $scope.openAdd = function () {
         $scope.isEdit = false;
         $scope.submitted = false;
         clearErr();
         $scope.form = { trangThai: 1, maCL: "", tenCL: "", moTa: "" };
     };
-
     $scope.openEdit = function (cl) {
         $scope.isEdit = true;
         $scope.submitted = false;
@@ -213,7 +176,6 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
         $scope.form = angular.copy(cl);
         if ($scope.form.trangThai === undefined || $scope.form.trangThai === null) $scope.form.trangThai = 1;
     };
-
     $scope.resetForm = function (form) {
         $scope.submitted = false;
         clearErr();
@@ -228,7 +190,6 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
         }
     };
 
-    // ===== SAVE =====
     $scope.save = function (form) {
         $scope.submitted = true;
         clearErr();
@@ -290,7 +251,6 @@ angular.module("myApp").controller("chatLieuCtrl", function ($scope, $http, $tim
         }
     };
 
-    // ===== DETAIL =====
     $scope.showDetail = function (cl) {
         $scope.detail = null;
         if (!cl || !cl.id) return;

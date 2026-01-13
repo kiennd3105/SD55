@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.entity.SanPhamChiTiet;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -27,4 +28,23 @@ public interface SanPhamChiTietRepo extends JpaRepository<SanPhamChiTiet, String
 
     @Query("SELECT sp FROM SanPhamChiTiet sp WHERE sp.trangThai = 1")
     List<SanPhamChiTiet> findAllDangBan();
+
+    boolean existsBySanPham_IdAndSize_IdAndMauSac_Id(
+            String sanPhamId,
+            String sizeId,
+            String mauSacId
+    );
+
+    boolean existsBySanPham_IdAndSize_IdAndMauSac_IdAndIdNot(
+            String sanPhamId,
+            String sizeId,
+            String mauId,
+            String id
+    );
+
+    @Modifying
+    @Query("UPDATE SanPhamChiTiet c SET c.trangThai = :trangThai WHERE c.sanPham.id = :spId")
+    void updateTrangThaiBySanPhamId(@Param("spId") String spId, @Param("trangThai") int trangThai);
+
+
 }

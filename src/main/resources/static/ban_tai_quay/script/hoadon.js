@@ -1,4 +1,11 @@
         app.controller("hoaDonCtrl", function ($scope, $http, $timeout) {
+                $scope.userDangNhap = JSON.parse(localStorage.getItem("user"));
+
+                if (!$scope.userDangNhap) {
+                    alert("Bạn chưa đăng nhập");
+                    window.location.href = "/user/layout-user.html#!/login";
+                    return;
+                }
 
             $scope.dsHoaDon = [];
             $scope.hoaDonDangXem = {};
@@ -21,6 +28,36 @@
                     { value: 1, label: 'Hoàn thành' },
                     { value: 5, label: 'Đã hủy' }
                 ];
+               $scope.getStepIndex = function(status) {
+                   switch(status) {
+                       case 0: return 0;
+                       case 2: return 1;
+                       case 3: return 2;
+                       case 4: return 3;
+                       case 1: return 4;
+                       case 5: return 0;
+                       default: return 0;
+                   }
+               };
+
+               $scope.getProgressWidth = function() {
+                   const stepIndex = $scope.getStepIndex($scope.hoaDonDangXem.trangThai);
+                   const totalSteps = 4;
+                   return (stepIndex / totalSteps) * 100;
+               };
+               $scope.coTheChuyenTrangThai = function (trangThaiHienTai, trangThaiMoi) {
+                   let dsChoPhep = $scope.trangThaiTiepTheoMap[trangThaiHienTai] || [];
+                   return dsChoPhep.includes(trangThaiMoi);
+               };
+
+                $scope.trangThaiTiepTheoMap = {
+                    0: [2, 5],   // Chờ thanh toán → Chờ xác nhận | Hủy
+                    2: [3, 5],   // Chờ xác nhận → Đã xác nhận | Hủy
+                    3: [4],   // Đã xác nhận → Đang giao | Hủy
+                    4: [1],      // Đang giao → Hoàn thành
+                    1: [],       // Hoàn thành → không đổi
+                    5: []        // Đã hủy → không đổi
+                };
 
                 $scope.trangThaiDangChon = '';
 
@@ -104,5 +141,48 @@
                 $scope.hoaDonDangXem = null;
                 $scope.dsHDCT = [];
             };
+            $scope.doiTrangThaiHoaDon = function (hd, trangThaiMoi) {
+                if (!hd || !hd.id) return;
+
+                // 🔑 LẤY USER GIỐNG HỆT taiQuayCtrl
+                const user = JSON.parse(localStorage.getItem("user"));
+
+                if (!user || !user.user || !user.user.id) {
+                    alert("Chưa đăng nhập nhân viên");
+                    return;
+                }
+
+                const nhanVien = user.user;
+
+                let tenTrangThai = $scope.trangThaiMap[trangThaiMoi];
+                if (!confirm("Xác nhận chuyển hóa đơn sang trạng thái: " + tenTrangThai + " ?")) {
+                    return;
+                }
+
+                $http.put("http://localhost:8084/hoa-don/doi-trang-thai", null, {
+                    params: {
+                        idHoaDon: hd.id,
+                        trangThai: trangThaiMoi,
+                        idNhanVien: nhanVien.id   // ✅ OK
+                    }
+                }).then(function () {
+
+                    hd.trangThai = trangThaiMoi;
+
+                    if ($scope.hoaDonDangXem?.id === hd.id) {
+                        $scope.hoaDonDangXem.trangThai = trangThaiMoi;
+                        $scope.hoaDonDangXem.tenNV = nhanVien.ten;
+                    }
+
+                    alert("Cập nhật trạng thái thành công");
+
+                }).catch(function (err) {
+                    console.error(err);
+                    alert("Lỗi cập nhật trạng thái");
+                });
+            };
+
+
+
 
         });
