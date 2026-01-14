@@ -22,6 +22,7 @@
          $scope.dsThuongHieu = [];
          $scope.dsSize = [];
          $scope.dsMauSac = [];
+         $scope.getSTT = function (i) { return i + 1; };
          $scope.newSanPham = {
              ten: '',
              trangThai: 1,
@@ -260,6 +261,11 @@
                     transformRequest: angular.identity,
                     headers: { 'Content-Type': undefined }
                 }).then(function (res) {
+                    setTimeout(() => {
+                        $scope.$apply(() => {
+                             $scope.successMessage = "";
+                        });
+                    }, 3000);
                     $scope.successMessage = res.data.message || "Thêm sản phẩm thành công 🎉";
                     $('#addModal').modal('hide');
                     resetNewSanPham();
@@ -373,7 +379,11 @@
                     payload
                 ).then(function (res) {
                     $scope.successMessage = res.data.message || "Cập nhật thành công";
-
+                   setTimeout(() => {
+                       $scope.$apply(() => {
+                           $scope.successMessage = "";
+                       });
+                   }, 3000);
                     $('#editModal').modal('hide');
                     $scope.loadSanPham();
                 }).catch(function () {
@@ -534,17 +544,17 @@
               $http.get("http://localhost:8084/san-pham/detailsp/" + ctId)
                   .then(function (res) {
                       let ct = res.data;
-                      // map dữ liệu vào form
+
                       $scope.ctspForm = {
                           id: ct.id,
                           sanPhamId: ct.sanPhamId,
-                          sizeId: ct.sizeId,   // giữ string
-                          tenSize: ct.tenSize, // để hiển thị nếu cần
-                          mauId: ct.mauId,     // giữ string
-                          tenMau: ct.tenM,     // để hiển thị nếu cần
+                          sizeId: ct.sizeId,
+                          tenSize: ct.tenSize,
+                          mauId: ct.mauId,
+                          tenMau: ct.tenM,
                           gia: ct.gia,
                           soLuong: ct.soLuong,
-                          file: null,          // chưa đổi file
+                          file: null,
                           preview:"http://localhost:8084/uploads/"+ct.img
                       };
                   }).catch(function () {
@@ -615,19 +625,6 @@
                        err.data?.message || "Cập nhật chi tiết sản phẩm thất bại";
                });
            };
-
-
-
-
-
-
-
-
-
-
-
-
-
         $scope.loadSanPham();
 
 

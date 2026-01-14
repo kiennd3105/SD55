@@ -14,8 +14,8 @@
                const from = new Date();
                from.setDate(today.getDate() - 4);
 
-               $scope.filter.fromDate = from;   // ✅ Date
-               $scope.filter.toDate = today;    // ✅ Date
+               $scope.filter.fromDate = from;
+               $scope.filter.toDate = today;
            }
 
         function formatDate(d) {
@@ -70,7 +70,6 @@
               }).catch(err => console.error("Lỗi doanh thu", err));
           };
 
-              // ===== TOP SẢN PHẨM =====
               $scope.loadTopSanPham = function () {
                   $http.get(BASE + "/top-san-pham")
                       .then(function (res) {

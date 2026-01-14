@@ -51,12 +51,12 @@
                };
 
                 $scope.trangThaiTiepTheoMap = {
-                    0: [2, 5],   // Chờ thanh toán → Chờ xác nhận | Hủy
-                    2: [3, 5],   // Chờ xác nhận → Đã xác nhận | Hủy
-                    3: [4],   // Đã xác nhận → Đang giao | Hủy
-                    4: [1],      // Đang giao → Hoàn thành
-                    1: [],       // Hoàn thành → không đổi
-                    5: []        // Đã hủy → không đổi
+                    0: [2, 5],
+                    2: [3, 5],
+                    3: [4],
+                    4: [1],
+                    1: [],
+                    5: []
                 };
 
                 $scope.trangThaiDangChon = '';
@@ -143,27 +143,21 @@
             };
             $scope.doiTrangThaiHoaDon = function (hd, trangThaiMoi) {
                 if (!hd || !hd.id) return;
-
-                // 🔑 LẤY USER GIỐNG HỆT taiQuayCtrl
                 const user = JSON.parse(localStorage.getItem("user"));
-
                 if (!user || !user.user || !user.user.id) {
                     alert("Chưa đăng nhập nhân viên");
                     return;
                 }
-
                 const nhanVien = user.user;
-
                 let tenTrangThai = $scope.trangThaiMap[trangThaiMoi];
                 if (!confirm("Xác nhận chuyển hóa đơn sang trạng thái: " + tenTrangThai + " ?")) {
                     return;
                 }
-
                 $http.put("http://localhost:8084/hoa-don/doi-trang-thai", null, {
                     params: {
                         idHoaDon: hd.id,
                         trangThai: trangThaiMoi,
-                        idNhanVien: nhanVien.id   // ✅ OK
+                        idNhanVien: nhanVien.id
                     }
                 }).then(function () {
 

@@ -20,6 +20,8 @@ userApp.controller("cartCtrl", function ($scope, $http, $location,$routeParams,$
     function loadCart() {
         $http.get("http://localhost:8084/gio-hang/" + idKH)
             .then(function (res) {
+             let gioHang = res.data;
+                    $rootScope.cartCount = gioHang.length;
                 $scope.cart = res.data|| [];
                 console.log("ct giỏ hàng", res.data);
                 $rootScope.cartCount = $scope.cart.length;

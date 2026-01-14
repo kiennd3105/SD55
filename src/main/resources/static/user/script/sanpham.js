@@ -23,6 +23,23 @@ userApp.controller("ctspCtrl", function ($scope, $http, $routeParams, $location,
 
     $scope.minPrice = 0;
     $scope.maxPrice = 0;
+    $rootScope.cartCount = $rootScope.cartCount || 0;
+    $scope.coTheChuyenTrangThai = function (trangThaiHienTai, trangThaiMoi) {
+                       let dsChoPhep = $scope.trangThaiTiepTheoMap[trangThaiHienTai] || [];
+                       return dsChoPhep.includes(trangThaiMoi);
+                   };
+
+                    $scope.trangThaiTiepTheoMap = {
+                        0: [2, 5],
+                        2: [3, 5],
+                        3: [4],
+                        4: [1],
+                        1: [],
+                        5: []
+                    };
+
+                    $scope.trangThaiDangChon = '';
+
 
     $http.get("http://localhost:8084/san-pham/san-pham/" + idSP)
         .then(function (res) {
@@ -91,34 +108,44 @@ userApp.controller("ctspCtrl", function ($scope, $http, $routeParams, $location,
         $scope.mainImage = img;
     };
      $scope.addToCart = function(idKH, idCTSP, soLuong) {
-            if (!$scope.selectedCTSP) {
+         if (!$scope.selectedCTSP) {
+             $scope.message = "Vui lòng chọn Size và Màu ";
+             $scope.messageType = "error";
+             $timeout(function() { $scope.message = ""; }, 3000);
+             return;
+         }
+
+         $http({
+             method: "POST",
+             url: "http://localhost:8084/gio-hang/add",
+             params: { idKH, idCTSP, soLuong }
+         }).then(function(response) {
+             $http.get("http://localhost:8084/gio-hang/" + idKH)
+                 .then(function(res) {
+                     $rootScope.cartCount = res.data.length;
+                     console.log("Số lượng giỏ hàng hiện tại:", $rootScope.cartCount);
+                     $scope.message = "Thêm giỏ hàng thành công!";
+                     $scope.messageType = "success";
+                     $timeout(function() { $scope.message = ""; }, 3000);
+                 });
+         }, function(error) {
+             console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+             $scope.message = "Thêm giỏ hàng thất bại!";
+             $scope.messageType = "error";
+             $timeout(function() { $scope.message = ""; }, 3000);
+         });
+     };
+
+
+         $scope.buyNow = function() {
+             if (!$scope.selectedCTSP) {
                  $scope.message = "Vui lòng chọn Size và Màu ";
-                        $scope.messageType = "error";
-                         $timeout(function() {
-                                $scope.message = "";
-                            }, 3000);
+                 $scope.messageType = "error";
+                 $timeout(function() { $scope.message = ""; }, 3000);
+                 return;
+             }
+             $scope.addToCart($scope.idKH, $scope.selectedCTSP.id, $scope.qty);
+             $location.path("/gio-hang");
+         };
 
-                return;
-            }
-            $http({
-                method: "POST",
-                url: "http://localhost:8084/gio-hang/add",
-                params: {
-                    idKH: idKH,
-                    idCTSP: idCTSP,
-                    soLuong: soLuong
-                }
-            }).then(function(response) {
-                $rootScope.cartCount = $scope.cart.length;
-                console.log("Thêm sản phẩm vào giỏ hàng thành công!");
-            }, function(error) {
-                console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
-                alert("Thêm giỏ hàng thất bại!");
-            });
-        };
-
-    $scope.buyNow = function () {
-        $scope.addToCart();
-        $location.path("/gio-hang");
-    };
 });

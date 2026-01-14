@@ -2,7 +2,6 @@
 
     <div class="card border-0 shadow-sm rounded-4">
 
-        <!-- ================= HEADER ================= -->
         <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3 px-4">
             <div>
                 <h4 class="mb-0 fw-bold text-primary">
@@ -16,11 +15,9 @@
             </button>
         </div>
 
-        <!-- ================= FILTER ================= -->
         <div class="card-body border-bottom px-4">
             <div class="row g-3 align-items-center">
 
-                <!-- SEARCH -->
                 <div class="col-lg-5">
                     <div class="input-group shadow-sm">
                         <span class="input-group-text bg-light">
@@ -34,7 +31,6 @@
                     </div>
                 </div>
 
-                <!-- STATUS -->
                 <div class="col-lg-3">
                     <select class="form-select shadow-sm"
                             ng-model="search.trangThai"
@@ -45,7 +41,6 @@
                     </select>
                 </div>
 
-                <!-- RESET -->
                 <div class="col-lg-2">
                     <button class="btn btn-outline-secondary w-100 shadow-sm"
                             ng-click="reset()">
@@ -56,7 +51,6 @@
             </div>
         </div>
         <pre>{{ dsThuongHieu.length }}</pre>
-        <!-- ================= TABLE ================= -->
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
 
@@ -84,23 +78,19 @@
 
                     <td class="text-muted">{{th.moTa || '—'}}</td>
 
-                    <!-- ACTION -->
                     <td class="text-center">
-                        <!-- XEM CHI TIẾT -->
                         <button class="btn btn-outline-info btn-sm me-1"
                                 title="Xem chi tiết"
                                 ng-click="xemChiTiet(th.id)">
                             <i class="fa fa-eye"></i>
                         </button>
 
-                        <!-- CHỈNH SỬA -->
                         <button class="btn btn-outline-warning btn-sm me-1"
                                 title="Chỉnh sửa"
                                 ng-click="moModalSua(th.id)">
                             <i class="fa fa-pen"></i>
                         </button>
 
-                        <!-- XÓA -->
                         <button class="btn btn-outline-danger btn-sm"
                                 title="Xóa"
                                 ng-click="xoaThuongHieu(th)">
@@ -127,7 +117,6 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow rounded-4">
                 <form ng-submit="luuThuongHieu()" novalidate>
-                    <!-- HEADER -->
                     <div class="modal-header bg-success text-white px-4">
                         <h5 class="modal-title fw-bold">
                             {{ isView ? 'Chi tiết thương hiệu'
@@ -138,12 +127,10 @@
                                 data-bs-dismiss="modal"></button>
                     </div>
 
-                    <!-- BODY -->
                     <div class="modal-body px-4 pt-4">
                         <div class="alert alert-danger small py-2" ng-if="loi">
                             <i class="fa fa-circle-exclamation me-2"></i> {{loi}}
                         </div>
-                        <!-- TÊN -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">
                                 Tên thương hiệu <span class="text-danger">*</span>
@@ -157,7 +144,6 @@
                             <div class="invalid-feedback">{{loi.tenTH}}</div>
                         </div>
 
-                        <!-- TRẠNG THÁI -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">
                                 Trạng thái <span class="text-danger">*</span>
@@ -174,7 +160,6 @@
                             <div class="invalid-feedback">{{loi.trangThai}}</div>
                         </div>
 
-                        <!-- MÔ TẢ -->
                         <div>
                             <label class="form-label fw-semibold">Mô tả</label>
                             <textarea class="form-control"
@@ -186,7 +171,6 @@
 
                     </div>
 
-                    <!-- FOOTER -->
                     <div class="modal-footer border-0 px-4 pb-4">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                             Đóng
@@ -205,7 +189,6 @@
         </div>
     </div>
 
-    <!-- ================= MODAL XEM CHI TIẾT ================= -->
     <div class="modal fade" id="modalXemChiTiet" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow rounded-4">
@@ -258,8 +241,6 @@
     </div>
 
 
-
-    <!-- ================= MODAL CHỈNH SỬA ================= -->
     <div class="modal fade" id="modalChinhSua" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow rounded-4">
@@ -281,7 +262,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Tên thương hiệu <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold">Tên thương hiệu <span
+                                    class="text-danger">*</span></label>
                             <input type="text" class="form-control"
                                    placeholder="VD: Nike, Adidas, Puma..."
                                    ng-model="thuongHieuMoi.tenTH"

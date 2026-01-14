@@ -8,32 +8,47 @@
                 </div>
 
                 <div class="card-body">
+                    <p><strong>Họ tên:</strong>
+                        <span ng-if="!editing">{{user.ten}}</span>
+                        <input type="text" class="form-control" ng-model="user.ten" ng-if="editing">
+                    </p>
 
-                    <p><strong>Họ tên:</strong> {{user.ten}}</p>
-                    <p><strong>Email:</strong> {{user.email}}</p>
-                    <p><strong>Số điện thoại:</strong> {{user.sdt}}</p>
-                    <!--                    <p><strong>Password:</strong> {{user.passw}}</p>-->
-                    <p><strong>Địa chỉ:</strong> {{user.diaChi}}</p>
+                    <p><strong>Email:</strong>
+                        <span ng-if="!editing">{{user.email}}</span>
+                        <input type="email" class="form-control" ng-model="user.email" ng-if="editing">
+                    </p>
+
+                    <p><strong>Số điện thoại:</strong>
+                        <span ng-if="!editing">{{user.sdt}}</span>
+                        <input type="text" class="form-control" ng-model="user.sdt" ng-if="editing">
+                    </p>
+
+                    <p><strong>Địa chỉ:</strong>
+                        <span ng-if="!editing">{{user.diaChi}}</span>
+                        <input type="text" class="form-control" ng-model="user.diaChi" ng-if="editing">
+                    </p>
+
                     <p><strong>Giới tính:</strong>
-                        {{user.gioiTinh}}
+                        <span ng-if="!editing">{{user.gioiTinh}}</span>
+                        <select class="form-select" ng-model="user.gioiTinh" ng-if="editing">
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
                     </p>
-                    <p>
-                        <strong>Vai trò:</strong>
-                        <span class="badge bg-success">{{user.role}}</span>
-                    </p>
-
                 </div>
 
                 <div class="card-footer d-flex justify-content-between">
-                    <button class="btn btn-outline-primary">
-                        ✏️ Cập nhật thông tin
+                    <button class="btn btn-outline-primary" ng-click="toggleEdit()">
+                        <span ng-if="!editing">✏️ Cập nhật thông tin</span>
+                        <span ng-if="editing">💾 Lưu</span>
                     </button>
+
                     <button class="btn btn-outline-primary" ng-click="diDenLichSu()">
                         Lịch sử mua hàng
                     </button>
 
-                    <button class="btn btn-danger"
-                            ng-click="logout()">
+                    <button class="btn btn-danger" ng-click="logout()">
                         🚪 Đăng xuất
                     </button>
                 </div>

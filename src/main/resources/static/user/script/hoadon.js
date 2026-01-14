@@ -13,12 +13,12 @@ userApp.controller("hoaDonKHCtrl", function ($scope, $location, $http, $timeout)
 
    $scope.getStepIndex = function(status) {
        switch(status) {
-           case 0: return 0; // Chờ thanh toán
-           case 2: return 1; // Chờ xác nhận
-           case 3: return 2; // Đã xác nhận
-           case 4: return 3; // Đang giao
-           case 1: return 4; // Hoàn thành
-           case 5: return 0; // Hủy
+           case 0: return 0;
+           case 2: return 1;
+           case 3: return 2;
+           case 4: return 3;
+           case 1: return 4;
+           case 5: return 0;
            default: return 0;
        }
    };
@@ -48,7 +48,19 @@ userApp.controller("hoaDonKHCtrl", function ($scope, $location, $http, $timeout)
         { value: 1, label: 'Hoàn thành' },
         { value: 5, label: 'Đã hủy' }
     ];
-
+   $scope.coTheChuyenTrangThai = function (trangThaiHienTai, trangThaiMoi) {
+                   let dsChoPhep = $scope.trangThaiTiepTheoMap[trangThaiHienTai] || [];
+                   return dsChoPhep.includes(trangThaiMoi);
+               };
+    $scope.trangThaiTiepTheoMap = {
+                    0: [2, 5],
+                    2: [3, 5],
+                    3: [4],
+                    4: [1],
+                    1: [],
+                    5: []
+                };
+   $scope.trangThaiDangChon = '';
     $scope.trangThaiDangChon = '';
     $scope.filter = {
         keyword: '',
@@ -81,18 +93,14 @@ userApp.controller("hoaDonKHCtrl", function ($scope, $location, $http, $timeout)
         $scope.trangThaiDangChon = '';
     };
 
-    // Chuyển trang lịch sử mua hàng
     $scope.diDenLichSu = function() {
         $location.path("/hoa-don");
     };
 
-    // Load hóa đơn online của khách hàng
     $scope.loadHoaDon = function() {
         $http.get(`http://localhost:8084/hoa-don/getByKhachHangOnline/${idKH}`)
             .then(function(res) {
-                // Lọc chỉ lấy online
                 let hoaDonOnline = res.data.filter(hd => hd.loaiHoaDon === 1);
-                // Sắp xếp theo ngày đặt giảm dần
                 hoaDonOnline.sort((a, b) => new Date(b.ngayDatHang) - new Date(a.ngayDatHang));
                 $scope.dsHoaDon = hoaDonOnline;
             })
@@ -103,7 +111,6 @@ userApp.controller("hoaDonKHCtrl", function ($scope, $location, $http, $timeout)
 
     $scope.loadHoaDon();
 
-    // Mở modal xem chi tiết hóa đơn
     $scope.openHoaDonDetail = function(idHD) {
         $http.get("http://localhost:8084/ban-hang/hoa-don/detail-info/" + idHD)
             .then(function(res) {
@@ -133,4 +140,37 @@ userApp.controller("hoaDonKHCtrl", function ($scope, $location, $http, $timeout)
         $scope.hoaDonDangXem = {};
         $scope.dsHDCT = [];
     };
+
+         $scope.huyHoaDon = function (hd) {
+
+             if (hd.trangThai !== 2) {
+                 alert("Chỉ được hủy hóa đơn khi đang chờ xác nhận!");
+                 return;
+             }
+
+             if (!confirm("Bạn có chắc chắn muốn hủy hóa đơn này không?")) {
+                 return;
+             }
+
+             $http.put("http://localhost:8084/hoa-don/huy-trang-thai", null, {
+                 params: {
+                     idHoaDon: hd.id,
+                     trangThai: 5
+                 }
+             }).then(function () {
+
+                 hd.trangThai = 5;
+
+                 if ($scope.hoaDonDangXem && $scope.hoaDonDangXem.id === hd.id) {
+                     $scope.hoaDonDangXem.trangThai = 5;
+                 }
+
+                 alert("Hủy hóa đơn thành công!");
+
+             }).catch(function (err) {
+                 console.error(err);
+                 alert("Hủy hóa đơn thất bại!");
+             });
+         };
+
 });

@@ -94,5 +94,43 @@ public class HoaDonController {
         ));
     }
 
+    @PutMapping("/huy-trang-thai")
+    @Transactional
+    public ResponseEntity<?> huyTrangThai(
+            @RequestParam String idHoaDon,
+            @RequestParam Integer trangThai
+    ) {
+        HoaDon hoaDon = hoaDonRepo.findById(idHoaDon)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
+
+        Integer trangThaiCu = hoaDon.getTrangThai();
+        if (trangThai == 5 && trangThaiCu != 5) {
+            List<HDCT> dsCTHD = hdctRepo.findByHoaDonId(idHoaDon);
+            for (HDCT ct : dsCTHD) {
+                SanPhamChiTiet spct = ct.getSanPhamChiTiet();
+                int soLuongTon = 0;
+                if (spct.getSoLuong() != null && !spct.getSoLuong().isEmpty()) {
+                    soLuongTon = Integer.parseInt(spct.getSoLuong());
+                }
+                int soLuongHoan = 0;
+                if (ct.getSoLuong() != null && !ct.getSoLuong().isEmpty()) {
+                    soLuongHoan = Integer.parseInt(ct.getSoLuong());
+                }
+                int tongMoi = soLuongTon + soLuongHoan;
+                spct.setSoLuong(String.valueOf(tongMoi));
+                sanPhamChiTietRepo.save(spct);
+            }
+        }
+
+        hoaDon.setTrangThai(trangThai);
+        hoaDon.setNgaySua(LocalDateTime.now());
+        hoaDonRepo.save(hoaDon);
+
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Cập nhật trạng thái thành công"
+        ));
+    }
+
 
 }

@@ -12,11 +12,15 @@
             ➕ Thêm sản phẩm
         </button>
     </div>
-
+    <div class="alert alert-success alert-dismissible fade show"
+         ng-if="successMessage">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {{ successMessage }}
+    </div>
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
         <tr>
-            <th>#</th>
+            <th>STT</th>
             <th>Mã</th>
             <th>Tên sản phẩm</th>
             <th>Thương hiệu</th>
@@ -30,7 +34,7 @@
         <tbody>
 
         <tr ng-repeat="sp in dsSanPham  | filter:customFilter">
-            <td>{{sp.id}}</td>
+            <td>{{getSTT($index)}}</td>
             <td>{{sp.ma}}</td>
             <td>{{sp.ten}}</td>
             <td>{{sp.tenThuongHieu}}</td>
@@ -280,12 +284,6 @@
         </div>
     </div>
 
-
-    <div class="alert alert-success alert-dismissible fade show"
-         ng-if="successMessage">
-        <i class="bi bi-check-circle-fill me-2"></i>
-        {{ successMessage }}
-    </div>
 
     <div class="modal fade" id="addModal" tabindex="-1">
         <div class="modal-dialog modal-xl">

@@ -1,24 +1,20 @@
 angular.module("myApp").controller("mauSacCtrl", function ($scope, $http, $timeout) {
 
-    // Cấu hình URL API khớp với @RequestMapping("/san-pham")
     const API_URL = "http://localhost:8084/san-pham/mau-sac";
     let modalInstance = null;
 
-    // ================= KHỞI TẠO STATE =================
     $scope.dsMauSac = [];
-    $scope.mauSacMoi = {};      // Chứa dữ liệu thêm/sửa
-    $scope.mauSacView = {};     // Chứa dữ liệu xem chi tiết
+    $scope.mauSacMoi = {};
+    $scope.mauSacView = {};
     $scope.search = { tenM: '', trangThai: null };
-    $scope.loi = "";            // Thông báo lỗi từ server
-    $scope.isEdit = false;      // Cờ phân biệt thêm/sửa
-    $scope.dangGui = false;     // Trạng thái loading khi nhấn nút Lưu
+    $scope.loi = "";
+    $scope.isEdit = false;
+    $scope.dangGui = false;
 
-    // Khởi tạo Modal khi Controller load
     $timeout(function() {
         modalInstance = new bootstrap.Modal(document.getElementById('modalMauSac'));
     });
 
-    // ================= CHỨC NĂNG LOAD DỮ LIỆU =================
     function loadData() {
         $http.get(API_URL).then(function (res) {
             $scope.dsMauSac = res.data || [];
@@ -28,7 +24,6 @@ angular.module("myApp").controller("mauSacCtrl", function ($scope, $http, $timeo
     }
     loadData();
 
-    // ================= CHỨC NĂNG TÌM KIẾM =================
     let timeoutPromise = null;
     $scope.timKiem = function () {
         if (timeoutPromise) $timeout.cancel(timeoutPromise);
@@ -42,7 +37,7 @@ angular.module("myApp").controller("mauSacCtrl", function ($scope, $http, $timeo
             }).then(function (res) {
                 $scope.dsMauSac = res.data || [];
             });
-        }, 400); // Đợi người dùng ngừng gõ 400ms mới gọi API
+        }, 400);
     };
 
     $scope.reset = function () {
@@ -50,12 +45,11 @@ angular.module("myApp").controller("mauSacCtrl", function ($scope, $http, $timeo
         loadData();
     };
 
-    // ================= MỞ MODAL THÊM/SỬA =================
     $scope.moModalThem = function () {
         $scope.isEdit = false;
         $scope.loi = "";
         $scope.mauSacMoi = {
-            trangThai: 1 // Mặc định là Hoạt động
+            trangThai: 1
         };
         modalInstance.show();
     };
@@ -79,9 +73,7 @@ angular.module("myApp").controller("mauSacCtrl", function ($scope, $http, $timeo
         });
     };
 
-    // ================= LƯU DỮ LIỆU (ADD / UPDATE) =================
     $scope.luuMauSac = function () {
-        // Kiểm tra validation phía client đơn giản
         if (!$scope.mauSacMoi.tenM) {
             $scope.loi = "Vui lòng nhập tên màu sắc!";
             return;
@@ -90,7 +82,6 @@ angular.module("myApp").controller("mauSacCtrl", function ($scope, $http, $timeo
         $scope.dangGui = true;
         $scope.loi = "";
 
-        // API của bạn dùng ID làm PathVariable cho cả PUT và DELETE
         let request;
         console.log($scope.mauSacMoi)
         if ($scope.isEdit) {
@@ -104,7 +95,6 @@ angular.module("myApp").controller("mauSacCtrl", function ($scope, $http, $timeo
         request.then(function () {
             modalInstance.hide();
             loadData();
-            // Thành công
             alert($scope.isEdit ? "Cập nhật thành công!" : "Thêm mới thành công!");
         }).catch(function (err) {
             console.log("full error"+err)
@@ -115,18 +105,6 @@ angular.module("myApp").controller("mauSacCtrl", function ($scope, $http, $timeo
             $scope.dangGui = false;
         });
     };
-
-    // ================= XÓA MÀU SẮC =================
-    // $scope.xoaMauSac = function (m) {
-    //     if (!confirm("Xác nhận: Bạn có muốn xóa màu sắc '" + m.tenM + "'?")) return;
-    //
-    //     $http.delete(API_URL + "/" + m.id).then(function (res) {
-    //         alert(res.data); // "Xóa thành công" từ API
-    //         loadData();
-    //     }).catch(function (err) {
-    //         alert("Không thể xóa: " + (err.data || "Lỗi hệ thống"));
-    //     });
-    // };
 
     $scope.xoaMauSac = function (th) {
         if (!th || !th.id) return;

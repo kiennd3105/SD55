@@ -259,7 +259,7 @@ $scope.$watch('diaChi.tinh', function(newVal) {
                alert("Thanh toán thành công!");
                localStorage.removeItem("cartSelected");
               console.log("ITEMS GỬI LÊN:", payload.items);
-               $location.path("/thank-you");
+                $location.path("/hoa-don");
            })
            .catch(function (err) {
                console.error(err);

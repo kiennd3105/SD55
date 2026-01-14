@@ -16,7 +16,7 @@ userApp.config(function ($routeProvider) {
         })
         .when('/san-pham', {
             templateUrl: '/user/view/sponline.html',
-            controller: 'homePageCtrl'
+            controller: 'SPPageCtrl'
         })
         .when('/san-pham/:id', {
             templateUrl: '/user/view/ctsponlie.html',
@@ -52,7 +52,6 @@ userApp.run(function ($rootScope, $location) {
 
         const path = $location.path();
 
-        // ẩn header/footer cho login, register
         $rootScope.isAuthPage = authPages.includes(path);
 
         const user = JSON.parse(localStorage.getItem("user"));
@@ -83,6 +82,45 @@ userApp.controller("headerCtrl", function ($scope, $location) {
         localStorage.removeItem("user");
         $location.path("/login");
     };
+});
+userApp.controller('SPPageCtrl', function ($scope, $http, $location) {
+$scope.bestSellingProducts = [];
+    $scope.newProducts = [];
+    $scope.loadingBestSelling = true;
+    $scope.loadingNewProducts = true;
+    $scope.loadBestSellingProducts = function () {
+        $scope.loadingBestSelling = true;
+        $http.get("http://localhost:8084/user/san-pham-ban-chay?limit=8")
+            .then(function (response) {
+                $scope.bestSellingProducts = response.data;
+                $scope.loadingBestSelling = false;
+                console.log("Sản phẩm bán chạy:", response.data);
+            })
+            .catch(function (error) {
+                console.error("Lỗi load sản phẩm bán chạy:", error);
+                $scope.loadingBestSelling = false;
+            });
+    };
+    $scope.viewProduct = function (idSanPham) {
+        $location.path("/san-pham/" + idSanPham);
+    };
+
+    $scope.loadNewProducts = function () {
+        $scope.loadingNewProducts = true;
+        $http.get("http://localhost:8084/user/san-pham-moi?limit=50")
+            .then(function (response) {
+                $scope.newProducts = response.data;
+                $scope.loadingNewProducts = false;
+                console.log("Sản phẩm mới:", response.data);
+            })
+            .catch(function (error) {
+                console.error("Lỗi load sản phẩm mới:", error);
+                $scope.loadingNewProducts = false;
+            });
+    };
+    $scope.loadBestSellingProducts();
+    $scope.loadNewProducts();
+
 });
 userApp.controller('homePageCtrl', function ($scope, $http, $location) {
     $scope.bestSellingProducts = [];

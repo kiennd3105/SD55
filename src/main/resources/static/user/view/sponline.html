@@ -1,6 +1,5 @@
-<div class="container my-4" ng-controller="homePageCtrl">
+<div class="container my-4" ng-controller="SPPageCtrl">
 
-    <!-- 🔍 TÌM KIẾM -->
     <div class="row mb-4">
         <div class="col-12">
             <input type="text"
@@ -9,9 +8,7 @@
                    ng-model="keyword">
         </div>
     </div>
-
     <div class="row">
-        <!-- 🧭 BỘ LỌC (3 PHẦN) -->
         <div class="col-md-3">
             <div class="card p-3">
                 <h6 class="fw-bold">Sắp xếp</h6>
@@ -24,11 +21,10 @@
             </div>
         </div>
         <div class="col-md-9">
-            <!-- 🛍️ DANH SÁCH SẢN PHẨM -->
             <section class="new-products-section mb-5">
                 <div class="container">
                     <div class="section-header text-center mb-5">
-                        <h2 class="section-title fw-bold">Sản phẩm mới</h2>
+                        <h2 class="section-title fw-bold">Tất cả sản phẩm</h2>
                         <p class="text-muted">Những sản phẩm mới nhất từ OWEN</p>
                     </div>
                     <div ng-if="loadingNewProducts" class="text-center py-5">

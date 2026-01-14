@@ -2,18 +2,13 @@
 
     <h2 class="mb-3">Quản lý chất liệu</h2>
 
-    <!-- SEARCH BAR (TỔNG + THÊM Ở GÓC PHẢI) -->
     <div class="card mb-3">
         <div class="card-body">
 
-            <!-- Tiêu đề + Tổng + Thêm -->
             <div class="d-flex justify-content-between align-items-start mb-2">
                 <div class="fw-bold">Tìm kiếm</div>
-
                 <div class="text-end">
                     <div class="fw-bold">Tổng: {{dsChatLieu.length}}</div>
-
-                    <!-- NÚT THÊM NẰM DƯỚI TỔNG -->
                     <button type="button"
                             class="btn btn-success btn-sm mt-2"
                             data-bs-toggle="modal"
@@ -23,8 +18,6 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Input + select + buttons thẳng hàng -->
             <div class="row g-3 align-items-end">
 
                 <div class="col-md-4">
@@ -76,7 +69,6 @@
         </div>
     </div>
 
-    <!-- TABLE -->
     <div class="card">
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -159,7 +151,8 @@
                                        ng-class="{'is-invalid': (submitted && clForm.maCL.$invalid) || (submitted && err.maCL)}"
                                        placeholder="VD: CL01">
 
-                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"
+                                     class="text-danger">
                                     <span ng-show="submitted && clForm.maCL.$error.required">Vui lòng nhập mã chất liệu</span>
                                     <span ng-show="submitted && !clForm.maCL.$error.required && err.maCL">{{err.maCL}}</span>
                                 </div>
@@ -176,7 +169,8 @@
                                        ng-class="{'is-invalid': (submitted && clForm.tenCL.$invalid) || (submitted && err.tenCL)}"
                                        placeholder="VD: Cotton">
 
-                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px" class="text-danger">
+                                <div style="height:18px;margin-top:4px;font-size:12px;line-height:18px"
+                                     class="text-danger">
                                     <span ng-show="submitted && clForm.tenCL.$error.required">Vui lòng nhập tên chất liệu</span>
                                     <span ng-show="submitted && !clForm.tenCL.$error.required && err.tenCL">{{err.tenCL}}</span>
                                 </div>
@@ -218,7 +212,6 @@
         </div>
     </div>
 
-    <!-- MODAL DETAIL -->
     <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">

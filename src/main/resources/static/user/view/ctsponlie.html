@@ -52,18 +52,14 @@
                 </div>
 
 
-                <!-- MÀU -->
-
             </div>
 
 
-            <!-- CHƯA CHỌN -->
             <h4 class="text-danger fw-bold"
                 ng-if="!selectedCTSP">
                 {{minPrice | number}} đ - {{maxPrice | number}} đ
             </h4>
 
-            <!-- ĐÃ CHỌN -->
             <h4 class="text-danger fw-bold"
                 ng-if="selectedCTSP">
                 {{selectedCTSP.gia | number}} đ
@@ -73,9 +69,6 @@
             <p ng-if="selectedCTSP">
                 Số lượng kho: <b>{{selectedCTSP.soLuong}}</b>
             </p>
-
-
-            <!-- NHẬP SỐ LƯỢNG -->
             <div class="d-flex align-items-center mb-4">
                 <label class="me-2">Số lượng:</label>
                 <input type="number"
@@ -89,10 +82,6 @@
                 <button class="btn btn-outline-primary px-4"
                         ng-click="addToCart(idKH, selectedCTSP.id, qty)">
                     🛒 Thêm giỏ hàng
-                </button>
-                <button class="btn btn-danger px-4"
-                        ng-click="buyNow()">
-                    ⚡ Mua ngay
                 </button>
             </div>
         </div>
